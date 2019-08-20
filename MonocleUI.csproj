@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="lib\Centroid.cs" />
     <Compile Include="lib\FAIMS.cs" />
+    <Compile Include="lib\Files.cs" />
     <Compile Include="lib\Monocle.cs" />
     <Compile Include="lib\MonocleHelpers.cs" />
     <Compile Include="lib\Scan.cs" />

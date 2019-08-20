@@ -8,8 +8,8 @@ namespace MonocleUI
         public static double P(List<double> x, List<double> y)
         {
 
-            double avgX = Pearson.Avg(x);
-            double avgY = Pearson.Avg(y);
+            double avgX = Avg(x);
+            double avgY = Avg(y);
             double numerator = 0;
             double ex = 0; // Sum errors of x
             double ey = 0; // Sum errors of y
@@ -55,15 +55,15 @@ namespace MonocleUI
 
         public PeptideEnvelope(int numIsotopes)
         {
-            this.mzs = new List<List<double>>();
-            this.intensities = new List<List<double>>();
+            mzs = new List<List<double>>();
+            intensities = new List<List<double>>();
             for (int i = 0; i < numIsotopes; ++i)
             {
-                this.mzs.Add(new List<double>());
-                this.intensities.Add(new List<double>());
+                mzs.Add(new List<double>());
+                intensities.Add(new List<double>());
             }
-            this.averageMz = new List<double>();
-            this.averageIntensity = new List<double>();
+            averageMz = new List<double>();
+            averageIntensity = new List<double>();
         }
     }
 

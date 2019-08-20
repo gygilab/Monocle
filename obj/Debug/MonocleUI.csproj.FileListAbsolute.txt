@@ -8,3 +8,8 @@ C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\bin\Debug\Monoc
 C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\bin\Debug\MonocleUI.pdb
 C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\obj\Debug\MonocleUI.exe
 C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\obj\Debug\MonocleUI.pdb
+C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\bin\Debug\ThermoFisher.CommonCore.BackgroundSubtraction.dll
+C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\bin\Debug\ThermoFisher.CommonCore.Data.dll
+C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\bin\Debug\ThermoFisher.CommonCore.MassPrecisionEstimator.dll
+C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\bin\Debug\ThermoFisher.CommonCore.RawFileReader.dll
+C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\obj\Debug\MonocleUI.csproj.CopyComplete
