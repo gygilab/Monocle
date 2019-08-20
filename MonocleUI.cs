@@ -30,11 +30,6 @@ namespace MonocleUI
 
         }
 
-        private void Input_rtb_DragEnter(object sender, DragEventArgs e)
-        {
-            Debug.WriteLine("ENTER" + e.Data.GetDataPresent(DataFormats.FileDrop));
-        }
-
         private void Input_rtb_DragDrop(object sender, DragEventArgs e)
         {
             string[] fileArray;
@@ -43,7 +38,6 @@ namespace MonocleUI
                 fileArray = (string[])e.Data.GetData(DataFormats.FileDrop);
                 foreach (string filePath in fileArray)
                 {
-                    Debug.WriteLine(filePath);
                     if (InputFiles.Add(filePath))
                     {
                         input_rtb.AppendText(filePath + Environment.NewLine);

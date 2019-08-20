@@ -128,7 +128,7 @@
             this.input_rtb.Text = "";
             this.input_rtb.WordWrap = false;
             this.input_rtb.DragDrop += new System.Windows.Forms.DragEventHandler(this.Input_rtb_DragDrop);
-            this.input_rtb.DragEnter += new System.Windows.Forms.DragEventHandler(this.Input_rtb_DragEnter);
+            //this.input_rtb.DragEnter += new System.Windows.Forms.DragEventHandler(this.Input_rtb_DragEnter);
             this.input_rtb.TextChanged += new System.EventHandler(this.Input_rtb_TextChanged);
             // 
             // groupBox5

@@ -14,9 +14,7 @@ namespace MonocleUI
             if (File.Exists(newFilePath) && Path.GetExtension(newFilePath).IsInputType() &&
                 !FileList.Contains(newFilePath))
             {
-                Debug.WriteLine("Contains1: " + FileList.Contains(newFilePath));
                 FileList.Add(newFilePath);
-                Debug.WriteLine("Contains2: " + FileList.Contains(newFilePath));
                 return true;
             }
             return false;
