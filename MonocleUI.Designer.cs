@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,25 +38,26 @@
             this.file_column = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.file_output_format_CLB = new System.Windows.Forms.CheckedListBox();
             this.button2 = new System.Windows.Forms.Button();
             this.export_folder_maskedTB = new System.Windows.Forms.MaskedTextBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.monocle_log_tb = new System.Windows.Forms.GroupBox();
+            this.monocle_log = new System.Windows.Forms.RichTextBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.start_monocle_button = new System.Windows.Forms.Button();
             this.input_file_dialog = new System.Windows.Forms.OpenFileDialog();
             this.export_folder_dialog = new System.Windows.Forms.FolderBrowserDialog();
             this.log_toggle_checkbox = new System.Windows.Forms.CheckBox();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.monocle_log_tb.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenuStrip
@@ -72,6 +74,8 @@
             // 
             // fileToolStripMenuItem
             // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -93,13 +97,13 @@
             this.groupBox1.Controls.Add(this.input_files_dgv);
             this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Controls.Add(this.groupBox5);
             this.groupBox1.Location = new System.Drawing.Point(13, 28);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(742, 257);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Inputs";
+            this.mainToolTip.SetToolTip(this.groupBox1, "Drag and drop files or brows with the \"+\" button.");
             // 
             // input_files_dgv
             // 
@@ -120,8 +124,9 @@
             this.input_files_dgv.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.input_files_dgv.RowTemplate.ReadOnly = true;
             this.input_files_dgv.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.input_files_dgv.Size = new System.Drawing.Size(323, 231);
+            this.input_files_dgv.Size = new System.Drawing.Size(692, 231);
             this.input_files_dgv.TabIndex = 5;
+            this.mainToolTip.SetToolTip(this.input_files_dgv, "Drag and drop files or brows with the \"+\" button.");
             this.input_files_dgv.DragDrop += new System.Windows.Forms.DragEventHandler(this.Input_files_dgv_DragDrop);
             this.input_files_dgv.DragEnter += new System.Windows.Forms.DragEventHandler(this.Input_files_dgv_DragEnter);
             // 
@@ -132,33 +137,25 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(332, 58);
+            this.button4.Location = new System.Drawing.Point(704, 54);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(32, 32);
             this.button4.TabIndex = 4;
             this.button4.Text = "-";
+            this.mainToolTip.SetToolTip(this.button4, "Remove selected row(s).");
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(332, 20);
+            this.button3.Location = new System.Drawing.Point(704, 16);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(32, 32);
             this.button3.TabIndex = 3;
             this.button3.Text = "+";
+            this.mainToolTip.SetToolTip(this.button3, "Drag and drop files or brows with the \"+\" button.");
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.Button3_Click);
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.groupBox5.Location = new System.Drawing.Point(393, 16);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(346, 238);
-            this.groupBox5.TabIndex = 1;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Options";
             // 
             // groupBox2
             // 
@@ -218,23 +215,24 @@
             this.export_folder_maskedTB.Size = new System.Drawing.Size(539, 20);
             this.export_folder_maskedTB.TabIndex = 0;
             // 
-            // groupBox3
+            // monocle_log_tb
             // 
-            this.groupBox3.Controls.Add(this.richTextBox2);
-            this.groupBox3.Location = new System.Drawing.Point(13, 546);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(742, 166);
-            this.groupBox3.TabIndex = 3;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "groupBox3";
+            this.monocle_log_tb.Controls.Add(this.monocle_log);
+            this.monocle_log_tb.Location = new System.Drawing.Point(13, 546);
+            this.monocle_log_tb.Name = "monocle_log_tb";
+            this.monocle_log_tb.Size = new System.Drawing.Size(742, 166);
+            this.monocle_log_tb.TabIndex = 3;
+            this.monocle_log_tb.TabStop = false;
+            this.monocle_log_tb.Text = "Monocle Log";
             // 
-            // richTextBox2
+            // monocle_log
             // 
-            this.richTextBox2.Location = new System.Drawing.Point(7, 20);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(729, 140);
-            this.richTextBox2.TabIndex = 0;
-            this.richTextBox2.Text = "";
+            this.monocle_log.Location = new System.Drawing.Point(7, 20);
+            this.monocle_log.Name = "monocle_log";
+            this.monocle_log.ReadOnly = true;
+            this.monocle_log.Size = new System.Drawing.Size(729, 140);
+            this.monocle_log.TabIndex = 0;
+            this.monocle_log.Text = "";
             // 
             // progressBar1
             // 
@@ -251,6 +249,7 @@
             this.start_monocle_button.TabIndex = 5;
             this.start_monocle_button.Text = "Run!";
             this.start_monocle_button.UseVisualStyleBackColor = true;
+            this.start_monocle_button.Click += new System.EventHandler(this.Start_monocle_button_Click);
             // 
             // input_file_dialog
             // 
@@ -269,6 +268,13 @@
             this.log_toggle_checkbox.UseVisualStyleBackColor = true;
             this.log_toggle_checkbox.CheckedChanged += new System.EventHandler(this.Log_toggle_checkbox_CheckedChanged);
             // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
+            // 
             // MonocleUI
             // 
             this.AllowDrop = true;
@@ -278,7 +284,7 @@
             this.Controls.Add(this.log_toggle_checkbox);
             this.Controls.Add(this.start_monocle_button);
             this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.monocle_log_tb);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.mainMenuStrip);
@@ -295,7 +301,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
+            this.monocle_log_tb.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -309,23 +315,24 @@
         private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox monocle_log_tb;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button start_monocle_button;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.MaskedTextBox export_folder_maskedTB;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckedListBox file_output_format_CLB;
-        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.RichTextBox monocle_log;
         private System.Windows.Forms.OpenFileDialog input_file_dialog;
         private System.Windows.Forms.FolderBrowserDialog export_folder_dialog;
         private System.Windows.Forms.DataGridView input_files_dgv;
         private System.Windows.Forms.DataGridViewTextBoxColumn file_column;
         private System.Windows.Forms.CheckBox log_toggle_checkbox;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolTip mainToolTip;
     }
 }
 

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
+using MonocleUI.lib;
 
 namespace MonocleUI
 {
     public partial class MonocleUI : Form
     {
-        Files InputFiles = new Files();
+        FileProcessor Processor = new FileProcessor();
 
         public MonocleUI()
         {
@@ -28,11 +30,12 @@ namespace MonocleUI
         {
             if(input_file_dialog.ShowDialog() == DialogResult.OK)
             {
-                foreach(string file in input_file_dialog.FileNames)
+                foreach(string filePath in input_file_dialog.FileNames)
                 {
-                    if (InputFiles.Add(file))
+                    if (Processor.files.Add(filePath))
                     {
-                        input_files_dgv.Rows.Add(file);
+                        export_folder_maskedTB.Text = Path.GetFullPath(filePath).Replace(Path.GetFileName(filePath), "");
+                        input_files_dgv.Rows.Add(filePath);
                     }
                 }
             }
@@ -50,8 +53,9 @@ namespace MonocleUI
                 fileArray = (string[])e.Data.GetData(DataFormats.FileDrop);
                 foreach (string filePath in fileArray)
                 {
-                    if (InputFiles.Add(filePath))
+                    if (Processor.files.Add(filePath))
                     {
+                        export_folder_maskedTB.Text = Path.GetFullPath(filePath).Replace(Path.GetFileName(filePath), "");
                         input_files_dgv.Rows.Add(filePath);
                     }
                 }
@@ -91,6 +95,27 @@ namespace MonocleUI
             {
                 Size = new Size(783, 563);
             }
+        }
+
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        public void UpdateLog(string message)
+        {
+            Invoke(new Action(
+            () =>
+            {
+                monocle_log.AppendText(string.Format("[{0}]\t{1}\n", DateTime.Now.ToLongTimeString(), message));
+                monocle_log.SelectionStart = monocle_log.Text.Length;
+                monocle_log.ScrollToCaret();
+            }));
+        }
+
+        private void Start_monocle_button_Click(object sender, EventArgs e)
+        {
+            Processor = new FileProcessor();
         }
     }
 }

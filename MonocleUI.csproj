@@ -60,7 +60,9 @@
   <ItemGroup>
     <Compile Include="lib\Centroid.cs" />
     <Compile Include="lib\FAIMS.cs" />
+    <Compile Include="lib\FileProcessor.cs" />
     <Compile Include="lib\Files.cs" />
+    <Compile Include="lib\FileWriter.cs" />
     <Compile Include="lib\Monocle.cs" />
     <Compile Include="lib\MonocleHelpers.cs" />
     <Compile Include="lib\Scan.cs" />
@@ -99,10 +101,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ThermoFisher.CommonCore.BackgroundSubtraction.XML" />
-    <Content Include="ThermoFisher.CommonCore.Data.XML" />
-    <Content Include="ThermoFisher.CommonCore.MassPrecisionEstimator.XML" />
-    <Content Include="ThermoFisher.CommonCore.RawFileReader.XML" />
+    <Content Include="lib\ThermoFisher.CommonCore.BackgroundSubtraction.XML" />
+    <Content Include="lib\ThermoFisher.CommonCore.Data.XML" />
+    <Content Include="lib\ThermoFisher.CommonCore.MassPrecisionEstimator.XML" />
+    <Content Include="lib\ThermoFisher.CommonCore.RawFileReader.XML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
