@@ -11,7 +11,6 @@ namespace MonocleUI
         public MonocleUI()
         {
             InitializeComponent();
-            input_rtb.AllowDrop = true;
         }
 
         private void Button3_Click(object sender, EventArgs e)
@@ -20,17 +19,19 @@ namespace MonocleUI
             {
                 foreach(string file in input_file_dialog.FileNames)
                 {
-                    input_rtb.AppendText(file + Environment.NewLine);
+                    if (InputFiles.Add(file))
+                    {
+                        input_files_dgv.Rows.Add(file);
+                    }
                 }
             }
         }
-
-        private void Input_rtb_TextChanged(object sender, EventArgs e)
+        private void Input_files_dgv_DragEnter(object sender, DragEventArgs e)
         {
-
+            e.Effect = DragDropEffects.Copy;
         }
 
-        private void Input_rtb_DragDrop(object sender, DragEventArgs e)
+        private void Input_files_dgv_DragDrop(object sender, DragEventArgs e)
         {
             string[] fileArray;
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -40,9 +41,32 @@ namespace MonocleUI
                 {
                     if (InputFiles.Add(filePath))
                     {
-                        input_rtb.AppendText(filePath + Environment.NewLine);
+                        input_files_dgv.Rows.Add(filePath);
                     }
                 }
+            }
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            if (export_folder_dialog.ShowDialog() == DialogResult.OK)
+            {
+                export_folder_maskedTB.Text = export_folder_dialog.SelectedPath;
+            }
+        }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            if(input_files_dgv.SelectedRows.Count > 0)
+            {
+                foreach(DataGridViewRow row in input_files_dgv.Rows)
+                {
+                    if (row.Selected)
+                    {
+                        input_files_dgv.Rows.Remove(row);
+                    }
+                }
+                
             }
         }
     }

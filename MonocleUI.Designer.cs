@@ -33,25 +33,27 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.input_files_dgv = new System.Windows.Forms.DataGridView();
+            this.file_column = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.input_rtb = new System.Windows.Forms.RichTextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.maskedTextBox2 = new System.Windows.Forms.MaskedTextBox();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
-            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.export_folder_maskedTB = new System.Windows.Forms.MaskedTextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.button1 = new System.Windows.Forms.Button();
             this.input_file_dialog = new System.Windows.Forms.OpenFileDialog();
+            this.export_folder_dialog = new System.Windows.Forms.FolderBrowserDialog();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
@@ -88,17 +90,45 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.input_files_dgv);
             this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Controls.Add(this.input_rtb);
             this.groupBox1.Controls.Add(this.groupBox5);
-            this.groupBox1.Controls.Add(this.groupBox4);
             this.groupBox1.Location = new System.Drawing.Point(13, 28);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(742, 257);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Files";
+            this.groupBox1.Text = "Inputs";
+            // 
+            // input_files_dgv
+            // 
+            this.input_files_dgv.AllowDrop = true;
+            this.input_files_dgv.AllowUserToAddRows = false;
+            this.input_files_dgv.AllowUserToDeleteRows = false;
+            this.input_files_dgv.AllowUserToResizeColumns = false;
+            this.input_files_dgv.AllowUserToResizeRows = false;
+            this.input_files_dgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.input_files_dgv.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.input_files_dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.input_files_dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.file_column});
+            this.input_files_dgv.GridColor = System.Drawing.SystemColors.Control;
+            this.input_files_dgv.Location = new System.Drawing.Point(6, 16);
+            this.input_files_dgv.Name = "input_files_dgv";
+            this.input_files_dgv.RowHeadersVisible = false;
+            this.input_files_dgv.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.input_files_dgv.RowTemplate.ReadOnly = true;
+            this.input_files_dgv.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.input_files_dgv.Size = new System.Drawing.Size(323, 231);
+            this.input_files_dgv.TabIndex = 5;
+            this.input_files_dgv.DragDrop += new System.Windows.Forms.DragEventHandler(this.Input_files_dgv_DragDrop);
+            this.input_files_dgv.DragEnter += new System.Windows.Forms.DragEventHandler(this.Input_files_dgv_DragEnter);
+            // 
+            // file_column
+            // 
+            this.file_column.HeaderText = "Files";
+            this.file_column.Name = "file_column";
             // 
             // button4
             // 
@@ -108,6 +138,7 @@
             this.button4.TabIndex = 4;
             this.button4.Text = "-";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // button3
             // 
@@ -119,35 +150,15 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
-            // input_rtb
-            // 
-            this.input_rtb.Location = new System.Drawing.Point(7, 20);
-            this.input_rtb.Name = "input_rtb";
-            this.input_rtb.Size = new System.Drawing.Size(318, 231);
-            this.input_rtb.TabIndex = 2;
-            this.input_rtb.Text = "";
-            this.input_rtb.WordWrap = false;
-            this.input_rtb.DragDrop += new System.Windows.Forms.DragEventHandler(this.Input_rtb_DragDrop);
-            //this.input_rtb.DragEnter += new System.Windows.Forms.DragEventHandler(this.Input_rtb_DragEnter);
-            this.input_rtb.TextChanged += new System.EventHandler(this.Input_rtb_TextChanged);
-            // 
             // groupBox5
             // 
-            this.groupBox5.Location = new System.Drawing.Point(470, 127);
+            this.groupBox5.Dock = System.Windows.Forms.DockStyle.Right;
+            this.groupBox5.Location = new System.Drawing.Point(393, 16);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(266, 124);
+            this.groupBox5.Size = new System.Drawing.Size(346, 238);
             this.groupBox5.TabIndex = 1;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Options";
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Location = new System.Drawing.Point(470, 20);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(266, 100);
-            this.groupBox4.TabIndex = 0;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Input";
             // 
             // groupBox2
             // 
@@ -156,7 +167,7 @@
             this.groupBox2.Controls.Add(this.checkedListBox1);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.button2);
-            this.groupBox2.Controls.Add(this.maskedTextBox1);
+            this.groupBox2.Controls.Add(this.export_folder_maskedTB);
             this.groupBox2.Location = new System.Drawing.Point(13, 292);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(742, 176);
@@ -191,11 +202,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(31, 22);
+            this.label1.Location = new System.Drawing.Point(21, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.Size = new System.Drawing.Size(82, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "label1";
+            this.label1.Text = "Export Data To:";
             // 
             // button2
             // 
@@ -205,13 +216,15 @@
             this.button2.TabIndex = 1;
             this.button2.Text = "Browse";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
-            // maskedTextBox1
+            // export_folder_maskedTB
             // 
-            this.maskedTextBox1.Location = new System.Drawing.Point(109, 19);
-            this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.Size = new System.Drawing.Size(539, 20);
-            this.maskedTextBox1.TabIndex = 0;
+            this.export_folder_maskedTB.Location = new System.Drawing.Point(109, 19);
+            this.export_folder_maskedTB.Name = "export_folder_maskedTB";
+            this.export_folder_maskedTB.ReadOnly = true;
+            this.export_folder_maskedTB.Size = new System.Drawing.Size(539, 20);
+            this.export_folder_maskedTB.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -274,6 +287,7 @@
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
             this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -295,17 +309,18 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.RichTextBox input_rtb;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+        private System.Windows.Forms.MaskedTextBox export_folder_maskedTB;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.MaskedTextBox maskedTextBox2;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.OpenFileDialog input_file_dialog;
+        private System.Windows.Forms.FolderBrowserDialog export_folder_dialog;
+        private System.Windows.Forms.DataGridView input_files_dgv;
+        private System.Windows.Forms.DataGridViewTextBoxColumn file_column;
     }
 }
 
