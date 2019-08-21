@@ -9,26 +9,31 @@ namespace MonocleUI
     /// </summary>
     public class Scan : IDisposable
     {
+        const double protonMass = 1.007276466879000;
+
         public int ScanNumber { get; set; } // from header
         public int MsOrder { get; set; } // from header
+        public int MasterIndex { get; set; }
         public double PrecursorMz { get; set; } // from header
         public double PrecursorMz2 { get; set; } // from header
         public string ScanDescription { get; set; } //from header
         public double CollisionEnergy { get; set; } //from header
-
-        public FAIMS Faims { get; set; } = new FAIMS();
-
+        public double IonInjectionTime { get; set; }
+        public double ElapsedScanTime { get; set; }
+        public bool Polarity { get; set; } = true;
+        public string ScaneType { get; set; }
+        public string FilterLine { get; set; }
+        public string RetentionTime { get; set; }
+        public double StartMz { get; set; }
+        public double EndMz { get; set; }
+        public double HighestMz { get; set; }
+        public double BasePeakMz { get; set; }
+        public double BasePeakIntensity { get; set; } = 0;
+        public int FaimsCV { get; set; } = 0;
         public double MonoisotopicMz { get; set; } // from trailer
         public int PrecursorCharge { get; set; } // from trailer
-
-        public double basePeakMz { get; set; }
-        public double basePeakIntensity { get; set; } = 0;
-
         public int CentroidCount { get; private set; }
-
         public Centroid[] Centroids { get; private set; }
-
-        const double protonMass = 1.007276466879000;
 
         public double[] CentroidsToArray(bool outputMz)
         {
