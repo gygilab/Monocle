@@ -40,17 +40,17 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.maskedTextBox2 = new System.Windows.Forms.MaskedTextBox();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.file_output_format_CLB = new System.Windows.Forms.CheckedListBox();
             this.button2 = new System.Windows.Forms.Button();
             this.export_folder_maskedTB = new System.Windows.Forms.MaskedTextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.button1 = new System.Windows.Forms.Button();
+            this.start_monocle_button = new System.Windows.Forms.Button();
             this.input_file_dialog = new System.Windows.Forms.OpenFileDialog();
             this.export_folder_dialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.log_toggle_checkbox = new System.Windows.Forms.CheckBox();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
@@ -163,14 +163,13 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.maskedTextBox2);
-            this.groupBox2.Controls.Add(this.checkedListBox1);
             this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Controls.Add(this.file_output_format_CLB);
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Controls.Add(this.export_folder_maskedTB);
             this.groupBox2.Location = new System.Drawing.Point(13, 292);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(742, 176);
+            this.groupBox2.Size = new System.Drawing.Size(742, 152);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Correction Export";
@@ -178,39 +177,32 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(31, 113);
+            this.label2.Location = new System.Drawing.Point(6, 21);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 5;
-            this.label2.Text = "label2";
-            // 
-            // maskedTextBox2
-            // 
-            this.maskedTextBox2.Location = new System.Drawing.Point(109, 110);
-            this.maskedTextBox2.Name = "maskedTextBox2";
-            this.maskedTextBox2.Size = new System.Drawing.Size(317, 20);
-            this.maskedTextBox2.TabIndex = 4;
-            // 
-            // checkedListBox1
-            // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(432, 72);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(304, 94);
-            this.checkedListBox1.TabIndex = 3;
+            this.label2.Text = "Choose Output File Format";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 22);
+            this.label1.Location = new System.Drawing.Point(183, 62);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(82, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Export Data To:";
             // 
+            // file_output_format_CLB
+            // 
+            this.file_output_format_CLB.FormattingEnabled = true;
+            this.file_output_format_CLB.Location = new System.Drawing.Point(9, 35);
+            this.file_output_format_CLB.Name = "file_output_format_CLB";
+            this.file_output_format_CLB.Size = new System.Drawing.Size(159, 109);
+            this.file_output_format_CLB.TabIndex = 3;
+            // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(661, 17);
+            this.button2.Location = new System.Drawing.Point(650, 57);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
@@ -220,7 +212,7 @@
             // 
             // export_folder_maskedTB
             // 
-            this.export_folder_maskedTB.Location = new System.Drawing.Point(109, 19);
+            this.export_folder_maskedTB.Location = new System.Drawing.Point(186, 81);
             this.export_folder_maskedTB.Name = "export_folder_maskedTB";
             this.export_folder_maskedTB.ReadOnly = true;
             this.export_folder_maskedTB.Size = new System.Drawing.Size(539, 20);
@@ -246,24 +238,36 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(20, 492);
+            this.progressBar1.Location = new System.Drawing.Point(19, 450);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(641, 23);
             this.progressBar1.TabIndex = 4;
             // 
-            // button1
+            // start_monocle_button
             // 
-            this.button1.Location = new System.Drawing.Point(680, 492);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Go!";
-            this.button1.UseVisualStyleBackColor = true;
+            this.start_monocle_button.Location = new System.Drawing.Point(679, 450);
+            this.start_monocle_button.Name = "start_monocle_button";
+            this.start_monocle_button.Size = new System.Drawing.Size(75, 23);
+            this.start_monocle_button.TabIndex = 5;
+            this.start_monocle_button.Text = "Run!";
+            this.start_monocle_button.UseVisualStyleBackColor = true;
             // 
             // input_file_dialog
             // 
             this.input_file_dialog.FileName = "Input";
             this.input_file_dialog.Multiselect = true;
+            // 
+            // log_toggle_checkbox
+            // 
+            this.log_toggle_checkbox.Appearance = System.Windows.Forms.Appearance.Button;
+            this.log_toggle_checkbox.AutoSize = true;
+            this.log_toggle_checkbox.Location = new System.Drawing.Point(654, 491);
+            this.log_toggle_checkbox.Name = "log_toggle_checkbox";
+            this.log_toggle_checkbox.Size = new System.Drawing.Size(100, 23);
+            this.log_toggle_checkbox.TabIndex = 6;
+            this.log_toggle_checkbox.Text = "Show Output Log";
+            this.log_toggle_checkbox.UseVisualStyleBackColor = true;
+            this.log_toggle_checkbox.CheckedChanged += new System.EventHandler(this.Log_toggle_checkbox_CheckedChanged);
             // 
             // MonocleUI
             // 
@@ -271,7 +275,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(767, 724);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.log_toggle_checkbox);
+            this.Controls.Add(this.start_monocle_button);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -306,7 +311,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button start_monocle_button;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.GroupBox groupBox5;
@@ -314,13 +319,13 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.MaskedTextBox export_folder_maskedTB;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.MaskedTextBox maskedTextBox2;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.CheckedListBox file_output_format_CLB;
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.OpenFileDialog input_file_dialog;
         private System.Windows.Forms.FolderBrowserDialog export_folder_dialog;
         private System.Windows.Forms.DataGridView input_files_dgv;
         private System.Windows.Forms.DataGridViewTextBoxColumn file_column;
+        private System.Windows.Forms.CheckBox log_toggle_checkbox;
     }
 }
 

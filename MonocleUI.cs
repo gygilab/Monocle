@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace MonocleUI
@@ -11,6 +12,16 @@ namespace MonocleUI
         public MonocleUI()
         {
             InitializeComponent();
+            Initiliaze_OutputFormat_CLB();
+            Size = new Size(783, 563);
+        }
+
+        private void Initiliaze_OutputFormat_CLB()
+        {
+            foreach(string type in Enum.GetNames(typeof(InputFileType)))
+            {
+                file_output_format_CLB.Items.Add(type);
+            }
         }
 
         private void Button3_Click(object sender, EventArgs e)
@@ -67,6 +78,18 @@ namespace MonocleUI
                     }
                 }
                 
+            }
+        }
+
+        private void Log_toggle_checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (log_toggle_checkbox.Checked)
+            {
+                Size = new Size(783, 763); 
+            }
+            else
+            {
+                Size = new Size(783, 563);
             }
         }
     }
