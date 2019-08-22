@@ -93,10 +93,22 @@ namespace MonocleUI
         /// <param name="value"></param>
         public void CheckAndSetValue(string attribute, string value)
         {
-            string tempAttr;
+            string tempAttr = "";
             if (Attributes.ContainsKey(attribute))
             {
                 tempAttr = Attributes[attribute];
+            }
+            else if (PrecursorAttributes.ContainsKey(attribute))
+            {
+                tempAttr = PrecursorAttributes[attribute];
+            }
+            else if (PeaksAttributes.ContainsKey(attribute))
+            {
+                tempAttr = PeaksAttributes[attribute];
+            }
+
+            if (tempAttr != "")
+            {
                 PropertyInfo piTmp;
                 double dTmp; bool bTmp;
                 if (typeof(Scan).GetProperty(tempAttr) != null) //check names even though readOnly DGV
@@ -129,10 +141,21 @@ namespace MonocleUI
         /// <param name="value"></param>
         public string CheckAndGetValue(string attribute)
         {
-            string tempAttr;
+            string tempAttr = "";
             if (Attributes.ContainsKey(attribute))
             {
                 tempAttr = Attributes[attribute];
+            }
+            else if (PrecursorAttributes.ContainsKey(attribute))
+            {
+                tempAttr = PrecursorAttributes[attribute];
+            }
+            else if (PeaksAttributes.ContainsKey(attribute))
+            {
+                tempAttr = PeaksAttributes[attribute];
+            }
+
+            if(tempAttr != "") {
                 if (typeof(Scan).GetProperty(tempAttr) != null) //check names even though readOnly DGV
                 {
                     object output = GetType().GetProperty(tempAttr).GetValue(this, null);
@@ -176,20 +199,7 @@ namespace MonocleUI
             { "lowMz","LowestMz" },
             { "highMz","HighestMz" },
             { "basePeakMz","BasePeakMz" },
-            { "basePeakIntensity","BasePeakIntensity" },
-            // Precusor information
-            { "precursorMz","PrecursorMz" },
-            { "precursorScanNum","PrecursorMasterScanNumber" },
-            { "precursorIntensity","PrecursorIntensity" },
-            { "precursorCharge","PrecursorCharge" },
-            { "activationMethod","PrecursorActivationMethod" },
-            // Peaks information
-            { "peaks","Peaks" },
-            { "precision","PeaksPrecision" },
-            { "byteOrder","PeaksByteOrder" },
-            { "contentType","PeaksContentType" },
-            { "compressionType", "PeaksCompressionType" },
-            { "compressedLen", "PeaksCompressedLength" }
+            { "basePeakIntensity","BasePeakIntensity" }
         };
 
         public Dictionary<string, string> PrecursorAttributes = new Dictionary<string, string>()

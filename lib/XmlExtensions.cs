@@ -18,25 +18,51 @@ namespace MonocleUI.lib
         /// <returns></returns>
         public static XmlDocument ScanToXml(this XmlDocument doc, Scan scan)
         {
-            XmlElement newScanElement = doc.CreateElement("scan");
-            foreach(KeyValuePair<string,string> attr in scan.Attributes)
+            XmlElement scanElement = doc.CreateElement("scan");
+            XmlElement peaksElement = doc.CreateElement("peaks");
+
+            foreach (KeyValuePair<string,string> attr in scan.Attributes)
             {
-                if (attr.Value.Contains("Precursor"))
-                {
+                XmlAttribute newAttribute = doc.CreateAttribute(attr.Key);
+                newAttribute.Value = scan.CheckAndGetValue(attr.Key);
+                scanElement.Attributes.Append(newAttribute);
+            }
 
-                }
-                else if (attr.Value.Contains("Peaks"))
+            foreach (KeyValuePair<string, string> attr in scan.PeaksAttributes)
+            {
+                if(attr.Key == "peaks")
                 {
-
+                    peaksElement.InnerText = scan.CheckAndGetValue(attr.Key);
                 }
                 else
                 {
                     XmlAttribute newAttribute = doc.CreateAttribute(attr.Key);
                     newAttribute.Value = scan.CheckAndGetValue(attr.Key);
-                    newScanElement.Attributes.Append(newAttribute);
+                    peaksElement.Attributes.Append(newAttribute);
                 }
             }
-            doc.GetElementsByTagName("msRun")[0].AppendChild(newScanElement);
+            scanElement.AppendChild(peaksElement);
+
+            if (scan.MsOrder > 1)
+            {
+                XmlElement precursorElement = doc.CreateElement("precursorMz");
+                foreach (KeyValuePair<string, string> attr in scan.PrecursorAttributes)
+                {
+                    if (attr.Key == "precursorMz")
+                    {
+                        precursorElement.InnerText = scan.CheckAndGetValue(attr.Key);
+                    }
+                    else
+                    {
+                        XmlAttribute newAttribute = doc.CreateAttribute(attr.Key);
+                        newAttribute.Value = scan.CheckAndGetValue(attr.Key);
+                        precursorElement.Attributes.Append(newAttribute);
+                    }
+                }
+                scanElement.AppendChild(precursorElement);
+            }
+
+            doc.GetElementsByTagName("msRun")[0].AppendChild(scanElement);
             return doc;
         }
 
