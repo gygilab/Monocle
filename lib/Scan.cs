@@ -47,7 +47,7 @@ namespace MonocleUI
         /// <summary>
         /// Peaks
         /// </summary>
-        public Centroid[] Centroids { get; private set; }
+        public List<Centroid> Centroids { get; set; } = new List<Centroid>();
         public int PeaksPrecision { get; set; }
         public string PeaksByteOrder { get; set; }
         public string PeaksContentType { get; set; }
@@ -57,20 +57,13 @@ namespace MonocleUI
         {
             get
             {
-                if(Centroids != null && Centroids.Length > 0)
-                {
-                    return MZXML.WritePeaks(Centroids.ToList());
-                }
-                else
-                {
-                    return "";
-                }
+                return MZXML.WritePeaks(Centroids);
             }
             set
             {
-                if(PeakCount > 0)
+                if(PeakCount > 0 && value != "")
                 {
-                    Centroids = MZXML.ReadPeaks(value, PeakCount).ToArray();
+                    Centroids = MZXML.ReadPeaks(value, PeakCount);
                 }
             }
         }
@@ -191,35 +184,10 @@ namespace MonocleUI
             return isolationSpecificity;
         }
 
-        //https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
-        // Flag: Has Dispose already been called?
-        bool disposed = false;
-
-        ~Scan()
-        {
-            Dispose(false);
-        }
-
         public void Dispose()
         {
-            // Dispose of unmanaged resources.
-            Dispose(true);
-            // Suppress finalization.
-            GC.SuppressFinalize(this);
-        }
-
-        // Protected implementation of Dispose pattern.
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
-
-            if (disposing)
-            {
-                Centroids = null;
-            }
-
-            disposed = true;
+            Centroids.Clear();
+            Centroids = null;
         }
     }
 }

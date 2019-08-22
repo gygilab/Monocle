@@ -116,9 +116,10 @@ namespace MonocleUI
 
         private void Start_monocle_button_Click(object sender, EventArgs e)
         {
-            Processor = new FileProcessor();
-            Scan scan = new Scan();
-            MZXML.ReadXml("C:\\Users\\thom700\\Downloads\\g05432_tko_std_comet.mzXML");
+            List<Scan> scans = new List<Scan>();
+            MZXML.ReadXml("C:\\Users\\thom700\\Downloads\\g05432_tko_std_comet.mzXML", ref scans);
+            int count = scans.Count;
+            scans.Clear();
         }
     }
 }

@@ -11,53 +11,42 @@ namespace MonocleUI.lib
 {
     public class MZXML
     {
-        public static List<Scan> ReadXml(string xmlFilePath)
+        public static void ReadXml(string xmlFilePath, ref List<Scan> scans)
         {
             if (xmlFilePath == "" || !File.Exists(xmlFilePath))
             {
                 Debug.WriteLine("No proteins in the input.");
-                return null;
             }
-            List<Scan> scans = new List<Scan>();
-            Scan tScan = new Scan();
             XmlDocument doc = new XmlDocument();
-            doc.Load(xmlFilePath);
-            using (XmlReader reader = XmlReader.Create(xmlFilePath))
+            using (FileStream fs = new FileStream(xmlFilePath, FileMode.Open))
             {
-                while (reader.Read())
+                doc.Load(fs);
+            }
+            XmlNodeList scanElems = doc.GetElementsByTagName("scan");
+            foreach(XmlNode node in scanElems)
+            {
+                Scan tScan = new Scan();
+                foreach (XmlAttribute attr in node.Attributes)
                 {
-                    tScan = new Scan();
-                    if(reader.Name == "scan" && reader.NodeType == XmlNodeType.EndElement)
+                    tScan.SetAttributeValue(attr.Name, attr.Value);
+                }
+                XmlNodeList children = node.ChildNodes;
+                foreach (XmlNode child in children)
+                {
+                    if (child.Name == "peaks")
                     {
-                        scans.Add(tScan);
+                        tScan.SetAttributeValue(child.Name, child.InnerText);
                     }
-                    else if (reader.Name == "scan" && reader.NodeType == XmlNodeType.Element)
+                    foreach (XmlAttribute attr in child.Attributes)
                     {
-                        for (int attInd = 0; attInd < reader.AttributeCount; attInd++)
-                        {
-                            reader.MoveToAttribute(attInd);
-                            tScan.SetAttributeValue(reader.Name, reader.Value);
-                        }
-                        if(reader.ReadToDescendant("precursorMz")){
-                            for (int attInd = 0; attInd < reader.AttributeCount; attInd++)
-                            {
-                                reader.MoveToAttribute(attInd);
-                                tScan.SetAttributeValue(reader.Name, reader.Value);
-                            }
-                        }
-                        else if (reader.ReadToDescendant("peaks"))
-                        {
-                            tScan.SetAttributeValue(reader.Name, reader.ReadElementContentAsString());
-                            for (int attInd = 0; attInd < reader.AttributeCount; attInd++)
-                            {
-                                reader.MoveToAttribute(attInd);
-                                tScan.SetAttributeValue(reader.Name, reader.Value);
-                            }
-                        }
+                        tScan.SetAttributeValue(attr.Name, attr.Value);
                     }
                 }
+                scans.Add(tScan);
             }
-            return scans;
+            int count = scans.Count;
+            scanElems = null;
+            doc = null;
         }
 
         /// <summary>
@@ -67,7 +56,6 @@ namespace MonocleUI.lib
         /// <param name="peakCount"></param>
         /// <returns></returns>
         public static List<Centroid> ReadPeaks(string str,int peakCount) {
-            Debug.WriteLine(str);
             int count = peakCount;
             int size = count * 2;
             if (String.Compare(str, "AAAAAAAAAAA=") == 0)
