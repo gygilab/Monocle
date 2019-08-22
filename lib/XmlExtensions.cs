@@ -49,17 +49,17 @@ namespace MonocleUI.lib
         /// <returns></returns>
         public static XmlDocument BuildInitialMzxml(this XmlDocument doc, string parentFile, string parentFileType = "RAWData")
         {
+            XmlNode xmlNode = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+            doc.AppendChild(xmlNode);
             XmlElement newMzxmlElement = doc.CreateElement("mzXML");
+            XNamespace ns0 = "http://sashimi.sourceforge.net/schema_revision/mzXML_3.1";
             XNamespace ns1 = "http://www.w3.org/2001/XMLSchema-instance";
             XNamespace ns2 = "http://sashimi.sourceforge.net/schema_revision/mzXML_3.1 http://sashimi.sourceforge.net/schema_revision/mzXML_3.1/mzXML_idx_3.1.xsd";
-
-            XmlAttribute newAttribute = doc.CreateAttribute("xsi:schemaLocation", ns2.NamespaceName);
-            newMzxmlElement.Attributes.Append(newAttribute);
 
             /// Scans will also be added to the msRun node!
             /// add to mzXML node
             XmlElement newMsrunElement = doc.CreateElement("msRun");
-            newAttribute = doc.CreateAttribute("scanCount");
+            XmlAttribute newAttribute = doc.CreateAttribute("scanCount");
             newAttribute.Value = "0";
             newMsrunElement.Attributes.Append(newAttribute);
 
@@ -111,6 +111,9 @@ namespace MonocleUI.lib
 
             /// mzXML contains: msRun
             newMzxmlElement.AppendChild(newMsrunElement);
+            newMzxmlElement.SetAttribute("xmlns", ns0.NamespaceName);
+            newMzxmlElement.SetAttribute("xmlns:xsi", ns1.NamespaceName);
+            newMzxmlElement.SetAttribute("xsi:schemaLocation", ns2.NamespaceName);
 
             doc.AppendChild(newMzxmlElement);
             return doc;
