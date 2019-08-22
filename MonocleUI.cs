@@ -123,5 +123,15 @@ namespace MonocleUI
         {
             GC.Collect();
         }
+
+        private void GCCollection1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GC.Collect(0);
+        }
+
+        private void GCCollection2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GC.Collect(1);
+        }
     }
 }

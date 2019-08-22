@@ -54,7 +54,8 @@
             this.export_folder_dialog = new System.Windows.Forms.FolderBrowserDialog();
             this.log_toggle_checkbox = new System.Windows.Forms.CheckBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.button1 = new System.Windows.Forms.Button();
+            this.gCCollection1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gCCollection2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
@@ -92,7 +93,9 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gCCollectionToolStripMenuItem});
+            this.gCCollectionToolStripMenuItem,
+            this.gCCollection1ToolStripMenuItem,
+            this.gCCollection2ToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -287,14 +290,19 @@
             this.log_toggle_checkbox.UseVisualStyleBackColor = true;
             this.log_toggle_checkbox.CheckedChanged += new System.EventHandler(this.Log_toggle_checkbox_CheckedChanged);
             // 
-            // button1
+            // gCCollection1ToolStripMenuItem
             // 
-            this.button1.Location = new System.Drawing.Point(518, 490);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.gCCollection1ToolStripMenuItem.Name = "gCCollection1ToolStripMenuItem";
+            this.gCCollection1ToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.gCCollection1ToolStripMenuItem.Text = "GC Collection 1";
+            this.gCCollection1ToolStripMenuItem.Click += new System.EventHandler(this.GCCollection1ToolStripMenuItem_Click);
+            // 
+            // gCCollection2ToolStripMenuItem
+            // 
+            this.gCCollection2ToolStripMenuItem.Name = "gCCollection2ToolStripMenuItem";
+            this.gCCollection2ToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.gCCollection2ToolStripMenuItem.Text = "GC Collection 2";
+            this.gCCollection2ToolStripMenuItem.Click += new System.EventHandler(this.GCCollection2ToolStripMenuItem_Click);
             // 
             // MonocleUI
             // 
@@ -302,7 +310,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(767, 724);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.log_toggle_checkbox);
             this.Controls.Add(this.start_monocle_button);
             this.Controls.Add(this.progressBar1);
@@ -355,8 +362,9 @@
         private System.Windows.Forms.CheckBox log_toggle_checkbox;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolTip mainToolTip;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolStripMenuItem gCCollectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gCCollection1ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gCCollection2ToolStripMenuItem;
     }
 }
 

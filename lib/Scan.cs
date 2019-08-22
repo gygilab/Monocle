@@ -84,6 +84,11 @@ namespace MonocleUI
             return tempArray;
         }
 
+        /// <summary>
+        /// Set Scan properties, this is ugly and should be improved...
+        /// </summary>
+        /// <param name="attribute"></param>
+        /// <param name="value"></param>
         public void SetAttributeValue(string attribute, string value)
         {
             switch (attribute)

@@ -11,7 +11,7 @@ namespace MonocleUI.lib
 {
     public class MZXML
     {
-        public static void ReadXml(string xmlFilePath, ref List<Scan> scans)
+        public static List<Scan> ReadXml(string xmlFilePath, List<Scan> scans)
         {
             if (xmlFilePath == "" || !File.Exists(xmlFilePath))
             {
@@ -44,9 +44,7 @@ namespace MonocleUI.lib
                 }
                 scans.Add(tScan);
             }
-            int count = scans.Count;
-            scanElems = null;
-            doc = null;
+            return scans;
         }
 
         /// <summary>
