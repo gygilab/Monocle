@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace MonocleUI.lib
 {
-    class FileProcessor : IDisposable
+    class FileProcessor
     {
-        StreamReader Reader;
         FileWriter Writer;
 
         public Files files { get; set; } = new Files();
@@ -32,35 +31,16 @@ namespace MonocleUI.lib
             Writer = new FileWriter();
         }
 
-        /// <summary>
-        /// Processes a single file.
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <param name="inputFileType"></param>
-        public void Run(string filePath, InputFileType inputFileType)
+        public void Run(string newFile = "C:\\Users\\thom700\\Downloads\\g05432_tko_std_comet.mzXML")
         {
-            Reader = new StreamReader(filePath);
-        }
-
-        /// <summary>
-        /// Process a batch of files.
-        /// </summary>
-        /// <param name="filePaths"></param>
-        /// <param name="inputFileType"></param>
-        public void Run(string[] filePaths, InputFileType inputFileType)
-        {
-            foreach(string filePath in filePaths)
+            List<Scan> scans = new List<Scan>();
+            MZXML.ReadXml(newFile, ref scans);
+            foreach(Scan scan in scans)
             {
-                using (Reader = new StreamReader(filePath))
-                {
-
-                }
+                scan.Dispose();
             }
-        }
-
-        public void Dispose()
-        {
-            Reader.Dispose();
+            scans.Clear();
+            GC.Collect();
         }
     }
 }
