@@ -37,7 +37,8 @@ namespace MonocleUI.lib
         {
             if (xmlFilePath == "" || !File.Exists(xmlFilePath))
             {
-                Debug.WriteLine("No proteins in the input.");
+                Debug.WriteLine("No scans in the input.");
+                return null;
             }
             XmlDocument doc = new XmlDocument();
             using (FileStream fs = new FileStream(xmlFilePath, FileMode.Open))
@@ -51,17 +52,17 @@ namespace MonocleUI.lib
                     Scan tScan = new Scan();
                     foreach (XmlAttribute attr in node.Attributes)
                     {
-                        tScan.SetAttributeValue(attr.Name, attr.Value);
+                        tScan.CheckAndSetValue(attr.Name, attr.Value);
                     }
 
                     //Process child nodes
                     XmlNodeList children = node.ChildNodes;
                     foreach (XmlNode child in children)
                     {
-                        tScan.SetAttributeValue(child.Name, child.InnerText);
+                        tScan.CheckAndSetValue(child.Name, child.InnerText);
                         foreach (XmlAttribute attr in child.Attributes)
                         {
-                            tScan.SetAttributeValue(attr.Name, attr.Value);
+                            tScan.CheckAndSetValue(attr.Name, attr.Value);
                         }
                     }
                     // Check if MS1 and add to processing pool
@@ -72,7 +73,7 @@ namespace MonocleUI.lib
                     }
                     else if (tScan.MsOrder == 2)
                     {
-                        Monocle.Run(ref Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tScan.MasterScanNumber).First(), ref tScan);
+                        Monocle.Run(ref Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tScan.PrecursorMasterScanNumber).First(), ref tScan);
                     }
 
                     scans.Add(tScan);
@@ -81,6 +82,23 @@ namespace MonocleUI.lib
             Ms1ScansCentroids = new Scan[12];
             Ms1ScanIndex = 0;
             return scans;
+        }
+
+        public static void Write(string xmlFilePath, List<Scan> scans)
+        {
+            if (xmlFilePath == "" || !File.Exists(xmlFilePath))
+            {
+                Debug.WriteLine("No proteins in the input.");
+            }
+            XmlDocument doc = new XmlDocument();
+            doc.BuildInitialMzxml("");
+            foreach(Scan scan in scans)
+            {
+                doc.ScanToXml(scan);
+            }
+            doc.Save(Files.ExportPath + "test.mzXML");
+            Ms1ScansCentroids = new Scan[12];
+            Ms1ScanIndex = 0;
         }
 
         /// <summary>

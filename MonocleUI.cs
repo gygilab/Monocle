@@ -37,6 +37,7 @@ namespace MonocleUI
                     if (Processor.files.Add(filePath))
                     {
                         export_folder_maskedTB.Text = Path.GetFullPath(filePath).Replace(Path.GetFileName(filePath), "");
+                        Files.ExportPath = Path.GetFullPath(filePath).Replace(Path.GetFileName(filePath), "");
                         input_files_dgv.Rows.Add(filePath);
                     }
                 }

@@ -19,20 +19,17 @@ namespace MonocleUI
 
         public int ScanNumber { get; set; }
         public int ScanEvent { get; set; }
-        public int MasterScanNumber { get; set; }
         public int MsOrder { get; set; }
         public int PeakCount { get; set; } = 0;
         public int MasterIndex { get; set; }
-        public double PrecursorMz { get; set; }
-        public double PrecursorMz2 { get; set; }
-        public string ScanDescription { get; set; }
+        public string ScanDescription { get; set; } = "";
         public double CollisionEnergy { get; set; }
         public double IonInjectionTime { get; set; }
         public double ElapsedScanTime { get; set; }
         public bool Polarity { get; set; } = true;
-        public string ScanType { get; set; }
-        public string FilterLine { get; set; }
-        public string RetentionTime { get; set; }
+        public string ScanType { get; set; } = "";
+        public string FilterLine { get; set; } = "";
+        public string RetentionTime { get; set; } = "";
         public double StartMz { get; set; }
         public double EndMz { get; set; }
         public double LowestMz { get; set; }
@@ -41,18 +38,21 @@ namespace MonocleUI
         public double BasePeakIntensity { get; set; } = 0;
         public int FaimsCV { get; set; } = 0;
         public double MonoisotopicMz { get; set; }
+        public double PrecursorMz { get; set; }
+        public int PrecursorMasterScanNumber { get; set; }
+        public double PrecursorMz2 { get; set; }
         public int PrecursorCharge { get; set; }
         public double PrecursorIntensity { get; set; }
-        public string ActivationMethod { get; set; }
+        public string PrecursorActivationMethod { get; set; } = "";
         public int CentroidCount { get; private set; }
         /// <summary>
         /// Peaks
         /// </summary>
         public List<Centroid> Centroids { get; set; } = new List<Centroid>();
         public int PeaksPrecision { get; set; }
-        public string PeaksByteOrder { get; set; }
-        public string PeaksContentType { get; set; }
-        public string PeaksCompressionType { get; set; }
+        public string PeaksByteOrder { get; set; } = "";
+        public string PeaksContentType { get; set; } = "";
+        public string PeaksCompressionType { get; set; } = "";
         public int PeaksCompressedLength { get; set; }
         public string Peaks
         {
@@ -87,102 +87,131 @@ namespace MonocleUI
         }
 
         /// <summary>
-        /// Set Scan properties, this is ugly and should be improved...
+        /// Check and set attribute based on attributes dictionary
         /// </summary>
         /// <param name="attribute"></param>
         /// <param name="value"></param>
-        public void SetAttributeValue(string attribute, string value)
+        public void CheckAndSetValue(string attribute, string value)
         {
-            switch (attribute)
+            string tempAttr;
+            if (Attributes.ContainsKey(attribute))
             {
-                case "num":
-                    ScanNumber = int.Parse(value);
-                    break;
-                case "msLevel":
-                    MsOrder = int.Parse(value);
-                    break;
-                case "scanEvent":
-                    ScanEvent = int.Parse(value);
-                    break;
-                case "peaksCount":
-                    PeakCount = int.Parse(value);
-                    break;
-                case "masterIndex":
-                    MasterIndex = int.Parse(value);
-                    break;
-                case "ionInjectionTime":
-                    IonInjectionTime = double.Parse(value);
-                    break;
-                case "elapsedScanTime":
-                    IonInjectionTime = double.Parse(value);
-                    break;
-                case "polarity":
-                    Polarity = (value == "+");
-                    break;
-                case "scanType":
-                    ScanType = value;
-                    break;
-                case "filterLine":
-                    FilterLine = value;
-                    break;
-                case "retentionTime":
-                    RetentionTime = value;
-                    break;
-                case "startMz":
-                    StartMz = double.Parse(value);
-                    break;
-                case "endMz":
-                    EndMz = double.Parse(value);
-                    break;
-                case "lowMz":
-                    LowestMz = double.Parse(value);
-                    break;
-                case "highMz":
-                    HighestMz = double.Parse(value);
-                    break;
-                case "basePeakMz":
-                    BasePeakMz = double.Parse(value);
-                    break;
-                case "basePeakIntensity":
-                    BasePeakIntensity = double.Parse(value);
-                    break;
-                // Precusor information
-                case "precursorMz":
-                    PrecursorMz = double.Parse(value);
-                    break;
-                case "precursorScanNum":
-                    MasterScanNumber = int.Parse(value);
-                    break;
-                case "precursorIntensity":
-                    PrecursorIntensity = double.Parse(value);
-                    break;
-                case "precursorCharge":
-                    PrecursorCharge = int.Parse(value);
-                    break;
-                case "activationMethod":
-                    ActivationMethod = value;
-                    break;
-                // Peaks information
-                case "peaks":
-                    Peaks = value;
-                    break;
-                case "precision":
-                    PeaksPrecision = int.Parse(value);
-                    break;
-                case "byteOrder":
-                    PeaksByteOrder = value;
-                    break;
-                case "contentType":
-                    PeaksContentType = value;
-                    break;
-                case "compressionType":
-                    PeaksCompressionType = value;
-                    break;
-                case "compressedLen":
-                    PeaksCompressedLength = int.Parse(value);
-                    break;
+                tempAttr = Attributes[attribute];
+                PropertyInfo piTmp;
+                double dTmp; bool bTmp;
+                if (typeof(Scan).GetProperty(tempAttr) != null) //check names even though readOnly DGV
+                {
+                    piTmp = typeof(Scan).GetProperty(tempAttr);
+
+                    if (piTmp.PropertyType == typeof(int) && Int32.TryParse(value, out int iTmp))
+                    {
+                        piTmp.SetValue(this, iTmp);
+                    }
+                    else if (piTmp.PropertyType == typeof(string))
+                    {
+                        piTmp.SetValue(this, value);
+                    }
+                    else if (piTmp.PropertyType == typeof(double) && Double.TryParse(value, out dTmp))
+                    {
+                        piTmp.SetValue(this, dTmp);
+                    }
+                    else if (piTmp.PropertyType == typeof(bool) && Boolean.TryParse(value, out bTmp))
+                    {
+                        piTmp.SetValue(this, bTmp);
+                    }
+                }
             }
         }
+        /// <summary>
+        /// Check and GET attribute based on attributes dictionary
+        /// </summary>
+        /// <param name="attribute"></param>
+        /// <param name="value"></param>
+        public string CheckAndGetValue(string attribute)
+        {
+            string tempAttr;
+            if (Attributes.ContainsKey(attribute))
+            {
+                tempAttr = Attributes[attribute];
+                if (typeof(Scan).GetProperty(tempAttr) != null) //check names even though readOnly DGV
+                {
+                    object output = GetType().GetProperty(tempAttr).GetValue(this, null);
+                    if(output.GetType() == typeof(int))
+                    {
+                        return int.Parse(output.ToString()).ToString();
+                    }
+                    else if (output.GetType() == typeof(bool))
+                    {
+                        return bool.Parse(output.ToString()).ToString();
+                    }
+                    else if (output.GetType() == typeof(double))
+                    {
+                        return double.Parse(output.ToString()).ToString();
+                    }
+                    else if (output.GetType() == typeof(string))
+                    {
+                        return output.ToString();
+                    }
+                    return "";
+                }
+            }
+            return null;
+        }
+
+        public Dictionary<string, string> Attributes = new Dictionary<string, string>()
+        {
+            { "num" , "ScanNumber" },
+            { "msLevel" , "MsOrder" },
+            { "scanEvent" , "ScanEvent" },
+            { "peaksCount" , "PeakCount" },
+            { "masterIndex" , "MasterIndex" },
+            { "IonInjectionTime" , "IonInjectionTime" },
+            { "elapsedScanTime" , "ElapsedScanTime" },
+            { "polarity" , "Polarity" },
+            { "scanType" , "ScanType" },
+            { "filterLine" , "FilterLine" },
+            { "retentionTime","RetentionTime" },
+            { "startMz","StartMz" },
+            { "endMz","EndMz" },
+            { "lowMz","LowestMz" },
+            { "highMz","HighestMz" },
+            { "basePeakMz","BasePeakMz" },
+            { "basePeakIntensity","BasePeakIntensity" },
+            // Precusor information
+            { "precursorMz","PrecursorMz" },
+            { "precursorScanNum","PrecursorMasterScanNumber" },
+            { "precursorIntensity","PrecursorIntensity" },
+            { "precursorCharge","PrecursorCharge" },
+            { "activationMethod","PrecursorActivationMethod" },
+            // Peaks information
+            { "peaks","Peaks" },
+            { "precision","PeaksPrecision" },
+            { "byteOrder","PeaksByteOrder" },
+            { "contentType","PeaksContentType" },
+            { "compressionType", "PeaksCompressionType" },
+            { "compressedLen", "PeaksCompressedLength" }
+        };
+
+        public Dictionary<string, string> PrecursorAttributes = new Dictionary<string, string>()
+        {
+            // Precusor information
+            { "precursorMz","PrecursorMz" },
+            { "precursorScanNum","PrecursorMasterScanNumber" },
+            { "precursorIntensity","PrecursorIntensity" },
+            { "precursorCharge","PrecursorCharge" },
+            { "activationMethod","PrecursorActivationMethod" }
+        };
+
+        public Dictionary<string, string> PeaksAttributes = new Dictionary<string, string>()
+        {
+            // Peaks information
+            { "peaks","Peaks" },
+            { "precision","PeaksPrecision" },
+            { "byteOrder","PeaksByteOrder" },
+            { "contentType","PeaksContentType" },
+            { "compressionType", "PeaksCompressionType" },
+            { "compressedLen", "PeaksCompressedLength" }
+        };
 
         public double CalculateIsolationSpecificity(Centroid centroid, double isolationWindow)
         {

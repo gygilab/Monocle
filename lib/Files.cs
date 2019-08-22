@@ -9,6 +9,8 @@ namespace MonocleUI
     {
         public List<string> FileList { get; private set; } = new List<string>();
 
+        public static string ExportPath { get; set; } = "";
+
         public bool Add(string newFilePath)
         {
             if (File.Exists(newFilePath) && Path.GetExtension(newFilePath).IsInputType() &&

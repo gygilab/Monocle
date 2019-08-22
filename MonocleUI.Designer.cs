@@ -54,8 +54,6 @@
             this.export_folder_dialog = new System.Windows.Forms.FolderBrowserDialog();
             this.log_toggle_checkbox = new System.Windows.Forms.CheckBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.gCCollection1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gCCollection2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
@@ -93,9 +91,7 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gCCollectionToolStripMenuItem,
-            this.gCCollection1ToolStripMenuItem,
-            this.gCCollection2ToolStripMenuItem});
+            this.gCCollectionToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -291,18 +287,6 @@
             this.log_toggle_checkbox.UseVisualStyleBackColor = true;
             this.log_toggle_checkbox.CheckedChanged += new System.EventHandler(this.Log_toggle_checkbox_CheckedChanged);
             // 
-            // gCCollection1ToolStripMenuItem
-            // 
-            this.gCCollection1ToolStripMenuItem.Name = "gCCollection1ToolStripMenuItem";
-            this.gCCollection1ToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.gCCollection1ToolStripMenuItem.Text = "GC Collection 1";
-            // 
-            // gCCollection2ToolStripMenuItem
-            // 
-            this.gCCollection2ToolStripMenuItem.Name = "gCCollection2ToolStripMenuItem";
-            this.gCCollection2ToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.gCCollection2ToolStripMenuItem.Text = "GC Collection 2";
-            // 
             // MonocleUI
             // 
             this.AllowDrop = true;
@@ -362,8 +346,6 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolTip mainToolTip;
         private System.Windows.Forms.ToolStripMenuItem gCCollectionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gCCollection1ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gCCollection2ToolStripMenuItem;
     }
 }
 
