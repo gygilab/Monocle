@@ -21,9 +21,20 @@ namespace MonocleUI.lib
             XmlElement newScanElement = doc.CreateElement("scan");
             foreach(KeyValuePair<string,string> attr in scan.Attributes)
             {
-                XmlAttribute newAttribute = doc.CreateAttribute(attr.Key);
-                newAttribute.Value = scan.CheckAndGetValue(attr.Key);
-                newScanElement.Attributes.Append(newAttribute);
+                if (attr.Value.Contains("Precursor"))
+                {
+
+                }
+                else if (attr.Value.Contains("Peaks"))
+                {
+
+                }
+                else
+                {
+                    XmlAttribute newAttribute = doc.CreateAttribute(attr.Key);
+                    newAttribute.Value = scan.CheckAndGetValue(attr.Key);
+                    newScanElement.Attributes.Append(newAttribute);
+                }
             }
             doc.GetElementsByTagName("msRun")[0].AppendChild(newScanElement);
             return doc;

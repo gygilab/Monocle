@@ -99,6 +99,7 @@ namespace MonocleUI.lib
             doc.Save(Files.ExportPath + "test.mzXML");
             Ms1ScansCentroids = new Scan[12];
             Ms1ScanIndex = 0;
+            Debug.WriteLine("Finished writing xml: " + Files.ExportPath + "test.mzXML");
         }
 
         /// <summary>

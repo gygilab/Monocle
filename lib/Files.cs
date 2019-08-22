@@ -9,7 +9,7 @@ namespace MonocleUI
     {
         public List<string> FileList { get; private set; } = new List<string>();
 
-        public static string ExportPath { get; set; } = "";
+        public static string ExportPath { get; set; } = Environment.SpecialFolder.MyDocuments.ToString();
 
         public bool Add(string newFilePath)
         {
