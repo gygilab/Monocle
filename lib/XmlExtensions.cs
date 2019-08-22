@@ -8,6 +8,17 @@ using System.Xml.Linq;
 
 namespace MonocleUI.lib
 {
+    public class MonocleXmlDoxument : XmlDocument
+    {
+        public int currentByteCount { get; set; } = 0;
+
+        public override XmlNode AppendChild(XmlNode newChild)
+        {
+            currentByteCount += Encoding.Unicode.GetByteCount(newChild.InnerText);
+            return base.AppendChild(newChild);
+        }
+    }
+
     public static class XmlExtensions
     {
         /// <summary>
@@ -23,9 +34,9 @@ namespace MonocleUI.lib
 
             foreach (KeyValuePair<string,string> attr in scan.Attributes)
             {
-                XmlAttribute newAttribute = doc.CreateAttribute(attr.Key);
-                newAttribute.Value = scan.CheckAndGetValue(attr.Key);
-                scanElement.Attributes.Append(newAttribute);
+                XmlAttribute Attribute = doc.CreateAttribute(attr.Key);
+                Attribute.Value = scan.CheckAndGetValue(attr.Key);
+                scanElement.Attributes.Append(Attribute);
             }
 
             foreach (KeyValuePair<string, string> attr in scan.PeaksAttributes)
@@ -36,9 +47,9 @@ namespace MonocleUI.lib
                 }
                 else
                 {
-                    XmlAttribute newAttribute = doc.CreateAttribute(attr.Key);
-                    newAttribute.Value = scan.CheckAndGetValue(attr.Key);
-                    peaksElement.Attributes.Append(newAttribute);
+                    XmlAttribute Attribute = doc.CreateAttribute(attr.Key);
+                    Attribute.Value = scan.CheckAndGetValue(attr.Key);
+                    peaksElement.Attributes.Append(Attribute);
                 }
             }
             scanElement.AppendChild(peaksElement);
@@ -54,15 +65,28 @@ namespace MonocleUI.lib
                     }
                     else
                     {
-                        XmlAttribute newAttribute = doc.CreateAttribute(attr.Key);
-                        newAttribute.Value = scan.CheckAndGetValue(attr.Key);
-                        precursorElement.Attributes.Append(newAttribute);
+                        XmlAttribute Attribute = doc.CreateAttribute(attr.Key);
+                        Attribute.Value = scan.CheckAndGetValue(attr.Key);
+                        precursorElement.Attributes.Append(Attribute);
                     }
                 }
                 scanElement.AppendChild(precursorElement);
             }
 
             doc.GetElementsByTagName("msRun")[0].AppendChild(scanElement);
+            return doc;
+        }
+
+        public static XmlDocument ScanNumberToOffset(this XmlDocument doc, int ScanNumber)
+        {
+            XmlElement offsetElement = doc.CreateElement("offset");
+            XmlAttribute Attribute = doc.CreateAttribute("id");
+            Attribute.Value = ScanNumber.ToString();
+            offsetElement.Attributes.Append(Attribute);
+            offsetElement.InnerText = Encoding.Unicode.GetByteCount(doc.InnerXml).ToString();
+
+            doc.GetElementsByTagName("index")[0].AppendChild(offsetElement);
+
             return doc;
         }
 
@@ -75,73 +99,83 @@ namespace MonocleUI.lib
         /// <returns></returns>
         public static XmlDocument BuildInitialMzxml(this XmlDocument doc, string parentFile, string parentFileType = "RAWData")
         {
-            XmlNode xmlNode = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+            XmlNode xmlNode = doc.CreateXmlDeclaration("1.0", null, null);
             doc.AppendChild(xmlNode);
-            XmlElement newMzxmlElement = doc.CreateElement("mzXML");
+            XmlElement MzxmlElement = doc.CreateElement("mzXML");
             XNamespace ns0 = "http://sashimi.sourceforge.net/schema_revision/mzXML_3.1";
             XNamespace ns1 = "http://www.w3.org/2001/XMLSchema-instance";
             XNamespace ns2 = "http://sashimi.sourceforge.net/schema_revision/mzXML_3.1 http://sashimi.sourceforge.net/schema_revision/mzXML_3.1/mzXML_idx_3.1.xsd";
 
             /// Scans will also be added to the msRun node!
             /// add to mzXML node
-            XmlElement newMsrunElement = doc.CreateElement("msRun");
-            XmlAttribute newAttribute = doc.CreateAttribute("scanCount");
-            newAttribute.Value = "0";
-            newMsrunElement.Attributes.Append(newAttribute);
+            XmlElement MsrunElement = doc.CreateElement("msRun");
+            XmlAttribute Attribute = doc.CreateAttribute("scanCount");
+            Attribute.Value = "0";
+            MsrunElement.Attributes.Append(Attribute);
 
-            newAttribute = doc.CreateAttribute("startTime");
-            newAttribute.Value = "0";
-            newMsrunElement.Attributes.Append(newAttribute);
+            Attribute = doc.CreateAttribute("startTime");
+            Attribute.Value = "0";
+            MsrunElement.Attributes.Append(Attribute);
 
-            newAttribute = doc.CreateAttribute("endTime");
-            newAttribute.Value = "0";
-            newMsrunElement.Attributes.Append(newAttribute);
+            Attribute = doc.CreateAttribute("endTime");
+            Attribute.Value = "0";
+            MsrunElement.Attributes.Append(Attribute);
 
             // add to msRun
-            XmlElement newParentFileElement = doc.CreateElement("parentFile");
-            newAttribute = doc.CreateAttribute("fileName");
-            newAttribute.Value = parentFile;
-            newParentFileElement.Attributes.Append(newAttribute);
+            XmlElement ParentFileElement = doc.CreateElement("parentFile");
+            Attribute = doc.CreateAttribute("fileName");
+            Attribute.Value = parentFile;
+            ParentFileElement.Attributes.Append(Attribute);
 
-            newAttribute = doc.CreateAttribute("fileType");
-            newAttribute.Value = "parentFileType";
-            newParentFileElement.Attributes.Append(newAttribute);
+            Attribute = doc.CreateAttribute("fileType");
+            Attribute.Value = "parentFileType";
+            ParentFileElement.Attributes.Append(Attribute);
 
-            XmlElement newMsInstrumentElement = doc.CreateElement("msInstrument");
+            // add to index
+            XmlElement indexElement = doc.CreateElement("index");
+            XmlElement indexOffsetElement = doc.CreateElement("indexOffset");
+
+            Attribute = doc.CreateAttribute("name");
+            Attribute.Value = "scan";
+            indexElement.Attributes.Append(Attribute);
+
+            XmlElement MsInstrumentElement = doc.CreateElement("msInstrument");
             // add to instrument
-            XmlElement newMsManufacturerElement = doc.CreateElement("msManufacturer");
-            newAttribute = doc.CreateAttribute("category");
-            newAttribute.Value = "msManufacturer";
-            newMsManufacturerElement.Attributes.Append(newAttribute);
+            XmlElement MsManufacturerElement = doc.CreateElement("msManufacturer");
+            Attribute = doc.CreateAttribute("category");
+            Attribute.Value = "msManufacturer";
+            MsManufacturerElement.Attributes.Append(Attribute);
 
-            newAttribute = doc.CreateAttribute("value");
-            newAttribute.Value = "unknown";
-            newMsManufacturerElement.Attributes.Append(newAttribute);
+            Attribute = doc.CreateAttribute("value");
+            Attribute.Value = "unknown";
+            MsManufacturerElement.Attributes.Append(Attribute);
             // add to instrument
-            XmlElement newMsModelElement = doc.CreateElement("msModel");
-            newAttribute = doc.CreateAttribute("category");
-            newAttribute.Value = "msModel";
-            newMsModelElement.Attributes.Append(newAttribute);
+            XmlElement MsModelElement = doc.CreateElement("msModel");
+            Attribute = doc.CreateAttribute("category");
+            Attribute.Value = "msModel";
+            MsModelElement.Attributes.Append(Attribute);
 
-            newAttribute = doc.CreateAttribute("value");
-            newAttribute.Value = "unknown";
-            newMsModelElement.Attributes.Append(newAttribute);
+            Attribute = doc.CreateAttribute("value");
+            Attribute.Value = "unknown";
+            MsModelElement.Attributes.Append(Attribute);
 
             /// Instrument contains: msModel and msManufacturer
-            newMsInstrumentElement.AppendChild(newMsManufacturerElement);
-            newMsInstrumentElement.AppendChild(newMsModelElement);
+            MsInstrumentElement.AppendChild(MsManufacturerElement);
+            MsInstrumentElement.AppendChild(MsModelElement);
 
             /// msRun contains: parentfile, msInstrument (and scans)
-            newMsrunElement.AppendChild(newParentFileElement);
-            newMsrunElement.AppendChild(newMsInstrumentElement);
+            MsrunElement.AppendChild(ParentFileElement);
+            MsrunElement.AppendChild(MsInstrumentElement);
 
-            /// mzXML contains: msRun
-            newMzxmlElement.AppendChild(newMsrunElement);
-            newMzxmlElement.SetAttribute("xmlns", ns0.NamespaceName);
-            newMzxmlElement.SetAttribute("xmlns:xsi", ns1.NamespaceName);
-            newMzxmlElement.SetAttribute("xsi:schemaLocation", ns2.NamespaceName);
+            /// mzXML contains: msRun, index, and indexOffset
+            MzxmlElement.AppendChild(MsrunElement);
+            MzxmlElement.AppendChild(indexElement);
+            MzxmlElement.AppendChild(indexOffsetElement);
+            MzxmlElement.SetAttribute("xmlns", ns0.NamespaceName);
+            MzxmlElement.SetAttribute("xmlns:xsi", ns1.NamespaceName);
+            MzxmlElement.SetAttribute("xsi:schemaLocation", ns2.NamespaceName);
 
-            doc.AppendChild(newMzxmlElement);
+            doc.AppendChild(MzxmlElement);
             return doc;
         }
     }

@@ -33,7 +33,7 @@ namespace MonocleUI.lib
             }
         }
 
-        public static List<Scan> Process(string xmlFilePath, List<Scan> scans)
+        public static List<Scan> Consume(string xmlFilePath, List<Scan> scans)
         {
             if (xmlFilePath == "" || !File.Exists(xmlFilePath))
             {
@@ -95,6 +95,7 @@ namespace MonocleUI.lib
             foreach(Scan scan in scans)
             {
                 doc.ScanToXml(scan);
+                doc.ScanNumberToOffset(scan.ScanNumber);
             }
             doc.Save(Files.ExportPath + "test.mzXML");
             Ms1ScansCentroids = new Scan[12];

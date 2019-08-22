@@ -42,7 +42,7 @@ namespace MonocleUI.lib
                     {
                         List<Scan> scans = new List<Scan>();
                         Debug.WriteLine("Start reading.");
-                        MZXML.Process(newFile, scans);
+                        MZXML.Consume(newFile, scans);
                         Debug.WriteLine("Start writing.");
                         MZXML.Write(Files.ExportPath + "test.mzXML", scans);
                         foreach (Scan scan in scans)

@@ -188,7 +188,7 @@ namespace MonocleUI
             { "scanEvent" , "ScanEvent" },
             { "peaksCount" , "PeakCount" },
             { "masterIndex" , "MasterIndex" },
-            { "IonInjectionTime" , "IonInjectionTime" },
+            { "ionInjectionTime" , "IonInjectionTime" },
             { "elapsedScanTime" , "ElapsedScanTime" },
             { "polarity" , "Polarity" },
             { "scanType" , "ScanType" },
