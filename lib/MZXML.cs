@@ -11,7 +11,29 @@ namespace MonocleUI.lib
 {
     public class MZXML
     {
-        public static List<Scan> ReadXml(string xmlFilePath, List<Scan> scans)
+        public static Scan[] Ms1ScansCentroids = new Scan[12];
+        public static Scan ParentScan = new Scan();
+        private static int _Ms1ScanIndex { get; set; } = 0;
+        public static int Ms1ScanIndex
+        {
+            get
+            {
+                return _Ms1ScanIndex;
+            }
+            set
+            {
+                if (value >= Ms1ScansCentroids.Length)
+                {
+                    _Ms1ScanIndex = 0;
+                }
+                else
+                {
+                    _Ms1ScanIndex = value;
+                }
+            }
+        }
+
+        public static List<Scan> Process(string xmlFilePath, List<Scan> scans)
         {
             if (xmlFilePath == "" || !File.Exists(xmlFilePath))
             {
@@ -22,28 +44,42 @@ namespace MonocleUI.lib
             {
                 doc.Load(fs);
             }
-            XmlNodeList scanElems = doc.GetElementsByTagName("scan");
-            foreach(XmlNode node in scanElems)
+            using (XmlNodeList scanElems = doc.GetElementsByTagName("scan"))
             {
-                Scan tScan = new Scan();
-                foreach (XmlAttribute attr in node.Attributes)
+                foreach (XmlNode node in scanElems)
                 {
-                    tScan.SetAttributeValue(attr.Name, attr.Value);
-                }
-                XmlNodeList children = node.ChildNodes;
-                foreach (XmlNode child in children)
-                {
-                    if (child.Name == "peaks")
-                    {
-                        tScan.SetAttributeValue(child.Name, child.InnerText);
-                    }
-                    foreach (XmlAttribute attr in child.Attributes)
+                    Scan tScan = new Scan();
+                    foreach (XmlAttribute attr in node.Attributes)
                     {
                         tScan.SetAttributeValue(attr.Name, attr.Value);
                     }
+
+                    //Process child nodes
+                    XmlNodeList children = node.ChildNodes;
+                    foreach (XmlNode child in children)
+                    {
+                        tScan.SetAttributeValue(child.Name, child.InnerText);
+                        foreach (XmlAttribute attr in child.Attributes)
+                        {
+                            tScan.SetAttributeValue(attr.Name, attr.Value);
+                        }
+                    }
+                    // Check if MS1 and add to processing pool
+                    if (tScan.MsOrder == 1)
+                    {
+                        ParentScan = Ms1ScansCentroids[Ms1ScanIndex] = tScan;
+                        Ms1ScanIndex++;
+                    }
+                    else if (tScan.MsOrder == 2)
+                    {
+                        Monocle.Run(ref Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tScan.MasterScanNumber).First(), ref tScan);
+                    }
+
+                    scans.Add(tScan);
                 }
-                scans.Add(tScan);
             }
+            Ms1ScansCentroids = new Scan[12];
+            Ms1ScanIndex = 0;
             return scans;
         }
 

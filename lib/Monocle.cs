@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using MonocleUI.lib;
+using System.Collections.Generic;
 
 namespace MonocleUI
 {
     public static class Monocle
     {
-        public static double Run(ref Scan parentScan, ref Scan[] Ms1ScansCentroids, double isolatedMz, int charge)
+        public static void Run(ref Scan[] Ms1ScansCentroids, Scan ParentScan, ref Scan DependentScan)
         {
             int numIsotopes = 0;
             int monoisotopicIndex = 0;
             int numTheo = 4;
-
-            double mass = isolatedMz * charge;
             int left = -7;
+
+            double mass = DependentScan.PrecursorMz * DependentScan.PrecursorCharge;
 
             // Restrict number of isotopes to consider based on precursor mass.
             if (mass > 2900)
@@ -35,20 +36,21 @@ namespace MonocleUI
 
             monoisotopicIndex = -1 * left;
 
-            double precursorMz = isolatedMz; // This shold be precursoMz?
+            double precursorMz = DependentScan.PrecursorMz; // This shold be precursoMz?
+            int precursorCharge = DependentScan.PrecursorCharge;
 
             // Search for ion in parent scan, use parent ion mz for future peaks
-            int index = PeakMatcher.Match(parentScan, precursorMz, 50, PeakMatcher.PPM);
+            int index = PeakMatcher.Match(ParentScan, precursorMz, 50, PeakMatcher.PPM);
             if (index >= 0)
             {
-                precursorMz = parentScan.Centroids[index].Mz;
+                precursorMz = ParentScan.Centroids[index].Mz;
             }
 
             // Generate expected relative intensities.
-            List<double> expected = PeptideEnvelopeCalculator.GetTheoreticalEnvelope(precursorMz, charge, numTheo);
+            List<double> expected = PeptideEnvelopeCalculator.GetTheoreticalEnvelope(precursorMz, precursorCharge, numTheo);
             PeptideEnvelopeCalculator.Scale(expected);
 
-            PeptideEnvelope envelope = PeptideEnvelopeExtractor.Extract(Ms1ScansCentroids, precursorMz, charge, left, numIsotopes);
+            PeptideEnvelope envelope = PeptideEnvelopeExtractor.Extract(Ms1ScansCentroids, precursorMz, precursorCharge, left, numIsotopes);
 
             // Get best match using pearson correlation.
             double best_score = -1;
@@ -70,7 +72,7 @@ namespace MonocleUI
 
             newMonoisotopicMz = (newMonoisotopicMz == 0) ? precursorMz : newMonoisotopicMz;
 
-            return newMonoisotopicMz;
+            DependentScan.MonoisotopicMz = newMonoisotopicMz;
         }
 
         public static double CalculateMz(List<double> mzs, List<double> intensities)

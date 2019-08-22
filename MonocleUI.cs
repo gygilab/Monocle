@@ -25,6 +25,7 @@ namespace MonocleUI
             {
                 file_output_format_CLB.Items.Add(type);
             }
+            file_output_format_CLB.SetItemChecked(0, true);
         }
 
         private void Button3_Click(object sender, EventArgs e)
@@ -122,16 +123,6 @@ namespace MonocleUI
         private void GCCollectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GC.Collect();
-        }
-
-        private void GCCollection1ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            GC.Collect(0);
-        }
-
-        private void GCCollection2ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            GC.Collect(1);
         }
     }
 }

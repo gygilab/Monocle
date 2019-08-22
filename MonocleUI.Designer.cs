@@ -213,6 +213,7 @@
             // 
             // file_output_format_CLB
             // 
+            this.file_output_format_CLB.CheckOnClick = true;
             this.file_output_format_CLB.FormattingEnabled = true;
             this.file_output_format_CLB.Location = new System.Drawing.Point(9, 35);
             this.file_output_format_CLB.Name = "file_output_format_CLB";
@@ -295,14 +296,12 @@
             this.gCCollection1ToolStripMenuItem.Name = "gCCollection1ToolStripMenuItem";
             this.gCCollection1ToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.gCCollection1ToolStripMenuItem.Text = "GC Collection 1";
-            this.gCCollection1ToolStripMenuItem.Click += new System.EventHandler(this.GCCollection1ToolStripMenuItem_Click);
             // 
             // gCCollection2ToolStripMenuItem
             // 
             this.gCCollection2ToolStripMenuItem.Name = "gCCollection2ToolStripMenuItem";
             this.gCCollection2ToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.gCCollection2ToolStripMenuItem.Text = "GC Collection 2";
-            this.gCCollection2ToolStripMenuItem.Click += new System.EventHandler(this.GCCollection2ToolStripMenuItem_Click);
             // 
             // MonocleUI
             // 

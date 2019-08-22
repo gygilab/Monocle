@@ -18,6 +18,7 @@ namespace MonocleUI
         const double protonMass = 1.007276466879000;
 
         public int ScanNumber { get; set; }
+        public int ScanEvent { get; set; }
         public int MasterScanNumber { get; set; }
         public int MsOrder { get; set; }
         public int PeakCount { get; set; } = 0;
@@ -64,6 +65,7 @@ namespace MonocleUI
                 if(PeakCount > 0 && value != "")
                 {
                     Centroids = MZXML.ReadPeaks(value, PeakCount);
+                    CentroidCount = Centroids.Count();
                 }
             }
         }
@@ -100,7 +102,7 @@ namespace MonocleUI
                     MsOrder = int.Parse(value);
                     break;
                 case "scanEvent":
-                    ScanNumber = int.Parse(value);
+                    ScanEvent = int.Parse(value);
                     break;
                 case "peaksCount":
                     PeakCount = int.Parse(value);
@@ -144,8 +146,9 @@ namespace MonocleUI
                 case "basePeakIntensity":
                     BasePeakIntensity = double.Parse(value);
                     break;
-                case "peaks":
-                    Peaks = value;
+                // Precusor information
+                case "precursorMz":
+                    PrecursorMz = double.Parse(value);
                     break;
                 case "precursorScanNum":
                     MasterScanNumber = int.Parse(value);
@@ -158,6 +161,10 @@ namespace MonocleUI
                     break;
                 case "activationMethod":
                     ActivationMethod = value;
+                    break;
+                // Peaks information
+                case "peaks":
+                    Peaks = value;
                     break;
                 case "precision":
                     PeaksPrecision = int.Parse(value);

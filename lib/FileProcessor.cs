@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -35,18 +36,26 @@ namespace MonocleUI.lib
         {
             await Task.Run(()=>
             {
-                foreach (string newFile in files.FileList)
+                try
                 {
-                    List<Scan> scans = new List<Scan>();
-                    MZXML.ReadXml(newFile, scans);
-                    foreach (Scan scan in scans)
+                    foreach (string newFile in files.FileList)
                     {
-                        //Monocle.Run(ref scan)
-                        scan.Dispose();
+                        List<Scan> scans = new List<Scan>();
+                        MZXML.Process(newFile, scans);
+                        foreach (Scan scan in scans)
+                        {
+                            //Monocle.Run(ref scan)
+                            scan.Dispose();
+                        }
+                        scans.Clear();
+                        scans = null;
                     }
-                    scans.Clear();
-                    scans = null;
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex + " file processing failed.");
+                }
+
             });
         }
     }
