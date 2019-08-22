@@ -31,16 +31,20 @@ namespace MonocleUI.lib
             Writer = new FileWriter();
         }
 
-        public void Run(string newFile = "C:\\Users\\thom700\\Downloads\\g05432_tko_std_comet.mzXML")
+        public void Run(string testFile = "C:\\Users\\thom700\\Downloads\\g05432_tko_std_comet.mzXML")
         {
-            List<Scan> scans = new List<Scan>();
-            MZXML.ReadXml(newFile, ref scans);
-            foreach(Scan scan in scans)
+            foreach(string newFile in files.FileList)
             {
-                scan.Dispose();
+                List<Scan> scans = new List<Scan>();
+                MZXML.ReadXml(newFile, ref scans);
+                foreach (Scan scan in scans)
+                {
+                    //Monocle.Run(ref scan)
+                    scan.Dispose();
+                }
+                scans.Clear();
+                GC.Collect();
             }
-            scans.Clear();
-            GC.Collect();
         }
     }
 }

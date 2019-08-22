@@ -7,7 +7,7 @@ namespace MonocleUI
 {
     public class Files
     {
-        private List<string> FileList { get; set; } = new List<string>();
+        public List<string> FileList { get; private set; } = new List<string>();
 
         public bool Add(string newFilePath)
         {

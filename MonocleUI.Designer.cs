@@ -31,7 +31,9 @@
             this.components = new System.ComponentModel.Container();
             this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gCCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.input_files_dgv = new System.Windows.Forms.DataGridView();
@@ -51,8 +53,8 @@
             this.input_file_dialog = new System.Windows.Forms.OpenFileDialog();
             this.export_folder_dialog = new System.Windows.Forms.FolderBrowserDialog();
             this.log_toggle_checkbox = new System.Windows.Forms.CheckBox();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.button1 = new System.Windows.Forms.Button();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
@@ -80,11 +82,28 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
+            // 
             // optionsToolStripMenuItem
             // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gCCollectionToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // gCCollectionToolStripMenuItem
+            // 
+            this.gCCollectionToolStripMenuItem.Name = "gCCollectionToolStripMenuItem";
+            this.gCCollectionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+            this.gCCollectionToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.gCCollectionToolStripMenuItem.Text = "GC Collection";
+            this.gCCollectionToolStripMenuItem.Click += new System.EventHandler(this.GCCollectionToolStripMenuItem_Click);
             // 
             // preferencesToolStripMenuItem
             // 
@@ -268,12 +287,14 @@
             this.log_toggle_checkbox.UseVisualStyleBackColor = true;
             this.log_toggle_checkbox.CheckedChanged += new System.EventHandler(this.Log_toggle_checkbox_CheckedChanged);
             // 
-            // exitToolStripMenuItem
+            // button1
             // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
+            this.button1.Location = new System.Drawing.Point(518, 490);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // MonocleUI
             // 
@@ -281,6 +302,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(767, 724);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.log_toggle_checkbox);
             this.Controls.Add(this.start_monocle_button);
             this.Controls.Add(this.progressBar1);
@@ -333,6 +355,8 @@
         private System.Windows.Forms.CheckBox log_toggle_checkbox;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolTip mainToolTip;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripMenuItem gCCollectionToolStripMenuItem;
     }
 }
 

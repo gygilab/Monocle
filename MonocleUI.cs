@@ -118,5 +118,10 @@ namespace MonocleUI
         {
             Processor.Run();
         }
+
+        private void GCCollectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GC.Collect();
+        }
     }
 }
