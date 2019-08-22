@@ -13,3 +13,4 @@ C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\bin\Debug\Therm
 C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\bin\Debug\ThermoFisher.CommonCore.MassPrecisionEstimator.dll
 C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\bin\Debug\ThermoFisher.CommonCore.RawFileReader.dll
 C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\obj\Debug\MonocleUI.csproj.CopyComplete
+C:\Users\thom700\Documents\Visual Studio 2019\Projects\MonocleUI\bin\Debug\zlib.net.dll

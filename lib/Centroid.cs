@@ -7,6 +7,17 @@ namespace MonocleUI
     /// </summary>
     public class Centroid : IComparable
     {
+        public Centroid()
+        {
+
+        }
+
+        public Centroid(double mz, double intensity)
+        {
+            Mz = mz;
+            Intensity = intensity;
+        }
+
         private double mz = 500;
         public double Mz
         {

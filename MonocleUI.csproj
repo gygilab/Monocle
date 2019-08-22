@@ -68,7 +68,9 @@
     <Compile Include="lib\FileWriter.cs" />
     <Compile Include="lib\Monocle.cs" />
     <Compile Include="lib\MonocleHelpers.cs" />
+    <Compile Include="lib\MZXML.cs" />
     <Compile Include="lib\Scan.cs" />
+    <Compile Include="lib\UnitTest.cs" />
     <Compile Include="MonocleUI.cs">
       <SubType>Form</SubType>
     </Compile>
