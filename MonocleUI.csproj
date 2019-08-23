@@ -61,17 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="lib\Centroid.cs" />
-    <Compile Include="lib\FAIMS.cs" />
-    <Compile Include="lib\FileProcessor.cs" />
-    <Compile Include="lib\Files.cs" />
-    <Compile Include="lib\FileWriter.cs" />
-    <Compile Include="lib\Monocle.cs" />
-    <Compile Include="lib\MonocleHelpers.cs" />
-    <Compile Include="lib\MZXML.cs" />
-    <Compile Include="lib\Scan.cs" />
-    <Compile Include="lib\UnitTest.cs" />
-    <Compile Include="lib\XmlExtensions.cs" />
     <Compile Include="MonocleUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,10 +96,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lib\ThermoFisher.CommonCore.BackgroundSubtraction.XML" />
-    <Content Include="lib\ThermoFisher.CommonCore.Data.XML" />
-    <Content Include="lib\ThermoFisher.CommonCore.MassPrecisionEstimator.XML" />
-    <Content Include="lib\ThermoFisher.CommonCore.RawFileReader.XML" />
+    <Folder Include="lib\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Monocle\Monocle.csproj">
+      <Project>{4bdd57cc-ba08-4cfb-b38e-414e26522d59}</Project>
+      <Name>Monocle</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

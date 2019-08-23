@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace MonocleUI.lib
+namespace Monocle
 {
     public class FileWriter
     {

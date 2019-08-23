@@ -1,14 +1,9 @@
-﻿using MonocleUI.lib;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using zlib;
 
-namespace MonocleUI
+namespace Monocle
 {
     /// <summary>
     /// Class to harvest IMsScan information without holding IMsScan class

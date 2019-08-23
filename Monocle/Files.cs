@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace MonocleUI
+namespace Monocle
 {
     public class Files
     {

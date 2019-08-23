@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonocleUI
+namespace Monocle
 {
     /// <summary>
     /// for pulling spectral information from API scans

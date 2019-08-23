@@ -1,7 +1,6 @@
-﻿using MonocleUI.lib;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace MonocleUI
+namespace Monocle
 {
     public static class Monocle
     {
