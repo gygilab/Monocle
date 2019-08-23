@@ -32,9 +32,9 @@ namespace Monocle
             Writer = new FileWriter();
         }
 
-        public async void Run(string testFile = "C:\\Users\\thom700\\Downloads\\g05432_tko_std_comet.mzXML")
+        public async void Run(bool console = false)
         {
-            await Task.Run(()=>
+            if (console)
             {
                 try
                 {
@@ -57,8 +57,35 @@ namespace Monocle
                 {
                     Debug.WriteLine(ex + " file processing failed.");
                 }
+            }
+            else
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        foreach (string newFile in files.FileList)
+                        {
+                            List<Scan> scans = new List<Scan>();
+                            Debug.WriteLine("Start reading.");
+                            MZXML.Consume(newFile, scans);
+                            Debug.WriteLine("Start writing.");
+                            MZXML.Write(Files.ExportPath + "test.mzXML", scans);
+                            foreach (Scan scan in scans)
+                            {
+                                scan.Dispose();
+                            }
+                            scans.Clear();
+                            scans = null;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex + " file processing failed.");
+                    }
 
-            });
+                });
+            }
         }
     }
 }

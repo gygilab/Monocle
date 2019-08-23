@@ -49,5 +49,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Monocle\Monocle.csproj">
+      <Project>{4bdd57cc-ba08-4cfb-b38e-414e26522d59}</Project>
+      <Name>Monocle</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
