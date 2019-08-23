@@ -10,11 +10,12 @@ namespace MonocleUI.lib
 {
     public class MonocleXmlDoxument : XmlDocument
     {
-        public int currentByteCount { get; set; } = 0;
-
-        public override XmlNode AppendChild(XmlNode newChild)
+        /// Count the current number of bytes
+        public int ByteCount { get; set; } = 0;
+        /// Count the current number of bytes
+        public XmlNode AppendChild(XmlNode newChild, bool final)
         {
-            currentByteCount += Encoding.Unicode.GetByteCount(newChild.InnerText);
+            ByteCount += Encoding.ASCII.GetByteCount(newChild.InnerText);
             return base.AppendChild(newChild);
         }
     }
@@ -22,12 +23,29 @@ namespace MonocleUI.lib
     public static class XmlExtensions
     {
         /// <summary>
+        /// Count the current number of bytes
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public static MonocleXmlDoxument IndexByteCount(this MonocleXmlDoxument doc, int ScanNumber)
+        {
+            XmlElement offsetElement = doc.CreateElement("offset");
+            XmlAttribute Attribute = doc.CreateAttribute("id");
+            Attribute.Value = ScanNumber.ToString();
+            offsetElement.Attributes.Append(Attribute);
+            offsetElement.InnerText = doc.ByteCount.ToString();
+            doc.GetElementsByTagName("index")[0].AppendChild(offsetElement);
+            return doc;
+        }
+
+
+        /// <summary>
         /// Add scans to the msRun node in the given document
         /// </summary>
         /// <param name="doc"></param>
         /// <param name="scan"></param>
         /// <returns></returns>
-        public static XmlDocument ScanToXml(this XmlDocument doc, Scan scan)
+        public static MonocleXmlDoxument ScanToXml(this MonocleXmlDoxument doc, Scan scan)
         {
             XmlElement scanElement = doc.CreateElement("scan");
             XmlElement peaksElement = doc.CreateElement("peaks");
@@ -72,21 +90,8 @@ namespace MonocleUI.lib
                 }
                 scanElement.AppendChild(precursorElement);
             }
-
+            doc.ByteCount += Encoding.ASCII.GetByteCount(scanElement.InnerText);
             doc.GetElementsByTagName("msRun")[0].AppendChild(scanElement);
-            return doc;
-        }
-
-        public static XmlDocument ScanNumberToOffset(this XmlDocument doc, int ScanNumber)
-        {
-            XmlElement offsetElement = doc.CreateElement("offset");
-            XmlAttribute Attribute = doc.CreateAttribute("id");
-            Attribute.Value = ScanNumber.ToString();
-            offsetElement.Attributes.Append(Attribute);
-            offsetElement.InnerText = Encoding.Unicode.GetByteCount(doc.InnerXml).ToString();
-
-            doc.GetElementsByTagName("index")[0].AppendChild(offsetElement);
-
             return doc;
         }
 
@@ -97,7 +102,7 @@ namespace MonocleUI.lib
         /// <param name="parentFile"></param>
         /// <param name="parentFileType"></param>
         /// <returns></returns>
-        public static XmlDocument BuildInitialMzxml(this XmlDocument doc, string parentFile, string parentFileType = "RAWData")
+        public static MonocleXmlDoxument BuildInitialMzxml(this MonocleXmlDoxument doc, string parentFile, string parentFileType = "RAWData")
         {
             XmlNode xmlNode = doc.CreateXmlDeclaration("1.0", null, null);
             doc.AppendChild(xmlNode);
@@ -175,7 +180,7 @@ namespace MonocleUI.lib
             MzxmlElement.SetAttribute("xmlns:xsi", ns1.NamespaceName);
             MzxmlElement.SetAttribute("xsi:schemaLocation", ns2.NamespaceName);
 
-            doc.AppendChild(MzxmlElement);
+            doc.AppendChild(MzxmlElement,true);
             return doc;
         }
     }

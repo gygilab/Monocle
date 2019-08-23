@@ -90,13 +90,16 @@ namespace MonocleUI.lib
             {
                 Debug.WriteLine("No proteins in the input.");
             }
-            XmlDocument doc = new XmlDocument();
+            MonocleXmlDoxument doc = new MonocleXmlDoxument();
             doc.BuildInitialMzxml("");
             foreach(Scan scan in scans)
             {
+                doc.IndexByteCount(scan.ScanNumber);
                 doc.ScanToXml(scan);
-                doc.ScanNumberToOffset(scan.ScanNumber);
             }
+            XmlElement offsetElement = doc.CreateElement("offset");
+            XmlAttribute Attribute = doc.CreateAttribute("id");
+            doc.GetElementsByTagName("indexOffset")[0].InnerText = doc.ByteCount.ToString();
             doc.Save(Files.ExportPath + "test.mzXML");
             Ms1ScansCentroids = new Scan[12];
             Ms1ScanIndex = 0;
