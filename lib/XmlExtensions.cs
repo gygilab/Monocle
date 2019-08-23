@@ -8,15 +8,44 @@ using System.Xml.Linq;
 
 namespace MonocleUI.lib
 {
-    public class MonocleXmlDoxument : XmlDocument
+    public class MonocleXmlDocument : XmlDocument
     {
         /// Count the current number of bytes
-        public int ByteCount { get; set; } = 0;
-        /// Count the current number of bytes
+        private int _ByteCount { get; set; } = 0;
+        public int ByteCount {
+            get
+            {
+                return _ByteCount;
+            }
+            set
+            {
+                _ByteCount = value;
+            }
+        }
+        public string ParentFile { get; set; } = "";
+        public string ParentFileType { get; set; } = "RAWData";
+        /// <summary>
+        /// Extension method to count byteCount before adding scans.
+        /// </summary>
+        /// <param name="newChild"></param>
+        /// <param name="final"></param>
+        /// <returns></returns>
         public XmlNode AppendChild(XmlNode newChild, bool final)
         {
-            ByteCount += Encoding.ASCII.GetByteCount(newChild.InnerText);
-            return base.AppendChild(newChild);
+            XmlNode returnNode = base.AppendChild(newChild);
+            // Now count document inner bytes
+            string sOuterXml = OuterXml;
+            XDocument xDoc = XDocument.Parse(sOuterXml);
+            sOuterXml = xDoc.ToString();
+            if (sOuterXml.Contains("</msInstrument>"))
+            {
+                int i = sOuterXml.IndexOf("</msInstrument>");
+                sOuterXml = sOuterXml.Substring(0, i + "</msInstrument>".Length);
+            }
+            sOuterXml = "<?xml version=\"1.0\"?>" + Environment.NewLine + sOuterXml;
+            //8 added for unknown reason, +2 for cr/lf
+            ByteCount = Encoding.UTF8.GetByteCount(sOuterXml) - 6;
+            return returnNode;
         }
     }
 
@@ -27,7 +56,7 @@ namespace MonocleUI.lib
         /// </summary>
         /// <param name="doc"></param>
         /// <returns></returns>
-        public static MonocleXmlDoxument IndexByteCount(this MonocleXmlDoxument doc, int ScanNumber)
+        public static MonocleXmlDocument IndexByteCount(this MonocleXmlDocument doc, int ScanNumber)
         {
             XmlElement offsetElement = doc.CreateElement("offset");
             XmlAttribute Attribute = doc.CreateAttribute("id");
@@ -45,35 +74,27 @@ namespace MonocleUI.lib
         /// <param name="doc"></param>
         /// <param name="scan"></param>
         /// <returns></returns>
-        public static MonocleXmlDoxument ScanToXml(this MonocleXmlDoxument doc, Scan scan)
+        public static MonocleXmlDocument ScanToXml(this MonocleXmlDocument doc, Scan scan)
         {
             XmlElement scanElement = doc.CreateElement("scan");
             XmlElement peaksElement = doc.CreateElement("peaks");
-
+            int offsetCount = 0;
             foreach (KeyValuePair<string,string> attr in scan.Attributes)
             {
                 XmlAttribute Attribute = doc.CreateAttribute(attr.Key);
                 Attribute.Value = scan.CheckAndGetValue(attr.Key);
                 scanElement.Attributes.Append(Attribute);
             }
-
-            foreach (KeyValuePair<string, string> attr in scan.PeaksAttributes)
+            offsetCount += 4;
+            if (scan.MsOrder > 1)
             {
-                if(attr.Key == "peaks")
-                {
-                    peaksElement.InnerText = scan.CheckAndGetValue(attr.Key);
-                }
-                else
+                foreach (KeyValuePair<string, string> attr in scan.MsnAttributes)
                 {
                     XmlAttribute Attribute = doc.CreateAttribute(attr.Key);
                     Attribute.Value = scan.CheckAndGetValue(attr.Key);
-                    peaksElement.Attributes.Append(Attribute);
+                    scanElement.Attributes.Append(Attribute);
                 }
-            }
-            scanElement.AppendChild(peaksElement);
 
-            if (scan.MsOrder > 1)
-            {
                 XmlElement precursorElement = doc.CreateElement("precursorMz");
                 foreach (KeyValuePair<string, string> attr in scan.PrecursorAttributes)
                 {
@@ -89,8 +110,28 @@ namespace MonocleUI.lib
                     }
                 }
                 scanElement.AppendChild(precursorElement);
+                offsetCount += 3;
             }
-            doc.ByteCount += Encoding.ASCII.GetByteCount(scanElement.InnerText);
+            foreach (KeyValuePair<string, string> attr in scan.PeaksAttributes)
+            {
+                if(attr.Key == "peaks")
+                {
+                    peaksElement.InnerText = scan.CheckAndGetValue(attr.Key);
+                }
+                else
+                {
+                    XmlAttribute Attribute = doc.CreateAttribute(attr.Key);
+                    Attribute.Value = scan.CheckAndGetValue(attr.Key);
+                    peaksElement.Attributes.Append(Attribute);
+                }
+            }
+            offsetCount += 6;
+            scanElement.AppendChild(peaksElement);
+            string sOuterXml = scanElement.OuterXml;
+            XDocument xDoc = XDocument.Parse(sOuterXml);
+            sOuterXml = xDoc.ToString();
+            offsetCount += Encoding.ASCII.GetByteCount(sOuterXml);
+            doc.ByteCount += offsetCount + 1;
             doc.GetElementsByTagName("msRun")[0].AppendChild(scanElement);
             return doc;
         }
@@ -102,7 +143,7 @@ namespace MonocleUI.lib
         /// <param name="parentFile"></param>
         /// <param name="parentFileType"></param>
         /// <returns></returns>
-        public static MonocleXmlDoxument BuildInitialMzxml(this MonocleXmlDoxument doc, string parentFile, string parentFileType = "RAWData")
+        public static MonocleXmlDocument BuildInitialMzxml(this MonocleXmlDocument doc)
         {
             XmlNode xmlNode = doc.CreateXmlDeclaration("1.0", null, null);
             doc.AppendChild(xmlNode);
@@ -129,11 +170,11 @@ namespace MonocleUI.lib
             // add to msRun
             XmlElement ParentFileElement = doc.CreateElement("parentFile");
             Attribute = doc.CreateAttribute("fileName");
-            Attribute.Value = parentFile;
+            Attribute.Value = doc.ParentFile;
             ParentFileElement.Attributes.Append(Attribute);
 
             Attribute = doc.CreateAttribute("fileType");
-            Attribute.Value = "parentFileType";
+            Attribute.Value = doc.ParentFileType;
             ParentFileElement.Attributes.Append(Attribute);
 
             // add to index

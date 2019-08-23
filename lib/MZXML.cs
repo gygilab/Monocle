@@ -13,6 +13,7 @@ namespace MonocleUI.lib
     {
         public static Scan[] Ms1ScansCentroids = new Scan[12];
         public static Scan ParentScan = new Scan();
+        public static string ParentFile { get; set; } = "";
         private static int _Ms1ScanIndex { get; set; } = 0;
         public static int Ms1ScanIndex
         {
@@ -40,11 +41,29 @@ namespace MonocleUI.lib
                 Debug.WriteLine("No scans in the input.");
                 return null;
             }
-            XmlDocument doc = new XmlDocument();
+
+            ParentFile = xmlFilePath;
+
+            MonocleXmlDocument doc = new MonocleXmlDocument();
             using (FileStream fs = new FileStream(xmlFilePath, FileMode.Open))
             {
                 doc.Load(fs);
             }
+            using(XmlNodeList parentFileElements = doc.GetElementsByTagName("parentFile"))
+            {
+                foreach(XmlAttribute attr in parentFileElements[0])
+                {
+                    if(attr.Name == "fileName")
+                    {
+                        doc.ParentFile = "g05432_tko_std_comet.RAW";//attr.Value;
+                    }
+                    else if (attr.Name == "fileType")
+                    {
+                        doc.ParentFileType = attr.Value;
+                    }
+                }
+            }
+
             using (XmlNodeList scanElems = doc.GetElementsByTagName("scan"))
             {
                 foreach (XmlNode node in scanElems)
@@ -83,22 +102,25 @@ namespace MonocleUI.lib
             Ms1ScanIndex = 0;
             return scans;
         }
-
+        
         public static void Write(string xmlFilePath, List<Scan> scans)
         {
             if (xmlFilePath == "" || !File.Exists(xmlFilePath))
             {
-                Debug.WriteLine("No proteins in the input.");
+                Debug.WriteLine("No file at that location.");
             }
-            MonocleXmlDoxument doc = new MonocleXmlDoxument();
-            doc.BuildInitialMzxml("");
+            MonocleXmlDocument doc = new MonocleXmlDocument()
+            {
+                //Assume that the mzXML is named for the RAW file...
+                ParentFile = Path.GetFileName(ParentFile),
+                ParentFileType = "MonocleRAWData"
+            };
+            doc.BuildInitialMzxml();
             foreach(Scan scan in scans)
             {
                 doc.IndexByteCount(scan.ScanNumber);
                 doc.ScanToXml(scan);
             }
-            XmlElement offsetElement = doc.CreateElement("offset");
-            XmlAttribute Attribute = doc.CreateAttribute("id");
             doc.GetElementsByTagName("indexOffset")[0].InnerText = doc.ByteCount.ToString();
             doc.Save(Files.ExportPath + "test.mzXML");
             Ms1ScansCentroids = new Scan[12];

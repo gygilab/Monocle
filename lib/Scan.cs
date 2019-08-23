@@ -23,10 +23,34 @@ namespace MonocleUI
         public int PeakCount { get; set; } = 0;
         public int MasterIndex { get; set; }
         public string ScanDescription { get; set; } = "";
-        public double CollisionEnergy { get; set; }
         public double IonInjectionTime { get; set; }
         public double ElapsedScanTime { get; set; }
-        public bool Polarity { get; set; } = true;
+        private bool _Polarity { get; set; } = true;
+        public string Polarity
+        {
+            get
+            {
+                if (_Polarity)
+                {
+                    return "+";
+                }
+                else
+                {
+                    return "-";
+                }
+            }
+            set
+            {
+                if (value == "-")
+                {
+                    _Polarity = false;
+                }
+                else
+                {
+                    _Polarity = true;
+                }
+            }
+        }
         public string ScanType { get; set; } = "";
         public string FilterLine { get; set; } = "";
         public string RetentionTime { get; set; } = "";
@@ -38,6 +62,14 @@ namespace MonocleUI
         public double BasePeakIntensity { get; set; } = 0;
         public int FaimsCV { get; set; } = 0;
         public double MonoisotopicMz { get; set; }
+        /// <summary>
+        /// MSn
+        /// </summary>
+        public double TotalIonCurrent { get; set; }
+        public double CollisionEnergy { get; set; }
+        /// <summary>
+        /// Precursors
+        /// </summary>
         public double PrecursorMz { get; set; }
         public int PrecursorMasterScanNumber { get; set; }
         public double PrecursorMz2 { get; set; }
@@ -106,6 +138,10 @@ namespace MonocleUI
             {
                 tempAttr = PeaksAttributes[attribute];
             }
+            else if (MsnAttributes.ContainsKey(attribute))
+            {
+                tempAttr = MsnAttributes[attribute];
+            }
 
             if (tempAttr != "")
             {
@@ -154,8 +190,12 @@ namespace MonocleUI
             {
                 tempAttr = PeaksAttributes[attribute];
             }
+            else if (MsnAttributes.ContainsKey(attribute))
+            {
+                tempAttr = MsnAttributes[attribute];
+            }
 
-            if(tempAttr != "") {
+            if (tempAttr != "") {
                 if (typeof(Scan).GetProperty(tempAttr) != null) //check names even though readOnly DGV
                 {
                     object output = GetType().GetProperty(tempAttr).GetValue(this, null);
@@ -186,8 +226,8 @@ namespace MonocleUI
             { "num" , "ScanNumber" },
             { "msLevel" , "MsOrder" },
             { "scanEvent" , "ScanEvent" },
-            { "peaksCount" , "PeakCount" },
             { "masterIndex" , "MasterIndex" },
+            { "peaksCount" , "PeakCount" },
             { "ionInjectionTime" , "IonInjectionTime" },
             { "elapsedScanTime" , "ElapsedScanTime" },
             { "polarity" , "Polarity" },
@@ -200,6 +240,12 @@ namespace MonocleUI
             { "highMz","HighestMz" },
             { "basePeakMz","BasePeakMz" },
             { "basePeakIntensity","BasePeakIntensity" }
+        };
+
+        public Dictionary<string, string> MsnAttributes = new Dictionary<string, string>()
+        {
+            { "totIonCurrent","TotalIonCurrent" },
+            { "collisionEnergy","CollisionEnergy" }
         };
 
         public Dictionary<string, string> PrecursorAttributes = new Dictionary<string, string>()
