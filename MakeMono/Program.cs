@@ -1,11 +1,6 @@
 ﻿using Monocle;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MakeMono
 {
@@ -51,5 +46,11 @@ namespace MakeMono
                 Console.WriteLine("No file exists at the given path.");
             }
         }
+
+        public void FileTracker_Listener(object sender, FileEventHandler e)
+        {
+
+        }
+
     }
 }

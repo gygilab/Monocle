@@ -1,32 +1,35 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
+
 using System.Threading.Tasks;
 
 namespace Monocle
 {
+    public delegate void FileEventHandler(Object sender, FileEventArgs e);
+    public class FileEventArgs : EventArgs
+    {
+        public string FilePath;
+        public FileEventArgs(string filePath) { FilePath = filePath; }
+    }
+
     public class FileProcessor
     {
-        FileWriter Writer;
-
-        public Files files { get; set; } = new Files();
-
         /// <summary>
         /// Listener pair to track processing progress.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public delegate void FileEventHandler(Object sender, FileEventArgs e);
-        public class FileEventArgs : EventArgs
+        protected virtual void NewFile(string newFile)
         {
-            public string FilePath;
-            public FileEventArgs(string filePath) { FilePath = filePath; }
+            FileTracker?.Invoke(this, new FileEventArgs(newFile));
         }
 
+        public event FileEventHandler FileTracker;
+
+
+        FileWriter Writer;
+        public Files files { get; set; } = new Files();
         public FileProcessor()
         {
             Writer = new FileWriter();
@@ -40,10 +43,9 @@ namespace Monocle
                 {
                     foreach (string newFile in files.FileList)
                     {
+                        NewFile(newFile);
                         List<Scan> scans = new List<Scan>();
-                        Debug.WriteLine("Start reading.");
                         MZXML.Consume(newFile, scans);
-                        Debug.WriteLine("Start writing.");
                         MZXML.Write(Files.ExportPath + "test.mzXML", scans);
                         foreach (Scan scan in scans)
                         {
@@ -67,9 +69,7 @@ namespace Monocle
                         foreach (string newFile in files.FileList)
                         {
                             List<Scan> scans = new List<Scan>();
-                            Debug.WriteLine("Start reading.");
                             MZXML.Consume(newFile, scans);
-                            Debug.WriteLine("Start writing.");
                             MZXML.Write(Files.ExportPath + "test.mzXML", scans);
                             foreach (Scan scan in scans)
                             {
