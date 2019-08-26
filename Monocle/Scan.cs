@@ -113,6 +113,24 @@ namespace Monocle
             return tempArray;
         }
 
+        public void CentroidsFromArrays(double[] mzArray, double[] intensityArray)
+        {
+            if(mzArray.Length != intensityArray.Length)
+            {
+                throw new Exception(" Error: MZ and Intensity Arrays of unequal length.");
+            }
+
+            for (int i = 0; i < mzArray.Length; i++)
+            {
+                Centroid tempCentroid = new Centroid()
+                {
+                    Mz = mzArray[i],
+                    Intensity = intensityArray[i],
+                };
+                Centroids.Add(tempCentroid);
+            }
+        }
+
         /// <summary>
         /// Check and set attribute based on attributes dictionary
         /// </summary>
