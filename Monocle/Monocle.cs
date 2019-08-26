@@ -4,6 +4,13 @@ namespace Monocle
 {
     public static class Monocle
     {
+        public class MonocleOptions
+        {
+            public int Number_Of_Scans_To_Average { get; set; }
+            public bool Charge_Detection { get; set; }
+            public DoubleRange Charge_Range_LowRes { get; set; }
+        }
+
         public static void Run(ref Scan[] Ms1ScansCentroids, Scan ParentScan, ref Scan DependentScan)
         {
             int numIsotopes = 0;

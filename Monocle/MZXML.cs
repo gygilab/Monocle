@@ -9,7 +9,11 @@ namespace Monocle
 {
     public class MZXML
     {
-        public static Scan[] Ms1ScansCentroids = new Scan[12];
+        public static Scan[] Ms1ScansCentroids = new Scan[Num_Ms1_Scans_To_Average];
+
+        public static int Num_Ms1_Scans_To_Average { get; set; } = 6;
+        public static DoubleRange Charge_Range { get; set; } = new DoubleRange(2,6);
+
         public static Scan ParentScan = new Scan();
         public static string ParentFile { get; set; } = "";
         private static int _Ms1ScanIndex { get; set; } = 0;

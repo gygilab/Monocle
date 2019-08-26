@@ -35,20 +35,30 @@ namespace MakeMono
                 Console.WriteLine("Example: MakeMono.exe 'C:\\MY_FILE.mzXML'");
                 return;
             }
-
+            string filePath = "";
             /// Parse input arguments
             Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(opt =>
             {
                 if (Processor.files.Add(opt.InputFilePath))
                 {
+                    filePath = opt.InputFilePath;
                     Files.ExportPath = Path.GetFullPath(opt.InputFilePath).Replace(Path.GetFileName(opt.InputFilePath), "");
                 }
                 else
                 {
-                    HandleParseError("The input file is not an acceptable type: the file extension should be: .mzXML or .RAW");
+                    HandleParseError("The input file is not an acceptable type or does not exist: the file extension should be: .mzXML or .RAW");
                     return;
                 }
 
+                if (opt.NumOfScans > 0 && opt.NumOfScans < 50)
+                {
+                    MZXML.Num_Ms1_Scans_To_Average = opt.NumOfScans;
+                }
+                else
+                {
+                    HandleParseError("Number of scans outside bounds, will use default value.");
+                }
+
                 if (opt.ChargeDetection)
                 {
 
@@ -58,42 +68,19 @@ namespace MakeMono
 
                 }
 
-                if (opt.ChargeDetection)
+                if (opt.ChargeRange.Low > 0 && opt.ChargeRange.Low <= opt.ChargeRange.High && opt.ChargeRange.High < 10)
                 {
-
+                    MZXML.Charge_Range = opt.ChargeRange;
                 }
                 else
                 {
-
-                }
-
-                if (opt.ChargeDetection)
-                {
-
-                }
-                else
-                {
-
+                    HandleParseError("Charge range outside of bounds, will use default values.");
                 }
 
             }).WithNotParsed<Options>((errs) => HandleParseError(errs));
 
-            bool process = false;
-            string filePath = args[0];
-            Console.WriteLine("Starting Monocle on: " + filePath);
-            if (File.Exists(filePath))
-            {
-                process = true;
-            }
-
-            if (process)
-            {
-                Processor.Run(true);
-            }
-            else
-            {
-                Console.WriteLine("No file exists at the given path.");
-            }
+            /// RUN MONOCLE:
+            Processor.Run(true);
         }
 
         public static void HandleParseError(IEnumerable<Error> Errors)
