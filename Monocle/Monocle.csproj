@@ -50,6 +50,7 @@
     <Compile Include="MonocleHelpers.cs" />
     <Compile Include="MZXML.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Range.cs" />
     <Compile Include="Scan.cs" />
     <Compile Include="UnitTest.cs" />
     <Compile Include="XmlExtensions.cs" />

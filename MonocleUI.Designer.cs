@@ -54,6 +54,7 @@
             this.export_folder_dialog = new System.Windows.Forms.FolderBrowserDialog();
             this.log_toggle_checkbox = new System.Windows.Forms.CheckBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.monocleOptionsBox = new System.Windows.Forms.GroupBox();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
@@ -182,9 +183,9 @@
             this.groupBox2.Controls.Add(this.file_output_format_CLB);
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Controls.Add(this.export_folder_maskedTB);
-            this.groupBox2.Location = new System.Drawing.Point(13, 292);
+            this.groupBox2.Location = new System.Drawing.Point(296, 292);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(742, 152);
+            this.groupBox2.Size = new System.Drawing.Size(459, 152);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Correction Export";
@@ -192,7 +193,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 21);
+            this.label2.Location = new System.Drawing.Point(3, 17);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 5;
@@ -201,7 +202,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(183, 62);
+            this.label1.Location = new System.Drawing.Point(3, 109);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(82, 13);
             this.label1.TabIndex = 2;
@@ -211,14 +212,14 @@
             // 
             this.file_output_format_CLB.CheckOnClick = true;
             this.file_output_format_CLB.FormattingEnabled = true;
-            this.file_output_format_CLB.Location = new System.Drawing.Point(9, 35);
+            this.file_output_format_CLB.Location = new System.Drawing.Point(6, 33);
             this.file_output_format_CLB.Name = "file_output_format_CLB";
-            this.file_output_format_CLB.Size = new System.Drawing.Size(159, 109);
+            this.file_output_format_CLB.Size = new System.Drawing.Size(447, 64);
             this.file_output_format_CLB.TabIndex = 3;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(650, 57);
+            this.button2.Location = new System.Drawing.Point(378, 104);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
@@ -228,10 +229,10 @@
             // 
             // export_folder_maskedTB
             // 
-            this.export_folder_maskedTB.Location = new System.Drawing.Point(186, 81);
+            this.export_folder_maskedTB.Location = new System.Drawing.Point(6, 129);
             this.export_folder_maskedTB.Name = "export_folder_maskedTB";
             this.export_folder_maskedTB.ReadOnly = true;
-            this.export_folder_maskedTB.Size = new System.Drawing.Size(539, 20);
+            this.export_folder_maskedTB.Size = new System.Drawing.Size(447, 20);
             this.export_folder_maskedTB.TabIndex = 0;
             // 
             // monocle_log_tb
@@ -287,12 +288,22 @@
             this.log_toggle_checkbox.UseVisualStyleBackColor = true;
             this.log_toggle_checkbox.CheckedChanged += new System.EventHandler(this.Log_toggle_checkbox_CheckedChanged);
             // 
+            // monocleOptionsBox
+            // 
+            this.monocleOptionsBox.Location = new System.Drawing.Point(13, 292);
+            this.monocleOptionsBox.Name = "monocleOptionsBox";
+            this.monocleOptionsBox.Size = new System.Drawing.Size(277, 149);
+            this.monocleOptionsBox.TabIndex = 7;
+            this.monocleOptionsBox.TabStop = false;
+            this.monocleOptionsBox.Text = "Monocle Options";
+            // 
             // MonocleUI
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(767, 724);
+            this.Controls.Add(this.monocleOptionsBox);
             this.Controls.Add(this.log_toggle_checkbox);
             this.Controls.Add(this.start_monocle_button);
             this.Controls.Add(this.progressBar1);
@@ -346,6 +357,7 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolTip mainToolTip;
         private System.Windows.Forms.ToolStripMenuItem gCCollectionToolStripMenuItem;
+        private System.Windows.Forms.GroupBox monocleOptionsBox;
     }
 }
 
