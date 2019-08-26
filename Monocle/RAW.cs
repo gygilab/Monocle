@@ -73,16 +73,15 @@ namespace Monocle
 
                     if (PeakCount > 0)
                     {
-                        iPrecursorCharge = 0;
-                        dPrecursorMZ = rawFile.GetScanEventForScanNumber(iScanNumber).GetReaction(0).PrecursorMass;
+                        tempScan.PrecursorMz = rawFile.GetScanEventForScanNumber(iScanNumber).GetReaction(0).PrecursorMass;
 
                         var trailerData = rawFile.GetTrailerExtraInformation(iScanNumber);
                         for (int i = 0; i < trailerData.Length; i++)
                         {
                             if (trailerData.Labels[i] == "Monoisotopic M/Z:")
-                                dPrecursorMZ = double.Parse(trailerData.Values[i]);
+                                tempScan.MonoisotopicMz = double.Parse(trailerData.Values[i]);
                             else if (trailerData.Labels[i] == "Charge State:")
-                                iPrecursorCharge = (int)double.Parse(trailerData.Values[i]);
+                                tempScan.PrecursorCharge = (int)double.Parse(trailerData.Values[i]);
                         }
                     }
 
