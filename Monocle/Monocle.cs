@@ -14,7 +14,7 @@ namespace Monocle
             public DoubleRange Charge_Range_LowRes { get; set; }
         }
 
-        public static void Run(ref Scan[] Ms1ScansCentroids, Scan ParentScan, ref Scan DependentScan)
+        public static void Run(Scan[] Ms1ScansCentroids, Scan ParentScan, ref Scan DependentScan)
         {
             int numIsotopes = 0;
             int monoisotopicIndex = 0;

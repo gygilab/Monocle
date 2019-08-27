@@ -94,7 +94,7 @@ namespace Monocle.File
                     }
                     else if (scanFilter.MSOrder == MSOrderType.Ms2)
                     {
-                        Monocle.Run(ref Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tempScan.PrecursorMasterScanNumber).First(), ref tempScan);
+                        Monocle.Run(Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tempScan.PrecursorMasterScanNumber).First(), ref tempScan);
                     }
 
                     scans.Add(tempScan);

@@ -9,7 +9,12 @@ namespace Monocle.File
 {
     public class InputFile
     {
-        public static Scan[] Ms1ScansCentroids = new Scan[Num_Ms1_Scans_To_Average];
+        public InputFile()
+        {
+            Ms1ScansCentroids = new Scan[Num_Ms1_Scans_To_Average];
+        }
+
+        public static Scan[] Ms1ScansCentroids { get; set; }
 
         public static int Num_Ms1_Scans_To_Average { get; set; } = 6;
         public static bool DetectCharge { get; set; } = true;

@@ -40,6 +40,11 @@ namespace Monocle.File
                 }
             }
 
+            if(Ms1ScansCentroids == null || Ms1ScansCentroids.Length < 1)
+            {
+                Ms1ScansCentroids = new Scan[Num_Ms1_Scans_To_Average];
+            }
+
             using (XmlNodeList scanElems = doc.GetElementsByTagName("scan"))
             {
                 foreach (XmlNode node in scanElems)
@@ -63,12 +68,14 @@ namespace Monocle.File
                     // Check if MS1 and add to processing pool
                     if (tScan.MsOrder == 1)
                     {
+                        Debug.WriteLine("Index: " + Ms1ScanIndex);
+                        Debug.WriteLine("Index: " + Ms1ScansCentroids.Length);
                         ParentScan = Ms1ScansCentroids[Ms1ScanIndex] = tScan;
                         Ms1ScanIndex++;
                     }
                     else if (tScan.MsOrder == 2)
                     {
-                        Monocle.Run(ref Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tScan.PrecursorMasterScanNumber).First(), ref tScan);
+                        Monocle.Run(Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tScan.PrecursorMasterScanNumber).First(), ref tScan);
                     }
 
                     scans.Add(tScan);
