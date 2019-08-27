@@ -49,7 +49,19 @@ namespace Monocle.Data
         }
         public string ScanType { get; set; } = "";
         public string FilterLine { get; set; } = "";
-        public string RetentionTime { get; set; } = "";
+        public string RetentionTimeString { get; set; } = "";
+        private double _RetentionTime { get; set; } = 0;
+        public double RetentionTime {
+            get
+            {
+                return _RetentionTime;
+            }
+            set
+            {
+                _RetentionTime = value;
+                RetentionTimeString = "PT" + value.ToString();
+            }
+        }
         public double StartMz { get; set; }
         public double EndMz { get; set; }
         public double LowestMz { get; set; }
@@ -120,7 +132,7 @@ namespace Monocle.Data
             {
                 throw new Exception(" Error: MZ and Intensity Arrays of unequal length.");
             }
-
+            PeakCount = mzArray.Length;
             for (int i = 0; i < mzArray.Length; i++)
             {
                 Centroid tempCentroid = new Centroid()
@@ -247,7 +259,7 @@ namespace Monocle.Data
             { "polarity" , "Polarity" },
             { "scanType" , "ScanType" },
             { "filterLine" , "FilterLine" },
-            { "retentionTime","RetentionTime" },
+            { "retentionTime","RetentionTimeString" },
             { "startMz","StartMz" },
             { "endMz","EndMz" },
             { "lowMz","LowestMz" },

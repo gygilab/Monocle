@@ -78,49 +78,49 @@ namespace Monocle.File
             XmlElement scanElement = doc.CreateElement("scan");
             XmlElement peaksElement = doc.CreateElement("peaks");
             int offsetCount = 0;
-            foreach (KeyValuePair<string,string> attr in scan.Attributes)
+            foreach (KeyValuePair<string,string> attr in scan.mzxmlAttributes)
             {
                 XmlAttribute Attribute = doc.CreateAttribute(attr.Key);
-                Attribute.Value = scan.CheckAndGetValue(attr.Key);
+                Attribute.Value = scan.CheckGetMzxmlValue(attr.Key);
                 scanElement.Attributes.Append(Attribute);
             }
             offsetCount += 4;
             if (scan.MsOrder > 1)
             {
-                foreach (KeyValuePair<string, string> attr in scan.MsnAttributes)
+                foreach (KeyValuePair<string, string> attr in scan.mzxmlMsnAttributes)
                 {
                     XmlAttribute Attribute = doc.CreateAttribute(attr.Key);
-                    Attribute.Value = scan.CheckAndGetValue(attr.Key);
+                    Attribute.Value = scan.CheckGetMzxmlValue(attr.Key);
                     scanElement.Attributes.Append(Attribute);
                 }
 
                 XmlElement precursorElement = doc.CreateElement("precursorMz");
-                foreach (KeyValuePair<string, string> attr in scan.PrecursorAttributes)
+                foreach (KeyValuePair<string, string> attr in scan.mzxmlPrecursorAttributes)
                 {
                     if (attr.Key == "precursorMz")
                     {
-                        precursorElement.InnerText = scan.CheckAndGetValue(attr.Key);
+                        precursorElement.InnerText = scan.CheckGetMzxmlValue(attr.Key);
                     }
                     else
                     {
                         XmlAttribute Attribute = doc.CreateAttribute(attr.Key);
-                        Attribute.Value = scan.CheckAndGetValue(attr.Key);
+                        Attribute.Value = scan.CheckGetMzxmlValue(attr.Key);
                         precursorElement.Attributes.Append(Attribute);
                     }
                 }
                 scanElement.AppendChild(precursorElement);
                 offsetCount += 3;
             }
-            foreach (KeyValuePair<string, string> attr in scan.PeaksAttributes)
+            foreach (KeyValuePair<string, string> attr in scan.mzxmlPeaksAttributes)
             {
                 if(attr.Key == "peaks")
                 {
-                    peaksElement.InnerText = scan.CheckAndGetValue(attr.Key);
+                    peaksElement.InnerText = scan.CheckGetMzxmlValue(attr.Key);
                 }
                 else
                 {
                     XmlAttribute Attribute = doc.CreateAttribute(attr.Key);
-                    Attribute.Value = scan.CheckAndGetValue(attr.Key);
+                    Attribute.Value = scan.CheckGetMzxmlValue(attr.Key);
                     peaksElement.Attributes.Append(Attribute);
                 }
             }

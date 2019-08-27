@@ -52,10 +52,19 @@ namespace Monocle.File
                     ScanStatistics scanStatistics = rawFile.GetScanStatsForScanNumber(iScanNumber);
                     // Get the scan filter for this scan number
                     IScanFilter scanFilter = rawFile.GetFilterForScanNumber(iScanNumber);
+
                     Data.Scan tempScan = new Data.Scan()
                     {
                         ScanNumber = iScanNumber,
                         ScanEvent = iScanNumber,
+                        BasePeakIntensity = scanStatistics.BasePeakIntensity,
+                        BasePeakMz = scanStatistics.BasePeakMass,
+                        TotalIonCurrent = scanStatistics.TIC,
+                        LowestMz = scanStatistics.LowMass,
+                        HighestMz = scanStatistics.HighMass,
+                        ScanType = scanStatistics.ScanType,
+                        MsOrder = (int)scanFilter.MSOrder,
+                        RetentionTime = rawFile.RetentionTimeFromScanNumber(iScanNumber)
                     };
 
                     RunHeader runHeader = rawFile.RunHeader;
@@ -78,12 +87,12 @@ namespace Monocle.File
                     }
 
                     // Check if MS1 and add to processing pool
-                    if (scanFilter.MSOrder == MSOrderType.Ms)
+                    if (tempScan.MsOrder == 1)
                     {
                         ParentScan = Ms1ScansCentroids[Ms1ScanIndex] = tempScan;
                         Ms1ScanIndex++;
                     }
-                    else if (scanFilter.MSOrder == MSOrderType.Ms2 || scanFilter.MSOrder == MSOrderType.Ms3 || scanFilter.MSOrder == MSOrderType.Ms4)
+                    else if (tempScan.MsOrder > 1)
                     {
                         if (PeakCount > 0)
                         {
@@ -92,8 +101,18 @@ namespace Monocle.File
                             var trailerData = rawFile.GetTrailerExtraInformation(iScanNumber);
                             for (int i = 0; i < trailerData.Length; i++)
                             {
+                                if (trailerData.Values[i] == null)
+                                {
+                                    continue;
+                                }
                                 switch (trailerData.Labels[i])
                                 {
+                                    case "Ion Injection Time (ms):":
+                                        tempScan.IonInjectionTime = double.Parse(trailerData.Values[i]);
+                                        break;
+                                    case "Elapsed Scan Time (sec):":
+                                        tempScan.ElapsedScanTime = double.Parse(trailerData.Values[i]);
+                                        break;
                                     case "Monoisotopic M/Z:":
                                         tempScan.MonoisotopicMz = double.Parse(trailerData.Values[i]);
                                         break;
@@ -103,18 +122,21 @@ namespace Monocle.File
                                     case "Master Scan Number:":
                                         tempScan.PrecursorMasterScanNumber = int.Parse(trailerData.Values[i]);
                                         break;
-                                    case "Orbitrap Resolution:":
+                                    case "FAIMS CV:":
+                                        Console.WriteLine("FAIMS: " +trailerData.Values[i]);
+                                        tempScan.FaimsCV = (int)double.Parse(trailerData.Values[i]);
                                         break;
                                 }
                             }
                         }
 
-                        //Monocle.Run(Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tempScan.PrecursorMasterScanNumber).First(), ref tempScan);
+                        Monocle.Run(Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tempScan.PrecursorMasterScanNumber).First(), ref tempScan);
                     }
 
                     scans.Add(tempScan);
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(" RAW File Error: " + ex.ToString());
             }
