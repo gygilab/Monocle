@@ -61,7 +61,7 @@ namespace Monocle
                             return;
                         }
 
-                        Monocle.Run();
+                        Monocle.Run(ref Scans);
 
                         MZXML.Write(Files.ExportPath + "test.mzXML", Scans);
                         EmptyScans();

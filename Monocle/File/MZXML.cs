@@ -65,16 +65,6 @@ namespace Monocle.File
                             tScan.CheckSetMzxmlValue(attr.Name, attr.Value);
                         }
                     }
-                    // Check if MS1 and add to processing pool
-                    if (tScan.MsOrder == 1)
-                    {
-                        ParentScan = Ms1ScansCentroids[Ms1ScanIndex] = tScan;
-                        Ms1ScanIndex++;
-                    }
-                    else if (tScan.MsOrder == 2)
-                    {
-                        Monocle.Run(Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tScan.PrecursorMasterScanNumber).First(), ref tScan);
-                    }
 
                     scans.Add(tScan);
                 }

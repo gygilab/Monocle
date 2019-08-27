@@ -15,18 +15,48 @@ namespace Monocle
             public DoubleRange Charge_Range_LowRes { get; set; }
         }
 
-        public static void Run(List<Scan> AllScans, ref Scan DependentScan)
+        public enum AveragingVector
         {
-            int masterScanNumber = DependentScan.PrecursorMasterScanNumber;
-            int currentScanNumber = DependentScan.ScanNumber;
-            Scan PrecursorScan = AllScans.Where(b => b.PrecursorMasterScanNumber == masterScanNumber).First();
-            List<Scan> NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).ToList();
-            NearbyMs1Scans.AddRange(AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).ToList());
-            Scan[] Ms1ScansCentroids = NearbyMs1Scans.ToArray();
-            Run(Ms1ScansCentroids, PrecursorScan, ref DependentScan);
+            Before,
+            After,
+            Both
         }
 
-        public static void Run(Scan[] Ms1ScansCentroids, Scan ParentScan, ref Scan DependentScan)
+        /// <summary>
+        /// Overload to handle all available scans alowing for Ms1 inclusion of before + after
+        /// </summary>
+        /// <param name="AllScans"></param>
+        /// <param name="DependentScan"></param>
+        /// <param name="Number_Of_Scans_To_Average"></param>
+        public static void Run(ref List<Scan> AllScans, int Number_Of_Scans_To_Average = 12, AveragingVector averaging = AveragingVector.Both)
+        {
+            foreach (Scan scan in AllScans)
+            {
+                int masterScanNumber = scan.PrecursorMasterScanNumber;
+                int currentScanNumber = scan.ScanNumber;
+                Scan PrecursorScan = AllScans.Where(b => b.PrecursorMasterScanNumber == masterScanNumber).First();
+                List<Scan> NearbyMs1Scans = new List<Scan>();
+                int topN = (Number_Of_Scans_To_Average / 2);
+                if (averaging == AveragingVector.Both)
+                {
+                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).Take(topN).ToList();
+                    NearbyMs1Scans.AddRange(AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).Take(topN).ToList());
+                }
+                else if (averaging == AveragingVector.Before)
+                {
+                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).Take(topN).ToList();
+                }
+                else if (averaging == AveragingVector.After)
+                {
+                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).Take(topN).ToList();
+                }
+
+                Scan[] Ms1ScansCentroids = NearbyMs1Scans.ToArray();
+                Run(Ms1ScansCentroids, PrecursorScan, scan);
+            }
+        }
+
+        public static void Run(Scan[] Ms1ScansCentroids, Scan ParentScan, Scan DependentScan)
         {
             int numIsotopes = 0;
             int monoisotopicIndex = 0;
