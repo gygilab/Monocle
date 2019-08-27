@@ -29,13 +29,14 @@ namespace Monocle
 
         public event FileEventHandler FileTracker;
 
-
         FileWriter Writer;
         public Files files { get; set; } = new Files();
         public FileProcessor()
         {
             Writer = new FileWriter();
         }
+
+        List<Data.Scan> Scans = new List<Data.Scan>();
 
         public async void Run(bool console = false)
         {
@@ -46,28 +47,24 @@ namespace Monocle
                     foreach (string newFile in files.FileList)
                     {
                         NewFile(newFile);
-                        List<Scan> scans = new List<Scan>();
                         Console.WriteLine("Path Extension == " + Path.GetExtension(newFile).ToLower());
                         if (Path.GetExtension(newFile).ToLower() == ".mzxml")
                         {
-                            MZXML.Consume(newFile, scans);
+                            MZXML.Consume(newFile, Scans);
                         }
                         else if (Path.GetExtension(newFile).ToLower() == ".raw")
                         {
-                            RAW.Consume(newFile, scans);
+                            RAW.Consume(newFile, Scans);
                         }
                         else
                         {
                             return;
                         }
-                        
-                        MZXML.Write(Files.ExportPath + "test.mzXML", scans);
-                        foreach (Scan scan in scans)
-                        {
-                            scan.Dispose();
-                        }
-                        scans.Clear();
-                        scans = null;
+
+                        Monocle.Run();
+
+                        MZXML.Write(Files.ExportPath + "test.mzXML", Scans);
+                        EmptyScans();
                     }
                 }
                 catch (Exception ex)
@@ -83,27 +80,21 @@ namespace Monocle
                     {
                         foreach (string newFile in files.FileList)
                         {
-                            List<Scan> scans = new List<Scan>();
                             Console.WriteLine("Path Extension == " + Path.GetExtension(newFile).ToLower());
                             if (Path.GetExtension(newFile).ToLower() == ".mzxml")
                             {
-                                MZXML.Consume(newFile, scans);
+                                MZXML.Consume(newFile, Scans);
                             }
                             else if (Path.GetExtension(newFile).ToLower() == ".raw")
                             {
-                                RAW.Consume(newFile, scans);
+                                RAW.Consume(newFile, Scans);
                             }
                             else
                             {
                                 return;
                             }
-                            MZXML.Write(Files.ExportPath + "test.mzXML", scans);
-                            foreach (Scan scan in scans)
-                            {
-                                scan.Dispose();
-                            }
-                            scans.Clear();
-                            scans = null;
+                            MZXML.Write(Files.ExportPath + "test.mzXML", Scans);
+                            EmptyScans();
                         }
                     }
                     catch (Exception ex)
@@ -112,6 +103,16 @@ namespace Monocle
                     }
                 });
             }
+        }
+
+        public void EmptyScans()
+        {
+            foreach (Scan scan in Scans)
+            {
+                scan.Dispose();
+            }
+            Scans.Clear();
+            Scans = null;
         }
     }
 }

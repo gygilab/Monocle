@@ -118,22 +118,6 @@ namespace Monocle.File
                         tempScan.CentroidsFromArrays(segmentedScan.Positions, segmentedScan.Intensities);
                     }
 
-                    // Check if MS1 and add to processing pool
-                    if (tempScan.MsOrder == 1)
-                    {
-                        ParentScan = Ms1ScansCentroids[Ms1ScanIndex] = tempScan;
-                        Ms1ScanIndex++;
-                    }
-                    else if (tempScan.MsOrder > 1)
-                    {
-                        if (PeakCount > 0)
-                        {
-                            tempScan.PrecursorMz = rawFile.GetScanEventForScanNumber(iScanNumber).GetReaction(0).PrecursorMass;
-                        }
-
-                        Monocle.Run(Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tempScan.PrecursorMasterScanNumber).First(), ref tempScan);
-                    }
-
                     scans.Add(tempScan);
                 }
             }

@@ -2,6 +2,7 @@
 using Monocle.Math;
 using Monocle.Peak;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Monocle
 {
@@ -12,6 +13,17 @@ namespace Monocle
             public int Number_Of_Scans_To_Average { get; set; }
             public bool Charge_Detection { get; set; }
             public DoubleRange Charge_Range_LowRes { get; set; }
+        }
+
+        public static void Run(List<Scan> AllScans, ref Scan DependentScan)
+        {
+            int masterScanNumber = DependentScan.PrecursorMasterScanNumber;
+            int currentScanNumber = DependentScan.ScanNumber;
+            Scan PrecursorScan = AllScans.Where(b => b.PrecursorMasterScanNumber == masterScanNumber).First();
+            List<Scan> NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).ToList();
+            NearbyMs1Scans.AddRange(AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).ToList());
+            Scan[] Ms1ScansCentroids = NearbyMs1Scans.ToArray();
+            Run(Ms1ScansCentroids, PrecursorScan, ref DependentScan);
         }
 
         public static void Run(Scan[] Ms1ScansCentroids, Scan ParentScan, ref Scan DependentScan)
