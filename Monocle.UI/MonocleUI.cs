@@ -26,7 +26,7 @@ namespace MonocleUI
             file_output_format_CLB.SetItemChecked(0, true);
         }
 
-        private void Button3_Click(object sender, EventArgs e)
+        private void add_file_button_Click(object sender, EventArgs e)
         {
             if(input_file_dialog.ShowDialog() == DialogResult.OK)
             {
@@ -64,7 +64,7 @@ namespace MonocleUI
             }
         }
 
-        private void Button2_Click(object sender, EventArgs e)
+        private void select_output_directory_button_Click(object sender, EventArgs e)
         {
             if (export_folder_dialog.ShowDialog() == DialogResult.OK)
             {
@@ -117,12 +117,33 @@ namespace MonocleUI
 
         private void Start_monocle_button_Click(object sender, EventArgs e)
         {
+            EnableRunUI(false);
             Processor.Run();
+            EnableRunUI(true);
         }
 
         private void GCCollectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GC.Collect();
+        }
+
+        private void NumberOfScansToAverageNUD_ValueChanged(object sender, EventArgs e)
+        {
+            if(numberOfScansToAverageNUD.Value > 1 && numberOfScansToAverageNUD.Value < 10)
+            {
+                Processor.monocleOptions.Number_Of_Scans_To_Average = (int)numberOfScansToAverageNUD.Value;
+            }
+        }
+
+        private void EnableRunUI(bool enabled)
+        {
+            input_files_dgv.Enabled = enabled;
+            file_output_format_CLB.Enabled = enabled;
+            lowChargeSelectionNUD.Enabled = enabled;
+            highChargeSelectionNUD.Enabled = enabled;
+            remove_dgv_row_button.Enabled = enabled;
+            toggleChargeDetectionCB.Enabled = enabled;
+            numberOfScansToAverageNUD.Enabled = enabled;
         }
     }
 }

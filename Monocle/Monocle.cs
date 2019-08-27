@@ -32,23 +32,27 @@ namespace Monocle
         {
             foreach (Scan scan in AllScans)
             {
+                if(scan.MsOrder == 1)
+                {
+                    continue;
+                }
                 int masterScanNumber = scan.PrecursorMasterScanNumber;
                 int currentScanNumber = scan.ScanNumber;
                 Scan PrecursorScan = AllScans.Where(b => b.PrecursorMasterScanNumber == masterScanNumber).First();
                 List<Scan> NearbyMs1Scans = new List<Scan>();
-                int topN = (Number_Of_Scans_To_Average / 2);
+                int plusMinusN = (Number_Of_Scans_To_Average / 2);
                 if (averaging == AveragingVector.Both)
                 {
-                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).Take(topN).ToList();
-                    NearbyMs1Scans.AddRange(AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).Take(topN).ToList());
+                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).Take(plusMinusN).ToList();
+                    NearbyMs1Scans.AddRange(AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).Take(plusMinusN).ToList());
                 }
                 else if (averaging == AveragingVector.Before)
                 {
-                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).Take(topN).ToList();
+                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).Take(plusMinusN).ToList();
                 }
                 else if (averaging == AveragingVector.After)
                 {
-                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).Take(topN).ToList();
+                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).Take(plusMinusN).ToList();
                 }
 
                 Scan[] Ms1ScansCentroids = NearbyMs1Scans.ToArray();

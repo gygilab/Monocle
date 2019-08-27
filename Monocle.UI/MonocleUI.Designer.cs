@@ -39,12 +39,12 @@
             this.input_files_dgv = new System.Windows.Forms.DataGridView();
             this.file_column = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.remove_dgv_row_button = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.add_file_button = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.file_output_format_CLB = new System.Windows.Forms.CheckedListBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.select_output_directory_button = new System.Windows.Forms.Button();
             this.export_folder_maskedTB = new System.Windows.Forms.MaskedTextBox();
             this.monocle_log_tb = new System.Windows.Forms.GroupBox();
             this.monocle_log = new System.Windows.Forms.RichTextBox();
@@ -55,11 +55,21 @@
             this.log_toggle_checkbox = new System.Windows.Forms.CheckBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.monocleOptionsBox = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.highChargeSelectionNUD = new System.Windows.Forms.NumericUpDown();
+            this.lowChargeSelectionNUD = new System.Windows.Forms.NumericUpDown();
+            this.toggleChargeDetectionCB = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.numberOfScansToAverageNUD = new System.Windows.Forms.NumericUpDown();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.monocle_log_tb.SuspendLayout();
+            this.monocleOptionsBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.highChargeSelectionNUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lowChargeSelectionNUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numberOfScansToAverageNUD)).BeginInit();
             this.SuspendLayout();
             // 
             // mainMenuStrip
@@ -115,7 +125,7 @@
             // 
             this.groupBox1.Controls.Add(this.input_files_dgv);
             this.groupBox1.Controls.Add(this.remove_dgv_row_button);
-            this.groupBox1.Controls.Add(this.button3);
+            this.groupBox1.Controls.Add(this.add_file_button);
             this.groupBox1.Location = new System.Drawing.Point(13, 28);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(742, 257);
@@ -165,23 +175,23 @@
             this.remove_dgv_row_button.UseVisualStyleBackColor = true;
             this.remove_dgv_row_button.Click += new System.EventHandler(this.remove_dgv_row_button_Click);
             // 
-            // button3
+            // add_file_button
             // 
-            this.button3.Location = new System.Drawing.Point(704, 16);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(32, 32);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "+";
-            this.mainToolTip.SetToolTip(this.button3, "Drag and drop files or brows with the \"+\" button.");
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.Button3_Click);
+            this.add_file_button.Location = new System.Drawing.Point(704, 16);
+            this.add_file_button.Name = "add_file_button";
+            this.add_file_button.Size = new System.Drawing.Size(32, 32);
+            this.add_file_button.TabIndex = 3;
+            this.add_file_button.Text = "+";
+            this.mainToolTip.SetToolTip(this.add_file_button, "Drag and drop files or brows with the \"+\" button.");
+            this.add_file_button.UseVisualStyleBackColor = true;
+            this.add_file_button.Click += new System.EventHandler(this.add_file_button_Click);
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.file_output_format_CLB);
-            this.groupBox2.Controls.Add(this.button2);
+            this.groupBox2.Controls.Add(this.select_output_directory_button);
             this.groupBox2.Controls.Add(this.export_folder_maskedTB);
             this.groupBox2.Location = new System.Drawing.Point(296, 292);
             this.groupBox2.Name = "groupBox2";
@@ -217,15 +227,15 @@
             this.file_output_format_CLB.Size = new System.Drawing.Size(447, 64);
             this.file_output_format_CLB.TabIndex = 3;
             // 
-            // button2
+            // select_output_directory_button
             // 
-            this.button2.Location = new System.Drawing.Point(378, 104);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Browse";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Button2_Click);
+            this.select_output_directory_button.Location = new System.Drawing.Point(378, 104);
+            this.select_output_directory_button.Name = "select_output_directory_button";
+            this.select_output_directory_button.Size = new System.Drawing.Size(75, 23);
+            this.select_output_directory_button.TabIndex = 1;
+            this.select_output_directory_button.Text = "Browse";
+            this.select_output_directory_button.UseVisualStyleBackColor = true;
+            this.select_output_directory_button.Click += new System.EventHandler(this.select_output_directory_button_Click);
             // 
             // export_folder_maskedTB
             // 
@@ -290,12 +300,121 @@
             // 
             // monocleOptionsBox
             // 
+            this.monocleOptionsBox.Controls.Add(this.label4);
+            this.monocleOptionsBox.Controls.Add(this.highChargeSelectionNUD);
+            this.monocleOptionsBox.Controls.Add(this.lowChargeSelectionNUD);
+            this.monocleOptionsBox.Controls.Add(this.toggleChargeDetectionCB);
+            this.monocleOptionsBox.Controls.Add(this.label3);
+            this.monocleOptionsBox.Controls.Add(this.numberOfScansToAverageNUD);
             this.monocleOptionsBox.Location = new System.Drawing.Point(13, 292);
             this.monocleOptionsBox.Name = "monocleOptionsBox";
             this.monocleOptionsBox.Size = new System.Drawing.Size(277, 149);
             this.monocleOptionsBox.TabIndex = 7;
             this.monocleOptionsBox.TabStop = false;
             this.monocleOptionsBox.Text = "Monocle Options";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(38, 121);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(100, 17);
+            this.label4.TabIndex = 5;
+            this.label4.Text = "Charge Range";
+            // 
+            // highChargeSelectionNUD
+            // 
+            this.highChargeSelectionNUD.Location = new System.Drawing.Point(211, 118);
+            this.highChargeSelectionNUD.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.highChargeSelectionNUD.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.highChargeSelectionNUD.Name = "highChargeSelectionNUD";
+            this.highChargeSelectionNUD.Size = new System.Drawing.Size(60, 20);
+            this.highChargeSelectionNUD.TabIndex = 4;
+            this.highChargeSelectionNUD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.highChargeSelectionNUD.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            // 
+            // lowChargeSelectionNUD
+            // 
+            this.lowChargeSelectionNUD.Location = new System.Drawing.Point(149, 118);
+            this.lowChargeSelectionNUD.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.lowChargeSelectionNUD.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.lowChargeSelectionNUD.Name = "lowChargeSelectionNUD";
+            this.lowChargeSelectionNUD.Size = new System.Drawing.Size(60, 20);
+            this.lowChargeSelectionNUD.TabIndex = 3;
+            this.lowChargeSelectionNUD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.lowChargeSelectionNUD.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // toggleChargeDetectionCB
+            // 
+            this.toggleChargeDetectionCB.Appearance = System.Windows.Forms.Appearance.Button;
+            this.toggleChargeDetectionCB.AutoSize = true;
+            this.toggleChargeDetectionCB.BackColor = System.Drawing.Color.White;
+            this.toggleChargeDetectionCB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.toggleChargeDetectionCB.Location = new System.Drawing.Point(149, 74);
+            this.toggleChargeDetectionCB.Name = "toggleChargeDetectionCB";
+            this.toggleChargeDetectionCB.Size = new System.Drawing.Size(122, 23);
+            this.toggleChargeDetectionCB.TabIndex = 2;
+            this.toggleChargeDetectionCB.Text = "Use Charge Detection";
+            this.toggleChargeDetectionCB.UseVisualStyleBackColor = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(20, 33);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(118, 17);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "Average N Scans";
+            // 
+            // numberOfScansToAverageNUD
+            // 
+            this.numberOfScansToAverageNUD.Location = new System.Drawing.Point(151, 33);
+            this.numberOfScansToAverageNUD.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numberOfScansToAverageNUD.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numberOfScansToAverageNUD.Name = "numberOfScansToAverageNUD";
+            this.numberOfScansToAverageNUD.Size = new System.Drawing.Size(120, 20);
+            this.numberOfScansToAverageNUD.TabIndex = 0;
+            this.numberOfScansToAverageNUD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numberOfScansToAverageNUD.Value = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            this.numberOfScansToAverageNUD.ValueChanged += new System.EventHandler(this.NumberOfScansToAverageNUD_ValueChanged);
             // 
             // MonocleUI
             // 
@@ -325,6 +444,11 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.monocle_log_tb.ResumeLayout(false);
+            this.monocleOptionsBox.ResumeLayout(false);
+            this.monocleOptionsBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.highChargeSelectionNUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lowChargeSelectionNUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numberOfScansToAverageNUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -342,9 +466,9 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button start_monocle_button;
         private System.Windows.Forms.Button remove_dgv_row_button;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button add_file_button;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button select_output_directory_button;
         private System.Windows.Forms.MaskedTextBox export_folder_maskedTB;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckedListBox file_output_format_CLB;
@@ -358,6 +482,12 @@
         private System.Windows.Forms.ToolTip mainToolTip;
         private System.Windows.Forms.ToolStripMenuItem gCCollectionToolStripMenuItem;
         private System.Windows.Forms.GroupBox monocleOptionsBox;
+        private System.Windows.Forms.NumericUpDown numberOfScansToAverageNUD;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown highChargeSelectionNUD;
+        private System.Windows.Forms.NumericUpDown lowChargeSelectionNUD;
+        private System.Windows.Forms.CheckBox toggleChargeDetectionCB;
+        private System.Windows.Forms.Label label3;
     }
 }
 
