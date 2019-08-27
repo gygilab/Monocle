@@ -72,7 +72,7 @@ namespace MonocleUI
             }
         }
 
-        private void Button4_Click(object sender, EventArgs e)
+        private void remove_dgv_row_button_Click(object sender, EventArgs e)
         {
             if(input_files_dgv.SelectedRows.Count > 0)
             {
@@ -80,6 +80,7 @@ namespace MonocleUI
                 {
                     if (row.Selected)
                     {
+                        Processor.files.Remove(row.Cells[0].Value.ToString());
                         input_files_dgv.Rows.Remove(row);
                     }
                 }

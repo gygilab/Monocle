@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Monocle
 {
@@ -17,6 +18,16 @@ namespace Monocle
                 !FileList.Contains(newFilePath))
             {
                 FileList.Add(newFilePath);
+                return true;
+            }
+            return false;
+        }
+
+        public bool Remove(string RemoveFile)
+        {
+            if (FileList.First(b=>b == RemoveFile).Count() > 0)
+            {
+                FileList.Remove(RemoveFile);
                 return true;
             }
             return false;

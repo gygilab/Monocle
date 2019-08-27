@@ -38,7 +38,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.input_files_dgv = new System.Windows.Forms.DataGridView();
             this.file_column = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button4 = new System.Windows.Forms.Button();
+            this.remove_dgv_row_button = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -114,7 +114,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.input_files_dgv);
-            this.groupBox1.Controls.Add(this.button4);
+            this.groupBox1.Controls.Add(this.remove_dgv_row_button);
             this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Location = new System.Drawing.Point(13, 28);
             this.groupBox1.Name = "groupBox1";
@@ -154,16 +154,16 @@
             this.file_column.HeaderText = "Files";
             this.file_column.Name = "file_column";
             // 
-            // button4
+            // remove_dgv_row_button
             // 
-            this.button4.Location = new System.Drawing.Point(704, 54);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(32, 32);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "-";
-            this.mainToolTip.SetToolTip(this.button4, "Remove selected row(s).");
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.Button4_Click);
+            this.remove_dgv_row_button.Location = new System.Drawing.Point(704, 54);
+            this.remove_dgv_row_button.Name = "remove_dgv_row_button";
+            this.remove_dgv_row_button.Size = new System.Drawing.Size(32, 32);
+            this.remove_dgv_row_button.TabIndex = 4;
+            this.remove_dgv_row_button.Text = "-";
+            this.mainToolTip.SetToolTip(this.remove_dgv_row_button, "Remove selected row(s).");
+            this.remove_dgv_row_button.UseVisualStyleBackColor = true;
+            this.remove_dgv_row_button.Click += new System.EventHandler(this.remove_dgv_row_button_Click);
             // 
             // button3
             // 
@@ -341,7 +341,7 @@
         private System.Windows.Forms.GroupBox monocle_log_tb;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button start_monocle_button;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button remove_dgv_row_button;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button2;

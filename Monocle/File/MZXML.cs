@@ -68,8 +68,6 @@ namespace Monocle.File
                     // Check if MS1 and add to processing pool
                     if (tScan.MsOrder == 1)
                     {
-                        Debug.WriteLine("Index: " + Ms1ScanIndex);
-                        Debug.WriteLine("Index: " + Ms1ScansCentroids.Length);
                         ParentScan = Ms1ScansCentroids[Ms1ScanIndex] = tScan;
                         Ms1ScanIndex++;
                     }

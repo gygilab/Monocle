@@ -123,7 +123,6 @@ namespace Monocle.File
                                         tempScan.PrecursorMasterScanNumber = int.Parse(trailerData.Values[i]);
                                         break;
                                     case "FAIMS CV:":
-                                        Console.WriteLine("FAIMS: " +trailerData.Values[i]);
                                         tempScan.FaimsCV = (int)double.Parse(trailerData.Values[i]);
                                         break;
                                 }
