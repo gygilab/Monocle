@@ -84,7 +84,6 @@ namespace MonocleUI
                         input_files_dgv.Rows.Remove(row);
                     }
                 }
-                
             }
         }
 

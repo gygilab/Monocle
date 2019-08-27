@@ -52,7 +52,6 @@ namespace Monocle.File
                     ScanStatistics scanStatistics = rawFile.GetScanStatsForScanNumber(iScanNumber);
                     // Get the scan filter for this scan number
                     IScanFilter scanFilter = rawFile.GetFilterForScanNumber(iScanNumber);
-
                     Data.Scan tempScan = new Data.Scan()
                     {
                         ScanNumber = iScanNumber,
@@ -62,13 +61,46 @@ namespace Monocle.File
                         TotalIonCurrent = scanStatistics.TIC,
                         LowestMz = scanStatistics.LowMass,
                         HighestMz = scanStatistics.HighMass,
+                        StartMz = scanStatistics.LowMass,
+                        EndMz = scanStatistics.HighMass,
                         ScanType = scanStatistics.ScanType,
                         MsOrder = (int)scanFilter.MSOrder,
+                        Polarity = (scanFilter.Polarity == PolarityType.Positive) ? "+" : "-",
+                        FilterLine = scanFilter.ToString(),
                         RetentionTime = rawFile.RetentionTimeFromScanNumber(iScanNumber)
                     };
 
                     RunHeader runHeader = rawFile.RunHeader;
                     LogEntry trailer = rawFile.GetTrailerExtraInformation(iScanNumber);
+
+                    for (int i = 0; i < trailer.Length; i++)
+                    {
+                        if (trailer.Values[i] == null)
+                        {
+                            continue;
+                        }
+                        switch (trailer.Labels[i])
+                        {
+                            case "Ion Injection Time (ms):":
+                                tempScan.IonInjectionTime = double.Parse(trailer.Values[i]);
+                                break;
+                            case "Elapsed Scan Time (sec):":
+                                tempScan.ElapsedScanTime = double.Parse(trailer.Values[i]);
+                                break;
+                            case "Monoisotopic M/Z:":
+                                tempScan.MonoisotopicMz = double.Parse(trailer.Values[i]);
+                                break;
+                            case "Charge State:":
+                                tempScan.PrecursorCharge = int.Parse(trailer.Values[i]);
+                                break;
+                            case "Master Scan Number:":
+                                tempScan.PrecursorMasterScanNumber = int.Parse(trailer.Values[i]);
+                                break;
+                            case "FAIMS CV:":
+                                tempScan.FaimsCV = (int)double.Parse(trailer.Values[i]);
+                                break;
+                        }
+                    }
 
                     // Centroid or profile?:
                     if (scanStatistics.IsCentroidScan && (scanStatistics.SpectrumPacketType == SpectrumPacketType.FtCentroid))
@@ -97,36 +129,6 @@ namespace Monocle.File
                         if (PeakCount > 0)
                         {
                             tempScan.PrecursorMz = rawFile.GetScanEventForScanNumber(iScanNumber).GetReaction(0).PrecursorMass;
-
-                            var trailerData = rawFile.GetTrailerExtraInformation(iScanNumber);
-                            for (int i = 0; i < trailerData.Length; i++)
-                            {
-                                if (trailerData.Values[i] == null)
-                                {
-                                    continue;
-                                }
-                                switch (trailerData.Labels[i])
-                                {
-                                    case "Ion Injection Time (ms):":
-                                        tempScan.IonInjectionTime = double.Parse(trailerData.Values[i]);
-                                        break;
-                                    case "Elapsed Scan Time (sec):":
-                                        tempScan.ElapsedScanTime = double.Parse(trailerData.Values[i]);
-                                        break;
-                                    case "Monoisotopic M/Z:":
-                                        tempScan.MonoisotopicMz = double.Parse(trailerData.Values[i]);
-                                        break;
-                                    case "Charge State:":
-                                        tempScan.PrecursorCharge = int.Parse(trailerData.Values[i]);
-                                        break;
-                                    case "Master Scan Number:":
-                                        tempScan.PrecursorMasterScanNumber = int.Parse(trailerData.Values[i]);
-                                        break;
-                                    case "FAIMS CV:":
-                                        tempScan.FaimsCV = (int)double.Parse(trailerData.Values[i]);
-                                        break;
-                                }
-                            }
                         }
 
                         Monocle.Run(Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tempScan.PrecursorMasterScanNumber).First(), ref tempScan);
