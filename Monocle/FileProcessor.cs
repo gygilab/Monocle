@@ -3,6 +3,7 @@ using Monocle.File;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Monocle
@@ -46,7 +47,20 @@ namespace Monocle
                     {
                         NewFile(newFile);
                         List<Scan> scans = new List<Scan>();
-                        MZXML.Consume(newFile, scans);
+                        Console.WriteLine("Path Extension == " + Path.GetExtension(newFile).ToLower());
+                        if (Path.GetExtension(newFile).ToLower() == ".mzxml")
+                        {
+                            MZXML.Consume(newFile, scans);
+                        }
+                        else if (Path.GetExtension(newFile).ToLower() == ".raw")
+                        {
+                            RAW.Consume(newFile, scans);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        
                         MZXML.Write(Files.ExportPath + "test.mzXML", scans);
                         foreach (Scan scan in scans)
                         {
@@ -70,7 +84,19 @@ namespace Monocle
                         foreach (string newFile in files.FileList)
                         {
                             List<Scan> scans = new List<Scan>();
-                            MZXML.Consume(newFile, scans);
+                            Console.WriteLine("Path Extension == " + Path.GetExtension(newFile).ToLower());
+                            if (Path.GetExtension(newFile).ToLower() == ".mzxml")
+                            {
+                                MZXML.Consume(newFile, scans);
+                            }
+                            else if (Path.GetExtension(newFile).ToLower() == ".raw")
+                            {
+                                RAW.Consume(newFile, scans);
+                            }
+                            else
+                            {
+                                return;
+                            }
                             MZXML.Write(Files.ExportPath + "test.mzXML", scans);
                             foreach (Scan scan in scans)
                             {
