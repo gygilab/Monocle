@@ -9,7 +9,7 @@ using static Monocle.Monocle;
 
 namespace Monocle
 {
-    public delegate void FileEventHandler(Object sender, FileEventArgs e);
+    public delegate void FileEventHandler(object sender, FileEventArgs e);
     public class FileEventArgs : EventArgs
     {
         public string FilePath;
@@ -17,38 +17,34 @@ namespace Monocle
         public bool Processed = false;
         public bool Written = false;
         public bool Finished = false;
+        public bool FinishedAllFiles = false;
         public FileEventArgs()
         {
             FilePath = "";
         }
-        public FileEventArgs(string filePath) { FilePath = filePath; }
-        public FileEventArgs(bool finished) { Finished = finished; }
-        public FileEventArgs(string filePath, bool finished) { FilePath = filePath; Finished = finished; }
-        public FileEventArgs(bool read, bool processed, bool written) { Read = read; Processed = processed; Written = written; }
+        public FileEventArgs(string filePath, bool read, bool processed, bool written, bool finished) { FilePath = filePath; Read = read; Processed = processed; Written = written; Finished = finished; }
+        public FileEventArgs(bool finishedAll) { FinishedAllFiles = finishedAll; }
+
     }
 
     public class FileProcessor
     {
         /// <summary>
-        /// Listener pair to track processing progress.
+        /// Listener to track file progress
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected virtual void NewFile(string newFile, bool finished = false)
+        /// <param name="newFile"></param>
+        /// <param name="read"></param>
+        /// <param name="processed"></param>
+        /// <param name="written"></param>
+        /// <param name="finished"></param>
+        protected virtual void TrackProcess(string newFile, bool read = false, bool processed = false, bool written = false, bool finished = false)
         {
-            FileTracker?.Invoke(this, new FileEventArgs(newFile, finished));
+            FileTracker?.Invoke(this, new FileEventArgs(newFile, read, processed, written, finished));
         }
 
-        FileEventArgs FileEventArgs = new FileEventArgs();
-
-        protected virtual void FileFinished(bool finish)
+        protected virtual void AllFilesFinished(bool finishedAll)
         {
-            FileTracker?.Invoke(this, new FileEventArgs(finish));
-        }
-
-        protected virtual void TrackProcess(bool read, bool processed, bool written)
-        {
-            FileTracker?.Invoke(this, new FileEventArgs(read, processed, written));
+            FileTracker?.Invoke(this, new FileEventArgs(finishedAll));
         }
 
         public event FileEventHandler FileTracker;
@@ -76,8 +72,8 @@ namespace Monocle
                 {
                     foreach (string newFile in files.FileList)
                     {
-                        NewFile(newFile); FileFinished(false);
-                        Console.WriteLine("Path Extension == " + Path.GetExtension(newFile).ToLower());
+                        TrackProcess(newFile);
+                        // Start reading file
                         if (Path.GetExtension(newFile).ToLower() == ".mzxml")
                         {
                             MZXML.Consume(newFile, Scans);
@@ -90,14 +86,21 @@ namespace Monocle
                         {
                             return;
                         }
-                        TrackProcess(true, false, false);
+                        TrackProcess(newFile, true);
+                        // Start Run across Scans
                         Monocle.Run(ref Scans, monocleOptions.Number_Of_Scans_To_Average);
-                        TrackProcess(true, true, false);
+
+                        TrackProcess(newFile, true, true);
+                        // Start writing mzXML
                         MZXML.Write(Files.ExportPath + "test.mzXML", Scans);
-                        TrackProcess(true, true, true);
+
+                        TrackProcess(newFile, true, true, true);
+                        // Clear data
                         EmptyScans();
-                        FileFinished(true);
+
+                        TrackProcess(newFile, true, true, true, true);
                     }
+                    AllFilesFinished(true);
                 }
                 catch (Exception ex)
                 {
@@ -112,7 +115,8 @@ namespace Monocle
                     {
                         foreach (string newFile in files.FileList)
                         {
-                            Console.WriteLine("Path Extension == " + Path.GetExtension(newFile).ToLower());
+                            TrackProcess(newFile);
+                            // Start reading file
                             if (Path.GetExtension(newFile).ToLower() == ".mzxml")
                             {
                                 MZXML.Consume(newFile, Scans);
@@ -125,12 +129,21 @@ namespace Monocle
                             {
                                 return;
                             }
-
+                            TrackProcess(newFile, true);
+                            // Start Run across Scans
                             Monocle.Run(ref Scans, monocleOptions.Number_Of_Scans_To_Average);
 
+                            TrackProcess(newFile, true, true);
+                            // Start writing mzXML
                             MZXML.Write(Files.ExportPath + "test.mzXML", Scans);
+
+                            TrackProcess(newFile, true, true, true);
+                            // Clear data
                             EmptyScans();
+
+                            TrackProcess(newFile, true, true, true, true);
                         }
+                        AllFilesFinished(true);
                     }
                     catch (Exception ex)
                     {

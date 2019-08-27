@@ -118,8 +118,8 @@ namespace MonocleUI
         private void Start_monocle_button_Click(object sender, EventArgs e)
         {
             EnableRunUI(false);
+            Processor.FileTracker += FileListener;
             Processor.Run();
-            EnableRunUI(true);
         }
 
         private void GCCollectionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -144,6 +144,30 @@ namespace MonocleUI
             remove_dgv_row_button.Enabled = enabled;
             toggleChargeDetectionCB.Enabled = enabled;
             numberOfScansToAverageNUD.Enabled = enabled;
+        }
+
+        private void FileListener(object sender, FileEventArgs e)
+        {
+            if (e.FilePath != "" && e.Finished)
+            {
+                UpdateLog("Finished: " + e.FilePath);
+            }
+            else if (e.FilePath != "" && e.Written)
+            {
+                UpdateLog("Writing: " + e.FilePath);
+            }
+            else if (e.FilePath != "" && e.Processed)
+            {
+                UpdateLog("Processing: " + e.FilePath);
+            }
+            else if (e.FilePath != "" && e.Read)
+            {
+                UpdateLog("Reading: " + e.FilePath);
+            }
+            if (e.FinishedAllFiles)
+            {
+                EnableRunUI(true);
+            }
         }
     }
 }

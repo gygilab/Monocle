@@ -60,6 +60,12 @@ namespace Monocle
             }
         }
 
+        /// <summary>
+        /// Run a single Monocle scan.
+        /// </summary>
+        /// <param name="Ms1ScansCentroids"></param>
+        /// <param name="ParentScan"></param>
+        /// <param name="DependentScan"></param>
         public static void Run(Scan[] Ms1ScansCentroids, Scan ParentScan, Scan DependentScan)
         {
             int numIsotopes = 0;
