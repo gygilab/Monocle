@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Monocle.File;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Monocle
+namespace Monocle.Data
 {
     /// <summary>
     /// Class to harvest IMsScan information without holding IMsScan class

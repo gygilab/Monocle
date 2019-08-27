@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Monocle
+namespace Monocle.Data
 {
     public struct DoubleRange
     {

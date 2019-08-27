@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Monocle
+namespace Monocle.Data
 {
     /// <summary>
     /// for pulling spectral information from API scans

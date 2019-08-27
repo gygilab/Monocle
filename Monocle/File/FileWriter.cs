@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monocle.Data;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Monocle
+namespace Monocle.File
 {
     public class FileWriter
     {
@@ -21,7 +22,7 @@ namespace Monocle
 
         public void UpdateFilePath(string newFilePath)
         {
-            if (File.Exists(newFilePath))
+            if (System.IO.File.Exists(newFilePath))
             {
                 FilePath = newFilePath;
                 OutputDictionary = new Dictionary<string, Scan>();

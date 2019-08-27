@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Monocle.Data;
+using Monocle.Math;
+using Monocle.Peak;
+using System.Collections.Generic;
 
 namespace Monocle
 {

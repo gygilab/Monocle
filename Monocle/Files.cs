@@ -13,7 +13,7 @@ namespace Monocle
 
         public bool Add(string newFilePath)
         {
-            if (File.Exists(newFilePath) && Path.GetExtension(newFilePath).IsInputType() &&
+            if (System.IO.File.Exists(newFilePath) && Path.GetExtension(newFilePath).IsInputType() &&
                 !FileList.Contains(newFilePath))
             {
                 FileList.Add(newFilePath);

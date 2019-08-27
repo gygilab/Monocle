@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Monocle.Data;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Monocle
+namespace Monocle.File
 {
     public class MonocleXmlDocument : XmlDocument
     {

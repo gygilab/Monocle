@@ -1,9 +1,10 @@
-﻿using Monocle;
+﻿using CommandLine;
+using Monocle;
+using Monocle.Data;
+using Monocle.File;
 using System;
-using System.IO;
-using CommandLine;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MakeMono
 {

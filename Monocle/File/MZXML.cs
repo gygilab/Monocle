@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Monocle.Data;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
 
-namespace Monocle
+namespace Monocle.File
 {
     public class MZXML : InputFile
     {
         public static List<Scan> Consume(string xmlFilePath, List<Scan> scans)
         {
-            if (xmlFilePath == "" || !File.Exists(xmlFilePath))
+            if (xmlFilePath == "" || !System.IO.File.Exists(xmlFilePath))
             {
                 Debug.WriteLine("No scans in the input.");
                 return null;
@@ -80,7 +81,7 @@ namespace Monocle
         
         public static void Write(string xmlFilePath, List<Scan> scans)
         {
-            if (xmlFilePath == "" || !File.Exists(xmlFilePath))
+            if (xmlFilePath == "" || !System.IO.File.Exists(xmlFilePath))
             {
                 Debug.WriteLine("No file at that location.");
             }

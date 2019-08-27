@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monocle;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,14 +12,14 @@ using ThermoFisher.CommonCore.Data.FilterEnums;
 using ThermoFisher.CommonCore.Data.Interfaces;
 using ThermoFisher.CommonCore.RawFileReader;
 
-namespace Monocle
+namespace Monocle.File
 {
     public class RAW : InputFile
     {
         
-        public static List<Scan> Consume(string rawFilePath, List<Scan> scans)
+        public static List<Data.Scan> Consume(string rawFilePath, List<Data.Scan> scans)
         {
-            if (rawFilePath == "" || !File.Exists(rawFilePath))
+            if (rawFilePath == "" || !System.IO.File.Exists(rawFilePath))
             {
                 Console.WriteLine(" Error: No scans in the input.");
                 return null;
@@ -46,7 +47,7 @@ namespace Monocle
                     ScanStatistics scanStatistics = rawFile.GetScanStatsForScanNumber(iScanNumber);
                     // Get the scan filter for this scan number
                     IScanFilter scanFilter = rawFile.GetFilterForScanNumber(iScanNumber);
-                    Scan tempScan = new Scan()
+                    Data.Scan tempScan = new Data.Scan()
                     {
                         ScanNumber = iScanNumber,
                         ScanEvent = iScanNumber,
@@ -102,7 +103,7 @@ namespace Monocle
             {
                 Console.WriteLine(" RAW File Error: " + ex.ToString());
             }
-            Ms1ScansCentroids = new Scan[12];
+            Ms1ScansCentroids = new Data.Scan[12];
             Ms1ScanIndex = 0;
             return scans;
         }
