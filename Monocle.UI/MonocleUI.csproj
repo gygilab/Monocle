@@ -81,11 +81,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="lib\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Monocle\Monocle.csproj">
-      <Project>{4bdd57cc-ba08-4cfb-b38e-414e26522d59}</Project>
+    <ProjectReference Include="..\Monocle\Monocle.csproj">
+      <Project>{16ae4d53-80b2-4ad0-8250-939ed176d8d6}</Project>
       <Name>Monocle</Name>
     </ProjectReference>
   </ItemGroup>
