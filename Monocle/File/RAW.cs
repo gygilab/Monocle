@@ -27,6 +27,11 @@ namespace Monocle.File
 
             ParentFile = rawFilePath;
 
+            if (Ms1ScansCentroids == null || Ms1ScansCentroids.Length < 1)
+            {
+                Ms1ScansCentroids = new Data.Scan[Num_Ms1_Scans_To_Average];
+            }
+
             try
             {
                 IRawDataPlus rawFile = RawFileReaderAdapter.FileFactory(rawFilePath);
@@ -72,29 +77,39 @@ namespace Monocle.File
                         tempScan.CentroidsFromArrays(segmentedScan.Positions, segmentedScan.Intensities);
                     }
 
-                    if (PeakCount > 0)
-                    {
-                        tempScan.PrecursorMz = rawFile.GetScanEventForScanNumber(iScanNumber).GetReaction(0).PrecursorMass;
-
-                        var trailerData = rawFile.GetTrailerExtraInformation(iScanNumber);
-                        for (int i = 0; i < trailerData.Length; i++)
-                        {
-                            if (trailerData.Labels[i] == "Monoisotopic M/Z:")
-                                tempScan.MonoisotopicMz = double.Parse(trailerData.Values[i]);
-                            else if (trailerData.Labels[i] == "Charge State:")
-                                tempScan.PrecursorCharge = (int)double.Parse(trailerData.Values[i]);
-                        }
-                    }
-
                     // Check if MS1 and add to processing pool
                     if (scanFilter.MSOrder == MSOrderType.Ms)
                     {
                         ParentScan = Ms1ScansCentroids[Ms1ScanIndex] = tempScan;
                         Ms1ScanIndex++;
                     }
-                    else if (scanFilter.MSOrder == MSOrderType.Ms2)
+                    else if (scanFilter.MSOrder == MSOrderType.Ms2 || scanFilter.MSOrder == MSOrderType.Ms3 || scanFilter.MSOrder == MSOrderType.Ms4)
                     {
-                        Monocle.Run(Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tempScan.PrecursorMasterScanNumber).First(), ref tempScan);
+                        if (PeakCount > 0)
+                        {
+                            tempScan.PrecursorMz = rawFile.GetScanEventForScanNumber(iScanNumber).GetReaction(0).PrecursorMass;
+
+                            var trailerData = rawFile.GetTrailerExtraInformation(iScanNumber);
+                            for (int i = 0; i < trailerData.Length; i++)
+                            {
+                                switch (trailerData.Labels[i])
+                                {
+                                    case "Monoisotopic M/Z:":
+                                        tempScan.MonoisotopicMz = double.Parse(trailerData.Values[i]);
+                                        break;
+                                    case "Charge State:":
+                                        tempScan.PrecursorCharge = int.Parse(trailerData.Values[i]);
+                                        break;
+                                    case "Master Scan Number:":
+                                        tempScan.PrecursorMasterScanNumber = int.Parse(trailerData.Values[i]);
+                                        break;
+                                    case "Orbitrap Resolution:":
+                                        break;
+                                }
+                            }
+                        }
+
+                        //Monocle.Run(Ms1ScansCentroids, scans.Where(b => b.ScanNumber == tempScan.PrecursorMasterScanNumber).First(), ref tempScan);
                     }
 
                     scans.Add(tempScan);
@@ -107,6 +122,5 @@ namespace Monocle.File
             Ms1ScanIndex = 0;
             return scans;
         }
-
     }
 }

@@ -52,17 +52,17 @@ namespace Monocle.File
                     Scan tScan = new Scan();
                     foreach (XmlAttribute attr in node.Attributes)
                     {
-                        tScan.CheckAndSetValue(attr.Name, attr.Value);
+                        tScan.CheckSetMzxmlValue(attr.Name, attr.Value);
                     }
 
                     //Process child nodes
                     XmlNodeList children = node.ChildNodes;
                     foreach (XmlNode child in children)
                     {
-                        tScan.CheckAndSetValue(child.Name, child.InnerText);
+                        tScan.CheckSetMzxmlValue(child.Name, child.InnerText);
                         foreach (XmlAttribute attr in child.Attributes)
                         {
-                            tScan.CheckAndSetValue(attr.Name, attr.Value);
+                            tScan.CheckSetMzxmlValue(attr.Name, attr.Value);
                         }
                     }
                     // Check if MS1 and add to processing pool

@@ -137,24 +137,24 @@ namespace Monocle.Data
         /// </summary>
         /// <param name="attribute"></param>
         /// <param name="value"></param>
-        public void CheckAndSetValue(string attribute, string value)
+        public void CheckSetMzxmlValue(string attribute, string value)
         {
             string tempAttr = "";
-            if (Attributes.ContainsKey(attribute))
+            if (mzxmlAttributes.ContainsKey(attribute))
             {
-                tempAttr = Attributes[attribute];
+                tempAttr = mzxmlAttributes[attribute];
             }
-            else if (PrecursorAttributes.ContainsKey(attribute))
+            else if (mzxmlPrecursorAttributes.ContainsKey(attribute))
             {
-                tempAttr = PrecursorAttributes[attribute];
+                tempAttr = mzxmlPrecursorAttributes[attribute];
             }
-            else if (PeaksAttributes.ContainsKey(attribute))
+            else if (mzxmlPeaksAttributes.ContainsKey(attribute))
             {
-                tempAttr = PeaksAttributes[attribute];
+                tempAttr = mzxmlPeaksAttributes[attribute];
             }
-            else if (MsnAttributes.ContainsKey(attribute))
+            else if (mzxmlMsnAttributes.ContainsKey(attribute))
             {
-                tempAttr = MsnAttributes[attribute];
+                tempAttr = mzxmlMsnAttributes[attribute];
             }
 
             if (tempAttr != "")
@@ -189,24 +189,24 @@ namespace Monocle.Data
         /// </summary>
         /// <param name="attribute"></param>
         /// <param name="value"></param>
-        public string CheckAndGetValue(string attribute)
+        public string CheckGetMzxmlValue(string attribute)
         {
             string tempAttr = "";
-            if (Attributes.ContainsKey(attribute))
+            if (mzxmlAttributes.ContainsKey(attribute))
             {
-                tempAttr = Attributes[attribute];
+                tempAttr = mzxmlAttributes[attribute];
             }
-            else if (PrecursorAttributes.ContainsKey(attribute))
+            else if (mzxmlPrecursorAttributes.ContainsKey(attribute))
             {
-                tempAttr = PrecursorAttributes[attribute];
+                tempAttr = mzxmlPrecursorAttributes[attribute];
             }
-            else if (PeaksAttributes.ContainsKey(attribute))
+            else if (mzxmlPeaksAttributes.ContainsKey(attribute))
             {
-                tempAttr = PeaksAttributes[attribute];
+                tempAttr = mzxmlPeaksAttributes[attribute];
             }
-            else if (MsnAttributes.ContainsKey(attribute))
+            else if (mzxmlMsnAttributes.ContainsKey(attribute))
             {
-                tempAttr = MsnAttributes[attribute];
+                tempAttr = mzxmlMsnAttributes[attribute];
             }
 
             if (tempAttr != "") {
@@ -235,7 +235,7 @@ namespace Monocle.Data
             return null;
         }
 
-        public Dictionary<string, string> Attributes = new Dictionary<string, string>()
+        public Dictionary<string, string> mzxmlAttributes = new Dictionary<string, string>()
         {
             { "num" , "ScanNumber" },
             { "msLevel" , "MsOrder" },
@@ -256,13 +256,13 @@ namespace Monocle.Data
             { "basePeakIntensity","BasePeakIntensity" }
         };
 
-        public Dictionary<string, string> MsnAttributes = new Dictionary<string, string>()
+        public Dictionary<string, string> mzxmlMsnAttributes = new Dictionary<string, string>()
         {
             { "totIonCurrent","TotalIonCurrent" },
             { "collisionEnergy","CollisionEnergy" }
         };
 
-        public Dictionary<string, string> PrecursorAttributes = new Dictionary<string, string>()
+        public Dictionary<string, string> mzxmlPrecursorAttributes = new Dictionary<string, string>()
         {
             // Precusor information
             { "precursorMz","PrecursorMz" },
@@ -272,7 +272,7 @@ namespace Monocle.Data
             { "activationMethod","PrecursorActivationMethod" }
         };
 
-        public Dictionary<string, string> PeaksAttributes = new Dictionary<string, string>()
+        public Dictionary<string, string> mzxmlPeaksAttributes = new Dictionary<string, string>()
         {
             // Peaks information
             { "peaks","Peaks" },
