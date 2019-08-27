@@ -8,7 +8,7 @@ using System.IO;
 
 namespace MakeMono
 {
-    class Program
+    internal class Program
     {
         /// <summary>
         /// MakeMono Input options
