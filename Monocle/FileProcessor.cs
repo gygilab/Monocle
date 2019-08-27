@@ -18,11 +18,19 @@ namespace Monocle
         public bool Written = false;
         public bool Finished = false;
         public bool FinishedAllFiles = false;
+        public double CurrentProgress = 0;
         public FileEventArgs()
         {
             FilePath = "";
         }
-        public FileEventArgs(string filePath, bool read, bool processed, bool written, bool finished) { FilePath = filePath; Read = read; Processed = processed; Written = written; Finished = finished; }
+        public FileEventArgs(string filePath, double currentProgress, bool read, bool processed, bool written, bool finished) {
+            FilePath = filePath;
+            CurrentProgress = currentProgress;
+            Read = read;
+            Processed = processed;
+            Written = written;
+            Finished = finished;
+        }
         public FileEventArgs(bool finishedAll) { FinishedAllFiles = finishedAll; }
 
     }
@@ -37,10 +45,12 @@ namespace Monocle
         /// <param name="processed"></param>
         /// <param name="written"></param>
         /// <param name="finished"></param>
-        protected virtual void TrackProcess(string newFile, bool read = false, bool processed = false, bool written = false, bool finished = false)
+        protected virtual void TrackProcess(string newFile, double currentProgress, bool read = false, bool processed = false, bool written = false, bool finished = false)
         {
-            FileTracker?.Invoke(this, new FileEventArgs(newFile, read, processed, written, finished));
+            FileTracker?.Invoke(this, new FileEventArgs(newFile, currentProgress, read, processed, written, finished));
         }
+
+        public double CurrentProgress { get; set; } = 0;
 
         protected virtual void AllFilesFinished(bool finishedAll)
         {
@@ -70,9 +80,11 @@ namespace Monocle
             {
                 try
                 {
+                    int filesCompleted = 0;
                     foreach (string newFile in files.FileList)
                     {
-                        TrackProcess(newFile);
+                        CurrentProgress = 100 * (1 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                        TrackProcess(newFile, CurrentProgress);
                         // Start reading file
                         if (Path.GetExtension(newFile).ToLower() == ".mzxml")
                         {
@@ -86,19 +98,22 @@ namespace Monocle
                         {
                             return;
                         }
-                        TrackProcess(newFile, true);
+                        CurrentProgress = 100 * (2 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                        TrackProcess(newFile, CurrentProgress, true);
                         // Start Run across Scans
                         Monocle.Run(ref Scans, monocleOptions.Number_Of_Scans_To_Average);
 
-                        TrackProcess(newFile, true, true);
+                        TrackProcess(newFile, CurrentProgress, true, true);
                         // Start writing mzXML
                         MZXML.Write(Files.ExportPath + "test.mzXML", Scans);
 
-                        TrackProcess(newFile, true, true, true);
+                        CurrentProgress = 100 * (3 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                        TrackProcess(newFile, CurrentProgress, true, true, true);
                         // Clear data
                         EmptyScans();
-
-                        TrackProcess(newFile, true, true, true, true);
+                        filesCompleted++;
+                        CurrentProgress = 100 * (4 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                        TrackProcess(newFile, CurrentProgress, true, true, true, true);
                     }
                     AllFilesFinished(true);
                 }
@@ -113,9 +128,11 @@ namespace Monocle
                 {
                     try
                     {
+                        int filesCompleted = 0;
                         foreach (string newFile in files.FileList)
                         {
-                            TrackProcess(newFile);
+                            CurrentProgress = 100 * (1 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                            TrackProcess(newFile, CurrentProgress);
                             // Start reading file
                             if (Path.GetExtension(newFile).ToLower() == ".mzxml")
                             {
@@ -129,19 +146,22 @@ namespace Monocle
                             {
                                 return;
                             }
-                            TrackProcess(newFile, true);
+                            CurrentProgress = 100 * (2 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                            TrackProcess(newFile, CurrentProgress, true);
                             // Start Run across Scans
                             Monocle.Run(ref Scans, monocleOptions.Number_Of_Scans_To_Average);
 
-                            TrackProcess(newFile, true, true);
+                            TrackProcess(newFile, CurrentProgress, true, true);
                             // Start writing mzXML
                             MZXML.Write(Files.ExportPath + "test.mzXML", Scans);
 
-                            TrackProcess(newFile, true, true, true);
+                            CurrentProgress = 100 * (3 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                            TrackProcess(newFile, CurrentProgress, true, true, true);
                             // Clear data
                             EmptyScans();
-
-                            TrackProcess(newFile, true, true, true, true);
+                            filesCompleted++;
+                            CurrentProgress = 100 * (4 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                            TrackProcess(newFile, CurrentProgress, true, true, true, true);
                         }
                         AllFilesFinished(true);
                     }

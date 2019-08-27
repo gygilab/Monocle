@@ -115,6 +115,15 @@ namespace MonocleUI
             }));
         }
 
+        public void UpdateProgress(int progress)
+        {
+            Invoke(new Action(
+            () =>
+            {
+                progressBar1.Value = progress;
+            }));
+        }
+
         private void Start_monocle_button_Click(object sender, EventArgs e)
         {
             EnableRunUI(false);
@@ -137,10 +146,12 @@ namespace MonocleUI
 
         private void EnableRunUI(bool enabled)
         {
+            start_monocle_button.Enabled = enabled;
             input_files_dgv.Enabled = enabled;
             file_output_format_CLB.Enabled = enabled;
             lowChargeSelectionNUD.Enabled = enabled;
             highChargeSelectionNUD.Enabled = enabled;
+            add_file_button.Enabled = enabled;
             remove_dgv_row_button.Enabled = enabled;
             toggleChargeDetectionCB.Enabled = enabled;
             numberOfScansToAverageNUD.Enabled = enabled;
@@ -150,20 +161,21 @@ namespace MonocleUI
         {
             if (e.FilePath != "" && e.Finished)
             {
-                UpdateLog("Finished: " + e.FilePath);
+                UpdateLog("File Finished: " + e.FilePath);
             }
             else if (e.FilePath != "" && e.Written)
             {
-                UpdateLog("Writing: " + e.FilePath);
+                UpdateLog("Writing Complete: " + e.FilePath);
             }
             else if (e.FilePath != "" && e.Processed)
             {
-                UpdateLog("Processing: " + e.FilePath);
+                UpdateLog("Processing Complete: " + e.FilePath);
             }
             else if (e.FilePath != "" && e.Read)
             {
-                UpdateLog("Reading: " + e.FilePath);
+                UpdateLog("File Read Complete: " + e.FilePath);
             }
+            UpdateProgress((int)e.CurrentProgress);
             if (e.FinishedAllFiles)
             {
                 EnableRunUI(true);
