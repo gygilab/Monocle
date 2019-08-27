@@ -110,7 +110,6 @@ namespace Monocle
                     {
                         Debug.WriteLine(ex + " file processing failed.");
                     }
-
                 });
             }
         }
