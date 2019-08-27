@@ -1,4 +1,4 @@
-# MonocleUI
+# Monocle
 
 Monocle is a tool for monoisotopic peak and accurate precursor m/z detection in shotgun proteomics experiments.
 
