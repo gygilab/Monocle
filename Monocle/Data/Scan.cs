@@ -85,6 +85,30 @@ namespace Monocle.Data
         public double PrecursorIntensity { get; set; }
         public string PrecursorActivationMethod { get; set; } = "";
         public int CentroidCount { get; private set; }
+        public List<double> SpsIons { get; set; } = new List<double>();
+        public string SpsIonsString
+        {
+            get
+            {
+                if(SpsIons.Count > 0)
+                {
+                    return String.Join(",", SpsIons.ToArray());
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            set
+            {
+                string tempString = value.Trim();
+                if(tempString != "" && tempString != null && tempString != String.Empty)
+                {
+                    SpsIons = value.Split(',').Select(b => double.Parse(b)).ToList();
+                    PrecursorMz = SpsIons.First();
+                }
+            }
+        }
         /// <summary>
         /// Peaks
         /// </summary>

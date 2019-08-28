@@ -6,18 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="ThermoFisher.CommonCore.BackgroundSubtraction">
-      <HintPath>..\..\..\..\GygiLab\Projects\InSilico\C#\RawFileReader\ThermoRawFileReader.3.0.77\lib\ThermoFisher.CommonCore.BackgroundSubtraction.dll</HintPath>
-    </Reference>
-    <Reference Include="ThermoFisher.CommonCore.Data">
-      <HintPath>..\..\..\..\GygiLab\Projects\InSilico\C#\RawFileReader\ThermoRawFileReader.3.0.77\lib\ThermoFisher.CommonCore.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="ThermoFisher.CommonCore.MassPrecisionEstimator">
-      <HintPath>..\..\..\..\GygiLab\Projects\InSilico\C#\RawFileReader\ThermoRawFileReader.3.0.77\lib\ThermoFisher.CommonCore.MassPrecisionEstimator.dll</HintPath>
-    </Reference>
-    <Reference Include="ThermoFisher.CommonCore.RawFileReader">
-      <HintPath>..\..\..\..\GygiLab\Projects\InSilico\C#\RawFileReader\ThermoRawFileReader.3.0.77\lib\ThermoFisher.CommonCore.RawFileReader.dll</HintPath>
-    </Reference>
+    <PackageReference Include="ThermoFisher.CommonCore.BackgroundSubtraction" Version="5.0.0.7" />
+    <PackageReference Include="ThermoFisher.CommonCore.Data" Version="5.0.0.7" />
+    <PackageReference Include="ThermoFisher.CommonCore.MassPrecisionEstimator" Version="5.0.0.7" />
+    <PackageReference Include="ThermoFisher.CommonCore.RawFileReader" Version="5.0.0.7" />
   </ItemGroup>
 
 </Project>

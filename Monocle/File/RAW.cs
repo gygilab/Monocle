@@ -53,6 +53,7 @@ namespace Monocle.File
                     ScanStatistics scanStatistics = rawFile.GetScanStatsForScanNumber(iScanNumber);
                     // Get the scan filter for this scan number
                     IScanFilter scanFilter = rawFile.GetFilterForScanNumber(iScanNumber);
+
                     Data.Scan tempScan = new Data.Scan()
                     {
                         ScanNumber = iScanNumber,
@@ -100,7 +101,17 @@ namespace Monocle.File
                             case "FAIMS CV:":
                                 tempScan.FaimsCV = (int)double.Parse(trailer.Values[i]);
                                 break;
+                            case "SPS Masses:":
+                                tempScan.SpsIonsString = trailer.Values[i];
+                                break;
                         }
+                    }
+
+                    // handle dependent scans and not SPS (processed above)
+                    if (scanFilter.Dependent == TriState.On && tempScan.SpsIonsString == "")
+                    {
+                        IReaction reaction = scanFilter.GetReaction(iScanNumber);
+                        tempScan.PrecursorMz = reaction.PrecursorMass;
                     }
 
                     // Centroid or profile?:
