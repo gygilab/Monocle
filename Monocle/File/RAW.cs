@@ -1,12 +1,5 @@
-﻿using Monocle;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using ThermoFisher.CommonCore.Data.Business;
 using ThermoFisher.CommonCore.Data.FilterEnums;
 using ThermoFisher.CommonCore.Data.Interfaces;
@@ -35,9 +28,17 @@ namespace Monocle.File
             try
             {
                 IRawDataPlus rawFile = RawFileReaderAdapter.FileFactory(rawFilePath);
-                if (!rawFile.IsOpen || rawFile.IsError)
+                if (!rawFile.IsOpen)
                 {
-                    Console.WriteLine(" RawFile Error: unable to access the RAW file using the RawFileReader class: " + rawFilePath);
+                    Console.WriteLine(" RawFile Error: File could not be opened: " + rawFilePath);
+                    Console.WriteLine(rawFile.FileError.WarningMessage);
+                    Console.WriteLine(rawFile.FileError.ErrorMessage);
+                    Console.WriteLine(rawFile.FileError.ErrorCode);
+                    return null;
+                }
+                else if (rawFile.IsError)
+                {
+                    Console.WriteLine(" RawFile Error: reader error: " + rawFilePath);
                     return null;
                 }
 
