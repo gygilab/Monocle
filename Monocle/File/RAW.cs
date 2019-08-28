@@ -21,7 +21,7 @@ namespace Monocle.File
         {
             if (rawFilePath == "" || !System.IO.File.Exists(rawFilePath))
             {
-                Console.WriteLine(" Error: No scans in the input.");
+                Console.WriteLine(" Error: No file exists in the input.");
                 return null;
             }
 
@@ -37,7 +37,7 @@ namespace Monocle.File
                 IRawDataPlus rawFile = RawFileReaderAdapter.FileFactory(rawFilePath);
                 if (!rawFile.IsOpen || rawFile.IsError)
                 {
-                    Console.WriteLine(" Error: unable to access the RAW file using the RawFileReader class.");
+                    Console.WriteLine(" RawFile Error: unable to access the RAW file using the RawFileReader class: " + rawFilePath);
                     return null;
                 }
 

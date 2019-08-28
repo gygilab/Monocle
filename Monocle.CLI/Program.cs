@@ -23,6 +23,8 @@ namespace MakeMono
             public bool ChargeDetection { get; set; }
             [Option('z', "Charge range", Required = false, HelpText = "Set charge range, default: 2:6")]
             public DoubleRange ChargeRange { get; set; }
+            [Option('q', "Quiet Run", Required = false, HelpText = "Do not display file progress in console.")]
+            public bool RunQuiet { get; set; } = false;
         }
 
         static void Main(string[] args)
@@ -36,6 +38,7 @@ namespace MakeMono
                 Console.WriteLine("Example: MakeMono.exe 'C:\\MY_FILE.mzXML'");
                 return;
             }
+            
             string filePath = "";
             /// Parse input arguments
             Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(opt =>
@@ -55,51 +58,64 @@ namespace MakeMono
                 {
                     MZXML.Num_Ms1_Scans_To_Average = opt.NumOfScans;
                 }
-                else
-                {
-                    HandleParseError("Number of scans outside bounds, will use default value.");
-                }
 
-                if (opt.ChargeDetection)
+                if(opt.RunQuiet)
                 {
-
-                }
-                else
-                {
-
+                    silenceConsole = true;
                 }
 
                 if (opt.ChargeRange.Low > 0 && opt.ChargeRange.Low <= opt.ChargeRange.High && opt.ChargeRange.High < 10)
                 {
                     MZXML.Charge_Range = opt.ChargeRange;
                 }
-                else
-                {
-                    HandleParseError("Charge range outside of bounds, will use default values.");
-                }
 
             }).WithNotParsed<Options>((errs) => HandleParseError(errs));
 
+            Processor.FileTracker += FileListener;
             /// RUN MONOCLE:
             Processor.Run(true);
         }
 
-        public static void HandleParseError(IEnumerable<Error> Errors)
+        private static bool silenceConsole = false;
+
+        private static void FileListener(object sender, FileEventArgs e)
+        {
+            if (!silenceConsole)
+            {
+                if (e.FilePath != "" && e.Finished)
+                {
+                    Console.WriteLine("File Finished: " + e.FilePath);
+                }
+                else if (e.FilePath != "" && e.Written)
+                {
+                    Console.WriteLine("Writing Complete: " + e.FilePath);
+                }
+                else if (e.FilePath != "" && e.Processed)
+                {
+                    Console.WriteLine("Processing Complete: " + e.FilePath);
+                }
+                else if (e.FilePath != "" && e.Read)
+                {
+                    Console.WriteLine("File Read Complete: " + e.FilePath);
+                }
+            }
+
+        }
+
+        private static void HandleParseError(IEnumerable<Error> Errors)
         {
             foreach(Error error in Errors)
             {
-                Console.WriteLine("Error: " + error.Tag.ToString());
+                if(error.Tag != ErrorType.VersionRequestedError)
+                {
+                    Console.WriteLine("Error1: " + error.Tag.ToString());
+                }
             }
         }
 
-        public static void HandleParseError(string error)
+        private static void HandleParseError(string error)
         {
             Console.WriteLine("Error: " + error);
-        }
-
-        public void FileTracker_Listener(object sender, FileEventHandler e)
-        {
-
         }
     }
 }
