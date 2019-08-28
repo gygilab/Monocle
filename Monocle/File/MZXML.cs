@@ -92,11 +92,14 @@ namespace Monocle.File
                 doc.IndexByteCount(scan.ScanNumber);
                 doc.ScanToXml(scan);
             }
+
+            string fileName = Path.GetFileNameWithoutExtension(xmlFilePath);
+
             doc.GetElementsByTagName("indexOffset")[0].InnerText = doc.ByteCount.ToString();
-            doc.Save(Files.ExportPath + "test.mzXML");
+            doc.Save(Files.ExportPath + fileName + "_monocle.mzXML");
             Ms1ScansCentroids = new Scan[12];
             Ms1ScanIndex = 0;
-            Debug.WriteLine("Finished writing xml: " + Files.ExportPath + "\\test.mzXML");
+            Debug.WriteLine("Finished writing xml: " + Files.ExportPath + fileName + "_monocle.mzXML");
         }
 
         /// <summary>

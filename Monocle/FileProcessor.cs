@@ -105,7 +105,7 @@ namespace Monocle
 
                         TrackProcess(newFile, CurrentProgress, true, true);
                         // Start writing mzXML
-                        MZXML.Write(Files.ExportPath + "test.mzXML", Scans);
+                        MZXML.Write(newFile, Scans);
 
                         CurrentProgress = 100 * (3 + (filesCompleted * 4)) / (files.FileList.Count * 4);
                         TrackProcess(newFile, CurrentProgress, true, true, true);
