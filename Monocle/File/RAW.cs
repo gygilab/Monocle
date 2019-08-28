@@ -53,6 +53,7 @@ namespace Monocle.File
                     ScanStatistics scanStatistics = rawFile.GetScanStatsForScanNumber(iScanNumber);
                     // Get the scan filter for this scan number
                     IScanFilter scanFilter = rawFile.GetFilterForScanNumber(iScanNumber);
+                    IScanEvents scanEvents = rawFile.ScanEvents;
 
                     Data.Scan tempScan = new Data.Scan()
                     {
@@ -107,10 +108,13 @@ namespace Monocle.File
                         }
                     }
 
+                    IScanEvent scanEvent = rawFile.GetScanEventForScanNumber(iScanNumber);
+                    //write current scan filter:
+                    //Console.WriteLine("Scan " + iScanNumber + ": " + scanEvent.ToString());
                     // handle dependent scans and not SPS (processed above)
-                    if (scanFilter.Dependent == TriState.On && tempScan.SpsIonsString == "")
+                    if (tempScan.MsOrder > 1 && tempScan.SpsIonsString == "")
                     {
-                        IReaction reaction = scanFilter.GetReaction(iScanNumber);
+                        IReaction reaction = scanEvent.GetReaction(0);
                         tempScan.PrecursorMz = reaction.PrecursorMass;
                     }
 

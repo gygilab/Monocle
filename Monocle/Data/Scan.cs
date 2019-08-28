@@ -104,7 +104,8 @@ namespace Monocle.Data
                 string tempString = value.Trim();
                 if(tempString != "" && tempString != null && tempString != String.Empty)
                 {
-                    SpsIons = value.Split(',').Select(b => double.Parse(b)).ToList();
+                    List<string> tempStringList = value.Split(',').Where(c => c.Trim() != "").ToList();
+                    SpsIons = tempStringList.Select(b => double.Parse(b.Trim())).ToList();
                     PrecursorMz = SpsIons.First();
                 }
             }
