@@ -10,6 +10,12 @@ namespace Monocle.File
 {
     public class MZXML : InputFile
     {
+        /// <summary>
+        /// Open and convert an mzXML file to a scan list
+        /// </summary>
+        /// <param name="xmlFilePath"></param>
+        /// <param name="scans"></param>
+        /// <returns></returns>
         public static List<Scan> Consume(string xmlFilePath, List<Scan> scans)
         {
             if (xmlFilePath == "" || !System.IO.File.Exists(xmlFilePath))
@@ -25,11 +31,11 @@ namespace Monocle.File
             {
                 doc.Load(fs);
             }
-            using(XmlNodeList parentFileElements = doc.GetElementsByTagName("parentFile"))
+            using (XmlNodeList parentFileElements = doc.GetElementsByTagName("parentFile"))
             {
-                foreach(XmlAttribute attr in parentFileElements[0])
+                foreach (XmlAttribute attr in parentFileElements[0])
                 {
-                    if(attr.Name == "fileName")
+                    if (attr.Name == "fileName")
                     {
                         doc.ParentFile = "g05432_tko_std_comet.RAW";//attr.Value;
                     }
@@ -40,7 +46,7 @@ namespace Monocle.File
                 }
             }
 
-            if(Ms1ScansCentroids == null || Ms1ScansCentroids.Length < 1)
+            if (Ms1ScansCentroids == null || Ms1ScansCentroids.Length < 1)
             {
                 Ms1ScansCentroids = new Scan[Num_Ms1_Scans_To_Average];
             }
@@ -73,7 +79,12 @@ namespace Monocle.File
             Ms1ScanIndex = 0;
             return scans;
         }
-        
+
+        /// <summary>
+        /// Write a new mzXML file
+        /// </summary>
+        /// <param name="xmlFilePath"></param>
+        /// <param name="scans"></param>
         public static void Write(string xmlFilePath, List<Scan> scans)
         {
             if (xmlFilePath == "" || !System.IO.File.Exists(xmlFilePath))
