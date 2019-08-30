@@ -19,7 +19,7 @@ namespace MonocleUI
 
         private void Initiliaze_OutputFormat_CLB()
         {
-            foreach(string type in Enum.GetNames(typeof(InputFileType)))
+            foreach(string type in Enum.GetNames(typeof(OutputFileType)))
             {
                 file_output_format_CLB.Items.Add(type);
             }
@@ -106,13 +106,16 @@ namespace MonocleUI
 
         public void UpdateLog(string message)
         {
-            Invoke(new Action(
-            () =>
+            if (monocle_log.IsHandleCreated)
             {
-                monocle_log.AppendText(string.Format("[{0}]\t{1}\n", DateTime.Now.ToLongTimeString(), message));
-                monocle_log.SelectionStart = monocle_log.Text.Length;
-                monocle_log.ScrollToCaret();
-            }));
+                Invoke(new Action(
+                () =>
+                {
+                    monocle_log.AppendText(string.Format("[{0}]\t{1}\n", DateTime.Now.ToLongTimeString(), message));
+                    monocle_log.SelectionStart = monocle_log.Text.Length;
+                    monocle_log.ScrollToCaret();
+                }));
+            }
         }
 
         public void UpdateProgress(int progress)
@@ -179,6 +182,22 @@ namespace MonocleUI
             if (e.FinishedAllFiles)
             {
                 EnableRunUI(true);
+            }
+        }
+
+        private void File_output_format_CLB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            for (int itemInd = 0; itemInd < file_output_format_CLB.Items.Count; itemInd++)
+            {
+                if (file_output_format_CLB.GetItemChecked(itemInd) && itemInd != file_output_format_CLB.SelectedIndex)
+                {
+                    file_output_format_CLB.SetItemCheckState(itemInd, CheckState.Unchecked);
+                }
+                else if (itemInd == file_output_format_CLB.SelectedIndex)
+                {
+                    file_output_format_CLB.SetItemCheckState(itemInd, CheckState.Checked);
+                    Processor.outputFileType = (OutputFileType)itemInd;
+                }
             }
         }
     }

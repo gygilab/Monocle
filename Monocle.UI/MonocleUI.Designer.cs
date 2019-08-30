@@ -203,7 +203,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 17);
+            this.label2.Location = new System.Drawing.Point(79, 16);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 5;
@@ -221,11 +221,13 @@
             // file_output_format_CLB
             // 
             this.file_output_format_CLB.CheckOnClick = true;
+            this.file_output_format_CLB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.file_output_format_CLB.FormattingEnabled = true;
-            this.file_output_format_CLB.Location = new System.Drawing.Point(6, 33);
+            this.file_output_format_CLB.Location = new System.Drawing.Point(82, 33);
             this.file_output_format_CLB.Name = "file_output_format_CLB";
-            this.file_output_format_CLB.Size = new System.Drawing.Size(447, 64);
+            this.file_output_format_CLB.Size = new System.Drawing.Size(371, 46);
             this.file_output_format_CLB.TabIndex = 3;
+            this.file_output_format_CLB.SelectedIndexChanged += new System.EventHandler(this.File_output_format_CLB_SelectedIndexChanged);
             // 
             // select_output_directory_button
             // 
