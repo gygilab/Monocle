@@ -191,7 +191,8 @@ namespace Monocle
 
         public double CalculateProgress(int currentStage, int filesCompleted, int totalFileCount, int stages = 4)
         {
-            return CurrentProgress = 100 * (currentStage + (filesCompleted * stages)) / (totalFileCount * stages);
+            CurrentProgress = 100 * (currentStage + (filesCompleted * stages)) / (totalFileCount * stages);
+            return (CurrentProgress > 100) ? 100 : CurrentProgress;
         }
 
         public void EmptyScans()
