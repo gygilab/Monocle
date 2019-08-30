@@ -19,12 +19,14 @@ namespace MakeMono
             public string InputFilePath { get; set; } = "";
             [Option('n', "NumOfScans", Required = false, HelpText = "The number of scans to average, default: +/- 6")]
             public int NumOfScans { get; set; }
-            [Option('c', "Charge detection", Required = false, HelpText = "Toggle charge detection, default: true|T")]
+            [Option('c', "ChargeDetection", Required = false, HelpText = "Toggle charge detection, default: true|T")]
             public bool ChargeDetection { get; set; }
-            [Option('z', "Charge range", Required = false, HelpText = "Set charge range, default: 2:6")]
+            [Option('z', "ChargeRange", Required = false, HelpText = "Set charge range, default: 2:6")]
             public DoubleRange ChargeRange { get; set; }
-            [Option('q', "Quiet Run", Required = false, HelpText = "Do not display file progress in console.")]
+            [Option('q', "QuietRun", Required = false, HelpText = "Do not display file progress in console.")]
             public bool RunQuiet { get; set; } = false;
+            [Option('o', "OutputFileType", Required = false, HelpText = "Choose to output an mzXML ('mzxml' or '0') or CSV file ('csv' or '1').")]
+            public OutputFileType outputFileType { get; set; } = OutputFileType.mzxml;
         }
 
         static void Main(string[] args)
@@ -59,7 +61,10 @@ namespace MakeMono
                     MZXML.Num_Ms1_Scans_To_Average = opt.NumOfScans;
                 }
 
-                if(opt.RunQuiet)
+                Processor.outputFileType = opt.outputFileType;
+                Console.WriteLine("Output file type set to: " + Processor.outputFileType.ToString());
+
+                if (opt.RunQuiet)
                 {
                     silenceConsole = true;
                 }
@@ -106,9 +111,9 @@ namespace MakeMono
         {
             foreach(Error error in Errors)
             {
-                if(error.Tag != ErrorType.VersionRequestedError)
+                if(error.Tag != ErrorType.VersionRequestedError && error.Tag != ErrorType.HelpRequestedError)
                 {
-                    Console.WriteLine("Error1: " + error.Tag.ToString());
+                    Console.WriteLine("Error: " + error.Tag.ToString());
                 }
             }
         }

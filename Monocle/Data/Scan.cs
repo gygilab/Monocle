@@ -70,6 +70,26 @@ namespace Monocle.Data
         public double BasePeakIntensity { get; set; } = 0;
         public int FaimsCV { get; set; } = 0;
         public double MonoisotopicMz { get; set; }
+        private double _MonoisotopicCharge { get; set; } = 0;
+        public double MonoisotopicCharge { get
+            {
+                if (_MonoisotopicCharge == 0)
+                {
+                    return PrecursorCharge;
+                }
+                else
+                {
+                    return _MonoisotopicCharge;
+                }
+            }
+        }
+        public double MonoisotopicMH
+        {
+            get
+            {
+                return (MonoisotopicMz * PrecursorCharge) - (protonMass * (PrecursorCharge - 1));
+            }
+        }
         /// <summary>
         /// MSn
         /// </summary>
@@ -79,6 +99,11 @@ namespace Monocle.Data
         /// Precursors
         /// </summary>
         public double PrecursorMz { get; set; }
+        public double PrecursorMH { get
+            {
+                return (PrecursorMz * PrecursorCharge) - (protonMass * (PrecursorCharge - 1));
+            }
+        }
         public int PrecursorMasterScanNumber { get; set; }
         public double PrecursorMz2 { get; set; }
         public int PrecursorCharge { get; set; }
@@ -135,6 +160,17 @@ namespace Monocle.Data
             }
         }
 
+        /// <summary>
+        /// Output data
+        /// </summary>
+        public double PrecursorIsolationSpecificity { get; set; } = 0;
+        public double PrecursorIsolationWidth { get; set; } = 0.5;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="outputMz"></param>
+        /// <returns></returns>
         public double[] CentroidsToArray(bool outputMz)
         {
             if(Centroids == null)

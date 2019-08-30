@@ -51,6 +51,7 @@ namespace Monocle
         }
 
         public double CurrentProgress { get; set; } = 0;
+        public OutputFileType outputFileType { get; set; } = OutputFileType.mzxml;
 
         protected virtual void AllFilesFinished(bool finishedAll)
         {
@@ -83,7 +84,7 @@ namespace Monocle
                     int filesCompleted = 0;
                     foreach (string newFile in files.FileList)
                     {
-                        CurrentProgress = 100 * (1 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                        CurrentProgress = CalculateProgress(1, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress);
                         // Start reading file
                         if (Path.GetExtension(newFile).ToLower() == ".mzxml")
@@ -98,21 +99,28 @@ namespace Monocle
                         {
                             return;
                         }
-                        CurrentProgress = 100 * (2 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                        CurrentProgress = CalculateProgress(2, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true);
                         // Start Run across Scans
                         Monocle.Run(ref Scans, monocleOptions.Number_Of_Scans_To_Average);
 
                         TrackProcess(newFile, CurrentProgress, true, true);
-                        // Start writing mzXML
-                        MZXML.Write(newFile, Scans);
+                        if(outputFileType == OutputFileType.mzxml)
+                        {
+                            // Start writing mzXML
+                            MZXML.Write(newFile, Scans);
+                        } else if (outputFileType == OutputFileType.csv)
+                        {
+                            // Start writing mzXML
+                            CSV.Write(newFile, Scans);
+                        }
 
-                        CurrentProgress = 100 * (3 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                        CurrentProgress = CalculateProgress(3, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true, true, true);
                         // Clear data
                         EmptyScans();
                         filesCompleted++;
-                        CurrentProgress = 100 * (4 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                        CurrentProgress = CalculateProgress(4, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true, true, true, true);
                     }
                     AllFilesFinished(true);
@@ -131,7 +139,7 @@ namespace Monocle
                         int filesCompleted = 0;
                         foreach (string newFile in files.FileList)
                         {
-                            CurrentProgress = 100 * (1 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                            CurrentProgress = CalculateProgress(1, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress);
                             // Start reading file
                             if (Path.GetExtension(newFile).ToLower() == ".mzxml")
@@ -146,21 +154,29 @@ namespace Monocle
                             {
                                 return;
                             }
-                            CurrentProgress = 100 * (2 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                            CurrentProgress = CalculateProgress(2, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress, true);
                             // Start Run across Scans
                             Monocle.Run(ref Scans, monocleOptions.Number_Of_Scans_To_Average);
 
                             TrackProcess(newFile, CurrentProgress, true, true);
-                            // Start writing mzXML
-                            MZXML.Write(Files.ExportPath + "test.mzXML", Scans);
+                            if (outputFileType == OutputFileType.mzxml)
+                            {
+                                // Start writing mzXML
+                                MZXML.Write(newFile, Scans);
+                            }
+                            else if (outputFileType == OutputFileType.csv)
+                            {
+                                // Start writing mzXML
+                                CSV.Write(newFile, Scans);
+                            }
 
-                            CurrentProgress = 100 * (3 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                            CurrentProgress = CalculateProgress(3, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress, true, true, true);
                             // Clear data
                             EmptyScans();
                             filesCompleted++;
-                            CurrentProgress = 100 * (4 + (filesCompleted * 4)) / (files.FileList.Count * 4);
+                            CurrentProgress = CalculateProgress(4, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress, true, true, true, true);
                         }
                         AllFilesFinished(true);
@@ -171,6 +187,11 @@ namespace Monocle
                     }
                 });
             }
+        }
+
+        public double CalculateProgress(int currentStage, int filesCompleted, int totalFileCount, int stages = 4)
+        {
+            return CurrentProgress = 100 * (currentStage + (filesCompleted * stages)) / (totalFileCount * stages);
         }
 
         public void EmptyScans()

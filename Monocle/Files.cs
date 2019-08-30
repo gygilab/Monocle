@@ -55,4 +55,10 @@ namespace Monocle
         raw,
         mgf
     }
+
+    public enum OutputFileType
+    {
+        mzxml,
+        csv
+    }
 }
