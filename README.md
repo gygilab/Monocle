@@ -23,7 +23,9 @@ Builds for the monocle library and the monocle cli app use the dotnet core comma
 
 ### MakeMono Console Information:
 MakeMono, a console application wrapper for Monocle.
+
 Monocle.CLI 1.0.0
+
 Copyright (C) 2019 Monocle.CLI
 
   -f, --File                Required. Input file for monoisotopic peak correction
