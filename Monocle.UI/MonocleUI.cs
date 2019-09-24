@@ -204,5 +204,10 @@ namespace MonocleUI
                 }
             }
         }
+
+        private void ToggleChargeDetectionCB_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

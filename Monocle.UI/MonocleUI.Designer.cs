@@ -61,6 +61,7 @@
             this.toggleChargeDetectionCB = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.numberOfScansToAverageNUD = new System.Windows.Forms.NumericUpDown();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
@@ -70,6 +71,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.highChargeSelectionNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lowChargeSelectionNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfScansToAverageNUD)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenuStrip
@@ -203,7 +205,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(79, 16);
+            this.label2.Location = new System.Drawing.Point(6, 26);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 5;
@@ -223,9 +225,9 @@
             this.file_output_format_CLB.CheckOnClick = true;
             this.file_output_format_CLB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.file_output_format_CLB.FormattingEnabled = true;
-            this.file_output_format_CLB.Location = new System.Drawing.Point(82, 33);
+            this.file_output_format_CLB.Location = new System.Drawing.Point(6, 43);
             this.file_output_format_CLB.Name = "file_output_format_CLB";
-            this.file_output_format_CLB.Size = new System.Drawing.Size(371, 46);
+            this.file_output_format_CLB.Size = new System.Drawing.Size(447, 46);
             this.file_output_format_CLB.TabIndex = 3;
             this.file_output_format_CLB.SelectedIndexChanged += new System.EventHandler(this.File_output_format_CLB_SelectedIndexChanged);
             // 
@@ -302,10 +304,7 @@
             // 
             // monocleOptionsBox
             // 
-            this.monocleOptionsBox.Controls.Add(this.label4);
-            this.monocleOptionsBox.Controls.Add(this.highChargeSelectionNUD);
-            this.monocleOptionsBox.Controls.Add(this.lowChargeSelectionNUD);
-            this.monocleOptionsBox.Controls.Add(this.toggleChargeDetectionCB);
+            this.monocleOptionsBox.Controls.Add(this.groupBox3);
             this.monocleOptionsBox.Controls.Add(this.label3);
             this.monocleOptionsBox.Controls.Add(this.numberOfScansToAverageNUD);
             this.monocleOptionsBox.Location = new System.Drawing.Point(13, 292);
@@ -319,7 +318,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(38, 121);
+            this.label4.Location = new System.Drawing.Point(16, 54);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(100, 17);
             this.label4.TabIndex = 5;
@@ -327,7 +326,7 @@
             // 
             // highChargeSelectionNUD
             // 
-            this.highChargeSelectionNUD.Location = new System.Drawing.Point(211, 118);
+            this.highChargeSelectionNUD.Location = new System.Drawing.Point(189, 51);
             this.highChargeSelectionNUD.Maximum = new decimal(new int[] {
             10,
             0,
@@ -350,7 +349,7 @@
             // 
             // lowChargeSelectionNUD
             // 
-            this.lowChargeSelectionNUD.Location = new System.Drawing.Point(149, 118);
+            this.lowChargeSelectionNUD.Location = new System.Drawing.Point(127, 51);
             this.lowChargeSelectionNUD.Maximum = new decimal(new int[] {
             10,
             0,
@@ -376,13 +375,15 @@
             this.toggleChargeDetectionCB.Appearance = System.Windows.Forms.Appearance.Button;
             this.toggleChargeDetectionCB.AutoSize = true;
             this.toggleChargeDetectionCB.BackColor = System.Drawing.Color.White;
+            this.toggleChargeDetectionCB.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
             this.toggleChargeDetectionCB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.toggleChargeDetectionCB.Location = new System.Drawing.Point(149, 74);
+            this.toggleChargeDetectionCB.Location = new System.Drawing.Point(127, 22);
             this.toggleChargeDetectionCB.Name = "toggleChargeDetectionCB";
             this.toggleChargeDetectionCB.Size = new System.Drawing.Size(122, 23);
             this.toggleChargeDetectionCB.TabIndex = 2;
             this.toggleChargeDetectionCB.Text = "Use Charge Detection";
             this.toggleChargeDetectionCB.UseVisualStyleBackColor = false;
+            this.toggleChargeDetectionCB.CheckedChanged += new System.EventHandler(this.ToggleChargeDetectionCB_CheckedChanged);
             // 
             // label3
             // 
@@ -418,6 +419,19 @@
             0});
             this.numberOfScansToAverageNUD.ValueChanged += new System.EventHandler(this.NumberOfScansToAverageNUD_ValueChanged);
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.toggleChargeDetectionCB);
+            this.groupBox3.Controls.Add(this.label4);
+            this.groupBox3.Controls.Add(this.highChargeSelectionNUD);
+            this.groupBox3.Controls.Add(this.lowChargeSelectionNUD);
+            this.groupBox3.Location = new System.Drawing.Point(7, 59);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(264, 84);
+            this.groupBox3.TabIndex = 6;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Charge Detection";
+            // 
             // MonocleUI
             // 
             this.AllowDrop = true;
@@ -451,6 +465,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.highChargeSelectionNUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lowChargeSelectionNUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfScansToAverageNUD)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -490,6 +506,7 @@
         private System.Windows.Forms.NumericUpDown lowChargeSelectionNUD;
         private System.Windows.Forms.CheckBox toggleChargeDetectionCB;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }
 
