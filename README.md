@@ -21,4 +21,23 @@ Builds for the monocle library and the monocle cli app use the dotnet core comma
 	# Use -r for the runtime that applies to you
 	dotnet publish -c Release -r win10-x64
 
+### MakeMono Console Information:
+MakeMono, a console application wrapper for Monocle.
 
+Monocle.CLI 1.0.0
+
+Copyright (C) 2019 Monocle.CLI
+
+  -f, --File                Required. Input file for monoisotopic peak correction
+
+  -n, --NumOfScans          The number of scans to average, default: +/- 6
+
+  -c, --Charge detection    Toggle charge detection, default: true|T
+
+  -z, --Charge range        Set charge range, default: 2:6
+
+  -q, --Quiet Run           Do not display file progress in console.
+
+  --help                    Display this help screen.
+
+  --version                 Display version information.
