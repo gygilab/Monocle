@@ -16,7 +16,7 @@ namespace Monocle
             public int Number_Of_Scans_To_Average { get; set; } = 12;
             public AveragingVector AveragingVector { get; set; } = AveragingVector.Both;
             public bool Charge_Detection { get; set; } = false;
-            public IntRange Charge_Range_LowRes { get; set; }
+            public ChargeRange Charge_Range { get; set; }
         }
 
         public enum AveragingVector
@@ -81,7 +81,7 @@ namespace Monocle
             int numTheo = 4;
             int left = -7;
 
-            IntRange charge_range = new IntRange(precursorCharge, precursorCharge);
+            ChargeRange charge_range = new ChargeRange(precursorCharge, precursorCharge);
 
             // For charge detection
             int best_charge = 0;
@@ -90,7 +90,7 @@ namespace Monocle
             PeptideEnvelope envelope = new PeptideEnvelope(numIsotopes);
             if (Options.Charge_Detection)
             {
-                charge_range = Options.Charge_Range_LowRes;
+                charge_range = Options.Charge_Range;
             }
 
             for(int charge_iterator = 0; charge_iterator < charge_range.High; charge_iterator++)

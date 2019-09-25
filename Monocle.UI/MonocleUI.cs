@@ -205,9 +205,31 @@ namespace MonocleUI
             }
         }
 
+        /// <summary>
+        /// Toggle charge detection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ToggleChargeDetectionCB_CheckedChanged(object sender, EventArgs e)
         {
+            if (toggleChargeDetectionCB.Checked)
+            {
+                Processor.monocleOptions.Charge_Detection = true;
+            }
+            else
+            {
+                Processor.monocleOptions.Charge_Detection = false;
+            }
+        }
 
+        private void LowChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
+        {
+            Processor.monocleOptions.Charge_Range.Low = (int)lowChargeSelectionNUD.Value;
+        }
+
+        private void HighChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
+        {
+            Processor.monocleOptions.Charge_Range.Low = (int)highChargeSelectionNUD.Value;
         }
     }
 }

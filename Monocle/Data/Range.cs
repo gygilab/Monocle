@@ -45,4 +45,26 @@ namespace Monocle.Data
             IsSet = true;
         }
     }
+
+    public class ChargeRange
+    {
+        public int High { get; set; } = 6;
+        public int Low { get; set; } = 2;
+
+        public bool IsSet { get; } = false;
+
+        public ChargeRange(int low, int high)
+        {
+            Low = low;
+            High = high;
+            IsSet = true;
+        }
+
+        public ChargeRange(double low, double high)
+        {
+            Low = (int)low;
+            High = (int)high;
+            IsSet = true;
+        }
+    }
 }

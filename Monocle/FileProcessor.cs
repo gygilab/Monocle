@@ -67,9 +67,10 @@ namespace Monocle
             Writer = new FileWriter();
         }
 
-        public MonocleOptions monocleOptions = new MonocleOptions() {
+        public MonocleOptions monocleOptions { get; set; } = new MonocleOptions()
+        {
             Charge_Detection = false,
-            Charge_Range_LowRes = new IntRange(2,6),
+            Charge_Range = new ChargeRange(2, 6),
             Number_Of_Scans_To_Average = 12,
         };
 

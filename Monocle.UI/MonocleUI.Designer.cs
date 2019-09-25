@@ -346,6 +346,7 @@
             0,
             0,
             0});
+            this.highChargeSelectionNUD.ValueChanged += new System.EventHandler(this.HighChargeSelectionNUD_ValueChanged);
             // 
             // lowChargeSelectionNUD
             // 
@@ -369,6 +370,7 @@
             0,
             0,
             0});
+            this.lowChargeSelectionNUD.ValueChanged += new System.EventHandler(this.LowChargeSelectionNUD_ValueChanged);
             // 
             // toggleChargeDetectionCB
             // 
