@@ -69,7 +69,7 @@ namespace Monocle
 
         public MonocleOptions monocleOptions = new MonocleOptions() {
             Charge_Detection = false,
-            Charge_Range_LowRes = new DoubleRange(2,6),
+            Charge_Range_LowRes = new IntRange(2,6),
             Number_Of_Scans_To_Average = 12,
         };
 
@@ -102,7 +102,7 @@ namespace Monocle
                         CurrentProgress = CalculateProgress(2, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true);
                         // Start Run across Scans
-                        Monocle.Run(ref Scans, monocleOptions.Number_Of_Scans_To_Average);
+                        Monocle.Run(ref Scans, monocleOptions);
 
                         TrackProcess(newFile, CurrentProgress, true, true);
                         if(outputFileType == OutputFileType.mzxml)
@@ -157,7 +157,7 @@ namespace Monocle
                             CurrentProgress = CalculateProgress(2, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress, true);
                             // Start Run across Scans
-                            Monocle.Run(ref Scans, monocleOptions.Number_Of_Scans_To_Average);
+                            Monocle.Run(ref Scans, monocleOptions);
 
                             TrackProcess(newFile, CurrentProgress, true, true);
                             if (outputFileType == OutputFileType.mzxml)

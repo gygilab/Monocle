@@ -23,4 +23,26 @@ namespace Monocle.Data
             High = (double)high;
         }
     }
+
+    public struct IntRange
+    {
+        public int High { get; set; }
+        public int Low { get; set; }
+
+        public bool IsSet { get; }
+
+        public IntRange(int low, int high)
+        {
+            Low = low;
+            High = high;
+            IsSet = true;
+        }
+
+        public IntRange(double low, double high)
+        {
+            Low = (int)low;
+            High = (int)high;
+            IsSet = true;
+        }
+    }
 }
