@@ -51,20 +51,41 @@ namespace Monocle.Data
         public int High { get; set; } = 6;
         public int Low { get; set; } = 2;
 
+        public Polarity Polarity { get; set; } = Polarity.Positive;
+
         public bool IsSet { get; } = false;
 
-        public ChargeRange(int low, int high)
+        public ChargeRange(string cli_arg = "2:6")
         {
-            Low = low;
-            High = high;
+            string[] args = cli_arg.Split(':');
+
+            Low = int.Parse(args[0]);
+            High = int.Parse(args[1]);
+            Polarity = (Low > 0) ? Polarity.Positive : Polarity.Negative;
             IsSet = true;
         }
 
-        public ChargeRange(double low, double high)
+        public ChargeRange(int low, int high, Polarity polarity = Polarity.Positive)
         {
-            Low = (int)low;
-            High = (int)high;
+            Low = (polarity == Polarity.Positive) ? low : low * -1;
+            High = (polarity == Polarity.Positive) ? high : high * -1;
+            Polarity = polarity;
             IsSet = true;
         }
+
+        public ChargeRange(double low, double high, Polarity polarity = Polarity.Positive)
+        {
+            Low = (polarity == Polarity.Positive) ? (int)low : (int)low * -1;
+            High = (polarity == Polarity.Positive) ? (int)high : (int)high * -1;
+            Polarity = polarity;
+            IsSet = true;
+        }
+    }
+
+    public enum Polarity
+    {
+        Positive,
+        Negative,
+        None
     }
 }

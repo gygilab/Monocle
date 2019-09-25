@@ -74,6 +74,12 @@ namespace Monocle
             Number_Of_Scans_To_Average = 12,
         };
 
+        public void ResetMonocleOptions(MonocleOptions newOptions)
+        {
+            monocleOptions = null;
+            monocleOptions = newOptions;
+        }
+
         List<Data.Scan> Scans = new List<Data.Scan>();
 
         public async void Run(bool console = false)

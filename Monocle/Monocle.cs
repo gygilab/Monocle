@@ -93,7 +93,7 @@ namespace Monocle
                 charge_range = Options.Charge_Range;
             }
 
-            for(int charge_iterator = 0; charge_iterator < charge_range.High; charge_iterator++)
+            for(int charge_iterator = charge_range.Low; charge_iterator < charge_range.High; charge_iterator++)
             {
                 double mass = DependentScan.PrecursorMz * charge_iterator;
 

@@ -22,7 +22,7 @@ namespace MakeMono
             [Option('c', "ChargeDetection", Required = false, HelpText = "Toggle charge detection, default: true|T")]
             public bool ChargeDetection { get; set; }
             [Option('z', "ChargeRange", Required = false, HelpText = "Set charge range, default: 2:6")]
-            public DoubleRange ChargeRange { get; set; }
+            public string ChargeRange { get; set; }
             [Option('q', "QuietRun", Required = false, HelpText = "Do not display file progress in console.")]
             public bool RunQuiet { get; set; } = false;
             [Option('o', "OutputFileType", Required = false, HelpText = "Choose to output an mzXML ('mzxml' or '0') or CSV file ('csv' or '1').")]
@@ -42,6 +42,7 @@ namespace MakeMono
             }
             
             string filePath = "";
+            Monocle.Monocle.MonocleOptions tempOptions = new Monocle.Monocle.MonocleOptions();
             /// Parse input arguments
             Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(opt =>
             {
@@ -69,12 +70,19 @@ namespace MakeMono
                     silenceConsole = true;
                 }
 
-                if (opt.ChargeRange.Low > 0 && opt.ChargeRange.Low <= opt.ChargeRange.High && opt.ChargeRange.High < 10)
+                if(opt.ChargeRange != null && opt.ChargeRange != "")
                 {
-                    MZXML.Charge_Range = opt.ChargeRange;
+                    Console.WriteLine("Using Charge Detection: " + opt.ChargeRange);
+                    ChargeRange cr = new ChargeRange(opt.ChargeRange);
+                    // This only works for positively charged precursors
+                    if (cr.Low > 0 && cr.Low <= cr.High && cr.High < 10)
+                    {
+                        tempOptions.Charge_Range = cr;
+                    }
                 }
-
             }).WithNotParsed<Options>((errs) => HandleParseError(errs));
+
+            Processor.ResetMonocleOptions(tempOptions);
 
             Processor.FileTracker += FileListener;
             /// RUN MONOCLE:
