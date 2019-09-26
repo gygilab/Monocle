@@ -18,7 +18,7 @@ namespace Monocle.File
 
         public static int Num_Ms1_Scans_To_Average { get; set; } = 6;
         public static bool DetectCharge { get; set; } = true;
-        public static DoubleRange Charge_Range { get; set; } = new DoubleRange(2, 6);
+        public static ChargeRange Charge_Range { get; set; } = new ChargeRange(2, 6);
         
         public static Scan ParentScan = new Scan();
         public static string ParentFile { get; set; } = "";

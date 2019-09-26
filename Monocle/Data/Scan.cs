@@ -70,16 +70,24 @@ namespace Monocle.Data
         public double BasePeakIntensity { get; set; } = 0;
         public int FaimsCV { get; set; } = 0;
         public double MonoisotopicMz { get; set; }
-        private double _MonoisotopicCharge { get; set; } = 0;
-        public double MonoisotopicCharge { get
+        private int? _MonoisotopicCharge { get; set; } = null;
+        public int? MonoisotopicCharge {
+            get
             {
-                if (_MonoisotopicCharge == 0)
+                if (_MonoisotopicCharge == null)
                 {
                     return PrecursorCharge;
                 }
                 else
                 {
                     return _MonoisotopicCharge;
+                }
+            }
+            set
+            {
+                if(value == null || System.Math.Abs((int)value) < 100)
+                {
+                    _MonoisotopicCharge = value;
                 }
             }
         }

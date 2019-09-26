@@ -136,14 +136,14 @@ namespace MonocleUI
 
         private void GCCollectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GC.Collect();
+            //GC.Collect();
         }
 
         private void NumberOfScansToAverageNUD_ValueChanged(object sender, EventArgs e)
         {
             if(numberOfScansToAverageNUD.Value > 1 && numberOfScansToAverageNUD.Value < 10)
             {
-                Processor.monocleOptions.Number_Of_Scans_To_Average = (int)numberOfScansToAverageNUD.Value;
+                FileProcessor.monocleOptions.Number_Of_Scans_To_Average = (int)numberOfScansToAverageNUD.Value;
             }
         }
 
@@ -205,9 +205,51 @@ namespace MonocleUI
             }
         }
 
+        /// <summary>
+        /// Toggle charge detection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ToggleChargeDetectionCB_CheckedChanged(object sender, EventArgs e)
         {
+            if (toggleChargeDetectionCB.Checked)
+            {
+                FileProcessor.monocleOptions.Charge_Detection = true;
+                polarity_checkBox.Enabled = true;
+                lowChargeSelectionNUD.Enabled = true;
+                highChargeSelectionNUD.Enabled = true;
+            }
+            else
+            {
+                FileProcessor.monocleOptions.Charge_Detection = false;
+                polarity_checkBox.Enabled = false;
+                lowChargeSelectionNUD.Enabled = false;
+                highChargeSelectionNUD.Enabled = false;
+            }
+        }
 
+        private void LowChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
+        {
+            FileProcessor.monocleOptions.Charge_Range.Low = (int)lowChargeSelectionNUD.Value;
+        }
+
+        private void HighChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
+        {
+            FileProcessor.monocleOptions.Charge_Range.Low = (int)highChargeSelectionNUD.Value;
+        }
+
+        private void Polarity_checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!polarity_checkBox.Checked)
+            {
+                polarity_checkBox.ForeColor = Color.MediumTurquoise;
+                polarity_checkBox.Text = "+";
+            }
+            else
+            {
+                polarity_checkBox.ForeColor = Color.MediumVioletRed;
+                polarity_checkBox.Text = "-";
+            }
         }
     }
 }

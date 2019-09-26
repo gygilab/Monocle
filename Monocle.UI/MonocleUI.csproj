@@ -53,7 +53,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>MonocleMS_Logo .ico</ApplicationIcon>
+    <ApplicationIcon>img\MonocleMS_Logo .ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -110,8 +110,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MonocleMS_Logo .ico" />
-    <Content Include="MonocleMS_Logo.ico" />
+    <Content Include="img\MonocleMS_Logo .ico" />
+    <Content Include="img\MonocleMS_Logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -71,7 +71,6 @@ namespace Monocle.File
                             tScan.CheckSetMzxmlValue(attr.Name, attr.Value);
                         }
                     }
-
                     scans.Add(tScan);
                 }
             }

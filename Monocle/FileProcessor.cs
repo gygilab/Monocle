@@ -67,11 +67,18 @@ namespace Monocle
             Writer = new FileWriter();
         }
 
-        public MonocleOptions monocleOptions = new MonocleOptions() {
+        public static MonocleOptions monocleOptions { get; set; } = new MonocleOptions()
+        {
             Charge_Detection = false,
-            Charge_Range_LowRes = new DoubleRange(2,6),
+            Charge_Range = new ChargeRange(2, 6),
             Number_Of_Scans_To_Average = 12,
         };
+
+        public void ResetMonocleOptions(MonocleOptions newOptions)
+        {
+            monocleOptions = null;
+            monocleOptions = newOptions;
+        }
 
         List<Data.Scan> Scans = new List<Data.Scan>();
 
@@ -84,6 +91,10 @@ namespace Monocle
                     int filesCompleted = 0;
                     foreach (string newFile in files.FileList)
                     {
+                        if(Scans == null)
+                        {
+                            Scans = new List<Data.Scan>();
+                        }
                         CurrentProgress = CalculateProgress(1, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress);
                         // Start reading file
@@ -102,7 +113,7 @@ namespace Monocle
                         CurrentProgress = CalculateProgress(2, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true);
                         // Start Run across Scans
-                        Monocle.Run(ref Scans, monocleOptions.Number_Of_Scans_To_Average);
+                        Monocle.Run(ref Scans, monocleOptions);
 
                         TrackProcess(newFile, CurrentProgress, true, true);
                         if(outputFileType == OutputFileType.mzxml)
@@ -139,6 +150,10 @@ namespace Monocle
                         int filesCompleted = 0;
                         foreach (string newFile in files.FileList)
                         {
+                            if (Scans == null)
+                            {
+                                Scans = new List<Data.Scan>();
+                            }
                             CurrentProgress = CalculateProgress(1, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress);
                             // Start reading file
@@ -157,7 +172,7 @@ namespace Monocle
                             CurrentProgress = CalculateProgress(2, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress, true);
                             // Start Run across Scans
-                            Monocle.Run(ref Scans, monocleOptions.Number_Of_Scans_To_Average);
+                            Monocle.Run(ref Scans, monocleOptions);
 
                             TrackProcess(newFile, CurrentProgress, true, true);
                             if (outputFileType == OutputFileType.mzxml)
@@ -183,7 +198,7 @@ namespace Monocle
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine(ex + " file processing failed.");
+                        Debug.WriteLine("File processing failed: " + ex);
                     }
                 });
             }
