@@ -67,7 +67,7 @@ namespace Monocle
             Writer = new FileWriter();
         }
 
-        public MonocleOptions monocleOptions { get; set; } = new MonocleOptions()
+        public static MonocleOptions monocleOptions { get; set; } = new MonocleOptions()
         {
             Charge_Detection = false,
             Charge_Range = new ChargeRange(2, 6),

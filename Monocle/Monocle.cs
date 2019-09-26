@@ -38,10 +38,11 @@ namespace Monocle
         {
             foreach (Scan scan in AllScans)
             {
-                if(scan.MsOrder == 1)
+                if (scan.MsOrder == 1)
                 {
                     continue;
                 }
+
                 int masterScanNumber = scan.PrecursorMasterScanNumber;
                 int currentScanNumber = scan.ScanNumber;
                 Scan PrecursorScan = AllScans.Where(b => b.PrecursorMasterScanNumber == masterScanNumber).First();
@@ -60,7 +61,6 @@ namespace Monocle
                 {
                     NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).Take(plusMinusN).ToList();
                 }
-
                 Scan[] Ms1ScansCentroids = NearbyMs1Scans.ToArray();
                 Run(Ms1ScansCentroids, PrecursorScan, scan, Options);
             }
@@ -87,11 +87,20 @@ namespace Monocle
             int best_charge = 0;
             double best_score = -1;
             int bestIndex = monoisotopicIndex;
-            PeptideEnvelope envelope = new PeptideEnvelope(numIsotopes);
+            double newMonoisotopicMz = 0;
 
-            for (int charge_iterator = Options.Charge_Range.Low; charge_iterator <= Options.Charge_Range.High; charge_iterator++)
+            //Create new class to maintain ref class options
+            ChargeRange chargeRange = new ChargeRange(precursorCharge, precursorCharge);
+            Console.WriteLine("Starting Low: " + chargeRange.Low + "; High: " + chargeRange.High);
+            if (Options.Charge_Detection)
             {
-                Console.WriteLine("Iteration: " + charge_iterator);
+                chargeRange.Low = Options.Charge_Range.Low;
+                chargeRange.High = Options.Charge_Range.High;
+                Console.WriteLine("Low: " + chargeRange.Low + "; High: " + chargeRange.High);
+            }
+
+            for (int charge_iterator = chargeRange.Low; charge_iterator <= chargeRange.High; charge_iterator++)
+            {
                 double mass = DependentScan.PrecursorMz * charge_iterator;
                 // Restrict number of isotopes to consider based on precursor mass.
                 if (mass > 2900)
@@ -126,7 +135,7 @@ namespace Monocle
                 List<double> expected = PeptideEnvelopeCalculator.GetTheoreticalEnvelope(precursorMz, charge_iterator, numTheo);
                 PeptideEnvelopeCalculator.Scale(expected);
 
-                envelope = PeptideEnvelopeExtractor.Extract(Ms1ScansCentroids, precursorMz, charge_iterator, left, numIsotopes);
+                PeptideEnvelope envelope = PeptideEnvelopeExtractor.Extract(Ms1ScansCentroids, precursorMz, charge_iterator, left, numIsotopes);
 
                 // Get best match using pearson correlation.
                 for (int i = 0; i < (numIsotopes - (expected.Count - 1)); ++i)
@@ -149,6 +158,9 @@ namespace Monocle
                         }
                     }
                 }
+
+                newMonoisotopicMz = CalculateMz(envelope.mzs[bestIndex], envelope.intensities[bestIndex]);
+
             } // end charge for loop
 
             if (best_charge > 0)
@@ -156,8 +168,6 @@ namespace Monocle
                 DependentScan.MonoisotopicCharge = best_charge;
                 Debug.WriteLine("Best charge: " + best_charge);
             }
-
-            double newMonoisotopicMz = CalculateMz(envelope.mzs[bestIndex], envelope.intensities[bestIndex]);
 
             newMonoisotopicMz = (newMonoisotopicMz == 0) ? precursorMz : newMonoisotopicMz;
 

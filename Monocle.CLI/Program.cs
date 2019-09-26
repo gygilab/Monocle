@@ -72,9 +72,12 @@ namespace MakeMono
 
                 if(opt.ChargeDetection)
                 {
+                    tempOptions.Charge_Detection = true;
+
+                    Console.WriteLine("Using Charge Detection");
                     if (opt.ChargeRange != null && opt.ChargeRange != "")
                     {
-                        Console.WriteLine("Using Charge Detection: " + opt.ChargeRange);
+                        Console.WriteLine("Charge Detection Range: " + opt.ChargeRange);
                         ChargeRange cr = new ChargeRange(opt.ChargeRange);
                         // This only works for positively charged precursors
                         if (cr.Low > 0 && cr.Low <= cr.High && cr.High < 10)
@@ -84,6 +87,7 @@ namespace MakeMono
                     }
                     else
                     {
+                        Console.WriteLine("Charge Detection Range: default 2-6");
                         tempOptions.Charge_Range = new ChargeRange(2,6);
                     }
                 }
