@@ -48,6 +48,8 @@ namespace Monocle.Data
 
     public class ChargeRange
     {
+        private int _Low { get; set; } = 2;
+        private int _High { get; set; } = 6; 
         public int High { get; set; } = 6;
         public int Low { get; set; } = 2;
 
@@ -58,10 +60,11 @@ namespace Monocle.Data
         public ChargeRange(string cli_arg = "2:6")
         {
             string[] args = cli_arg.Split(':');
-
-            Low = int.Parse(args[0]);
-            High = int.Parse(args[1]);
-            Polarity = (Low > 0) ? Polarity.Positive : Polarity.Negative;
+            int tempLow = int.Parse(args[0]);
+            int tempHigh = int.Parse(args[1]);
+            Polarity = (tempLow > 0) ? Polarity.Positive : Polarity.Negative;
+            Low = (Polarity == Polarity.Positive) ? tempLow : tempLow * -1;
+            High = (Polarity == Polarity.Positive) ? tempHigh : tempHigh * -1;
             IsSet = true;
         }
 

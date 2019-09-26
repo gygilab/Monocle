@@ -18,7 +18,10 @@ namespace Monocle
             public int Number_Of_Scans_To_Average { get; set; } = 12;
             public AveragingVector AveragingVector { get; set; } = AveragingVector.Both;
             public bool Charge_Detection { get; set; } = false;
-            public ChargeRange Charge_Range { get; set; }
+            /// <summary>
+            /// Default to charges 2 - 6.
+            /// </summary>
+            public ChargeRange Charge_Range { get; set; } = new ChargeRange(2, 6);
         }
 
         public enum AveragingVector
@@ -93,12 +96,10 @@ namespace Monocle
 
                 //Create new class to maintain ref class options
                 ChargeRange chargeRange = new ChargeRange(precursorCharge, precursorCharge);
-                Console.WriteLine("Starting Low: " + chargeRange.Low + "; High: " + chargeRange.High);
                 if (Options.Charge_Detection)
                 {
                     chargeRange.Low = Options.Charge_Range.Low;
                     chargeRange.High = Options.Charge_Range.High;
-                    Console.WriteLine("Low: " + chargeRange.Low + "; High: " + chargeRange.High);
                 }
 
                 for (int charge_iterator = chargeRange.Low; charge_iterator <= chargeRange.High; charge_iterator++)
@@ -166,7 +167,6 @@ namespace Monocle
                 if (best_charge > 0)
                 {
                     DependentScan.MonoisotopicCharge = best_charge;
-                    Console.WriteLine("Best charge: " + best_charge);
                 }
 
                 newMonoisotopicMz = (newMonoisotopicMz == 0) ? precursorMz : newMonoisotopicMz;
