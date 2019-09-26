@@ -91,6 +91,10 @@ namespace Monocle
                     int filesCompleted = 0;
                     foreach (string newFile in files.FileList)
                     {
+                        if(Scans == null)
+                        {
+                            Scans = new List<Data.Scan>();
+                        }
                         CurrentProgress = CalculateProgress(1, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress);
                         // Start reading file
@@ -146,6 +150,10 @@ namespace Monocle
                         int filesCompleted = 0;
                         foreach (string newFile in files.FileList)
                         {
+                            if (Scans == null)
+                            {
+                                Scans = new List<Data.Scan>();
+                            }
                             CurrentProgress = CalculateProgress(1, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress);
                             // Start reading file
@@ -190,7 +198,7 @@ namespace Monocle
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine(ex + " file processing failed.");
+                        Debug.WriteLine("File processing failed: " + ex);
                     }
                 });
             }
