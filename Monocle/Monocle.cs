@@ -1,7 +1,9 @@
 ﻿using Monocle.Data;
 using Monocle.Math;
 using Monocle.Peak;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Monocle
@@ -27,7 +29,7 @@ namespace Monocle
         }
 
         /// <summary>
-        /// Overload to handle all available scans alowing for Ms1 inclusion of before + after
+        /// Overload to handle all available scans allowing for Ms1 inclusion of before + after
         /// </summary>
         /// <param name="AllScans"></param>
         /// <param name="DependentScan"></param>
@@ -72,7 +74,7 @@ namespace Monocle
         /// <param name="DependentScan"></param>
         public static void Run(Scan[] Ms1ScansCentroids, Scan ParentScan, Scan DependentScan, MonocleOptions Options)
         {
-            double precursorMz = DependentScan.PrecursorMz; // This shold be precursorMz?
+            double precursorMz = DependentScan.PrecursorMz; // This should be precursorMz or raw mono?
             int precursorCharge = DependentScan.PrecursorCharge;
 
             // For number of isotopes to consider
@@ -81,22 +83,16 @@ namespace Monocle
             int numTheo = 4;
             int left = -7;
 
-            ChargeRange charge_range = new ChargeRange(precursorCharge, precursorCharge);
-
             // For charge detection
             int best_charge = 0;
             double best_score = -1;
             int bestIndex = monoisotopicIndex;
             PeptideEnvelope envelope = new PeptideEnvelope(numIsotopes);
-            if (Options.Charge_Detection)
-            {
-                charge_range = Options.Charge_Range;
-            }
 
-            for(int charge_iterator = charge_range.Low; charge_iterator < charge_range.High; charge_iterator++)
+            for (int charge_iterator = Options.Charge_Range.Low; charge_iterator <= Options.Charge_Range.High; charge_iterator++)
             {
+                Console.WriteLine("Iteration: " + charge_iterator);
                 double mass = DependentScan.PrecursorMz * charge_iterator;
-
                 // Restrict number of isotopes to consider based on precursor mass.
                 if (mass > 2900)
                 {
@@ -158,6 +154,7 @@ namespace Monocle
             if (best_charge > 0)
             {
                 DependentScan.MonoisotopicCharge = best_charge;
+                Debug.WriteLine("Best charge: " + best_charge);
             }
 
             double newMonoisotopicMz = CalculateMz(envelope.mzs[bestIndex], envelope.intensities[bestIndex]);

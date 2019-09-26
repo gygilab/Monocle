@@ -20,8 +20,8 @@ namespace MakeMono
             [Option('n', "NumOfScans", Required = false, HelpText = "The number of scans to average, default: +/- 6")]
             public int NumOfScans { get; set; }
             [Option('c', "ChargeDetection", Required = false, HelpText = "Toggle charge detection, default: true|T")]
-            public bool ChargeDetection { get; set; }
-            [Option('z', "ChargeRange", Required = false, HelpText = "Set charge range, default: 2:6")]
+            public bool ChargeDetection { get; set; } = false;
+            [Option('z', "CustomChargeRange", Required = false, HelpText = "Set charge range, default: 2:6")]
             public string ChargeRange { get; set; }
             [Option('q', "QuietRun", Required = false, HelpText = "Do not display file progress in console.")]
             public bool RunQuiet { get; set; } = false;
@@ -70,16 +70,24 @@ namespace MakeMono
                     silenceConsole = true;
                 }
 
-                if(opt.ChargeRange != null && opt.ChargeRange != "")
+                if(opt.ChargeDetection)
                 {
-                    Console.WriteLine("Using Charge Detection: " + opt.ChargeRange);
-                    ChargeRange cr = new ChargeRange(opt.ChargeRange);
-                    // This only works for positively charged precursors
-                    if (cr.Low > 0 && cr.Low <= cr.High && cr.High < 10)
+                    if (opt.ChargeRange != null && opt.ChargeRange != "")
                     {
-                        tempOptions.Charge_Range = cr;
+                        Console.WriteLine("Using Charge Detection: " + opt.ChargeRange);
+                        ChargeRange cr = new ChargeRange(opt.ChargeRange);
+                        // This only works for positively charged precursors
+                        if (cr.Low > 0 && cr.Low <= cr.High && cr.High < 10)
+                        {
+                            tempOptions.Charge_Range = cr;
+                        }
+                    }
+                    else
+                    {
+                        tempOptions.Charge_Range = new ChargeRange(2,6);
                     }
                 }
+
             }).WithNotParsed<Options>((errs) => HandleParseError(errs));
 
             Processor.ResetMonocleOptions(tempOptions);
