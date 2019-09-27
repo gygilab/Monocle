@@ -57,11 +57,6 @@ namespace MakeMono
                     return;
                 }
 
-                if (opt.NumOfScans > 0 && opt.NumOfScans < 50)
-                {
-                    MZXML.Num_Ms1_Scans_To_Average = opt.NumOfScans;
-                }
-
                 Processor.outputFileType = opt.outputFileType;
                 Console.WriteLine("Output file type set to: " + Processor.outputFileType.ToString());
 
