@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using ThermoFisher.CommonCore.Data.Business;
 using ThermoFisher.CommonCore.Data.FilterEnums;
 using ThermoFisher.CommonCore.Data.Interfaces;
@@ -19,10 +20,12 @@ namespace Monocle.File
                 Console.WriteLine(rawFile.FileError.WarningMessage);
                 Console.WriteLine(rawFile.FileError.ErrorMessage);
                 Console.WriteLine(rawFile.FileError.ErrorCode);
+                throw new IOException("Failed to open RAW file.");
             }
-            else if (rawFile.IsError)
+            if (rawFile.IsError)
             {
                 Console.WriteLine(" RawFile Error: reader error: " + path);
+                throw new IOException("Error while opening RAW file.");
             }
         }
 

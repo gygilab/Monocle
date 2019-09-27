@@ -60,9 +60,8 @@ namespace Monocle.File
         };
 
         public void Open(string path) {
-            if (path == "" || !System.IO.File.Exists(path))
-            {
-                Debug.WriteLine("No scans in the input.");
+            if (!System.IO.File.Exists(path)) {
+                throw new IOException("File not found: " + path);
             }
 
             doc = new XmlDocument();
