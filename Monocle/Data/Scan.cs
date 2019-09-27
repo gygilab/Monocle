@@ -157,45 +157,6 @@ namespace Monocle.Data
         public double PrecursorIsolationSpecificity { get; set; } = 0;
         public double PrecursorIsolationWidth { get; set; } = 0.5;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="outputMz"></param>
-        /// <returns></returns>
-        public double[] CentroidsToArray(bool outputMz)
-        {
-            if(Centroids == null)
-            {
-                return null;
-            }
-            double[] tempArray = new double[CentroidCount];
-
-            for(int i = 0; i < CentroidCount; i++)
-            {
-                tempArray[i] = (outputMz) ? Centroids[i].Mz : Centroids[i].Intensity;
-            }
-
-            return tempArray;
-        }
-
-        public void CentroidsFromArrays(double[] mzArray, double[] intensityArray)
-        {
-            if(mzArray.Length != intensityArray.Length)
-            {
-                throw new Exception(" Error: MZ and Intensity Arrays of unequal length.");
-            }
-            PeakCount = mzArray.Length;
-            for (int i = 0; i < mzArray.Length; i++)
-            {
-                Centroid tempCentroid = new Centroid()
-                {
-                    Mz = mzArray[i],
-                    Intensity = intensityArray[i],
-                };
-                Centroids.Add(tempCentroid);
-            }
-        }
-
         public double CalculateIsolationSpecificity(Centroid centroid, double isolationWindow)
         {
             double halfIsolationWindow = isolationWindow / 2;

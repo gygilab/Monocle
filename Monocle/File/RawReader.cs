@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monocle.Data;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using ThermoFisher.CommonCore.Data.Business;
@@ -113,19 +114,38 @@ namespace Monocle.File
                     // High res data
                     var centroidStream = rawFile.GetCentroidStream(iScanNumber, false);
                     PeakCount = centroidStream.Length;
-                    scan.CentroidsFromArrays(centroidStream.Masses, centroidStream.Intensities);
+                    CentroidsFromArrays(scan, centroidStream.Masses, centroidStream.Intensities);
                 }
                 else
                 {
                     // Low res data
                     var segmentedScan = rawFile.GetSegmentedScanFromScanNumber(iScanNumber, scanStatistics);
                     PeakCount = segmentedScan.Positions.Length;
-                    scan.CentroidsFromArrays(segmentedScan.Positions, segmentedScan.Intensities);
+                    CentroidsFromArrays(scan, segmentedScan.Positions, segmentedScan.Intensities);
                 }
 
                 yield return scan;
             }
         }
+
+        public void CentroidsFromArrays(Data.Scan scan, double[] mzArray, double[] intensityArray)
+        {
+            if(mzArray.Length != intensityArray.Length)
+            {
+                throw new Exception(" Error: MZ and Intensity Arrays of unequal length.");
+            }
+            scan.PeakCount = mzArray.Length;
+            for (int i = 0; i < mzArray.Length; i++)
+            {
+                Centroid tempCentroid = new Centroid()
+                {
+                    Mz = mzArray[i],
+                    Intensity = intensityArray[i],
+                };
+                scan.Centroids.Add(tempCentroid);
+            }
+        }
+
 
     }
 }
