@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Monocle.File
 {
-    public class CSV : InputFile
+    public class CSV
     {
         private static StreamWriter writer = null;
 
@@ -35,9 +35,6 @@ namespace Monocle.File
             {
                 writer.WriteLine(scan.ScanToMonocleString());
             }
-
-            Ms1ScansCentroids = new Scan[12];
-            Ms1ScanIndex = 0;
         }
     }
 }

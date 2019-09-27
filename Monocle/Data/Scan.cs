@@ -1,8 +1,6 @@
-﻿using Monocle.File;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Monocle.Data
 {
@@ -152,21 +150,6 @@ namespace Monocle.Data
         public string PeaksContentType { get; set; } = "";
         public string PeaksCompressionType { get; set; } = "";
         public int PeaksCompressedLength { get; set; }
-        public string Peaks
-        {
-            get
-            {
-                return MZXML.WritePeaks(Centroids);
-            }
-            set
-            {
-                if(PeakCount > 0 && value != "")
-                {
-                    Centroids = MZXML.ReadPeaks(value, PeakCount);
-                    CentroidCount = Centroids.Count();
-                }
-            }
-        }
 
         /// <summary>
         /// Output data
@@ -212,157 +195,6 @@ namespace Monocle.Data
                 Centroids.Add(tempCentroid);
             }
         }
-
-        /// <summary>
-        /// Check and set attribute based on attributes dictionary
-        /// </summary>
-        /// <param name="attribute"></param>
-        /// <param name="value"></param>
-        public void CheckSetMzxmlValue(string attribute, string value)
-        {
-            string tempAttr = "";
-            if (mzxmlAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlAttributes[attribute];
-            }
-            else if (mzxmlPrecursorAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlPrecursorAttributes[attribute];
-            }
-            else if (mzxmlPeaksAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlPeaksAttributes[attribute];
-            }
-            else if (mzxmlMsnAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlMsnAttributes[attribute];
-            }
-
-            if (tempAttr != "")
-            {
-                PropertyInfo piTmp;
-                double dTmp; bool bTmp;
-                if (typeof(Scan).GetProperty(tempAttr) != null) //check names even though readOnly DGV
-                {
-                    piTmp = typeof(Scan).GetProperty(tempAttr);
-
-                    if (piTmp.PropertyType == typeof(int) && Int32.TryParse(value, out int iTmp))
-                    {
-                        piTmp.SetValue(this, iTmp);
-                    }
-                    else if (piTmp.PropertyType == typeof(string))
-                    {
-                        piTmp.SetValue(this, value);
-                    }
-                    else if (piTmp.PropertyType == typeof(double) && Double.TryParse(value, out dTmp))
-                    {
-                        piTmp.SetValue(this, dTmp);
-                    }
-                    else if (piTmp.PropertyType == typeof(bool) && Boolean.TryParse(value, out bTmp))
-                    {
-                        piTmp.SetValue(this, bTmp);
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// Check and GET attribute based on attributes dictionary
-        /// </summary>
-        /// <param name="attribute"></param>
-        /// <param name="value"></param>
-        public string CheckGetMzxmlValue(string attribute)
-        {
-            string tempAttr = "";
-            if (mzxmlAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlAttributes[attribute];
-            }
-            else if (mzxmlPrecursorAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlPrecursorAttributes[attribute];
-            }
-            else if (mzxmlPeaksAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlPeaksAttributes[attribute];
-            }
-            else if (mzxmlMsnAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlMsnAttributes[attribute];
-            }
-
-            if (tempAttr != "") {
-                if (typeof(Scan).GetProperty(tempAttr) != null) //check names even though readOnly DGV
-                {
-                    object output = GetType().GetProperty(tempAttr).GetValue(this, null);
-                    if(output.GetType() == typeof(int))
-                    {
-                        return int.Parse(output.ToString()).ToString();
-                    }
-                    else if (output.GetType() == typeof(bool))
-                    {
-                        return bool.Parse(output.ToString()).ToString();
-                    }
-                    else if (output.GetType() == typeof(double))
-                    {
-                        return double.Parse(output.ToString()).ToString();
-                    }
-                    else if (output.GetType() == typeof(string))
-                    {
-                        return output.ToString();
-                    }
-                    return "";
-                }
-            }
-            return null;
-        }
-
-        public Dictionary<string, string> mzxmlAttributes = new Dictionary<string, string>()
-        {
-            { "num" , "ScanNumber" },
-            { "msLevel" , "MsOrder" },
-            { "scanEvent" , "ScanEvent" },
-            { "masterIndex" , "MasterIndex" },
-            { "peaksCount" , "PeakCount" },
-            { "ionInjectionTime" , "IonInjectionTime" },
-            { "elapsedScanTime" , "ElapsedScanTime" },
-            { "polarity" , "Polarity" },
-            { "scanType" , "ScanType" },
-            { "filterLine" , "FilterLine" },
-            { "retentionTime","RetentionTimeString" },
-            { "startMz","StartMz" },
-            { "endMz","EndMz" },
-            { "lowMz","LowestMz" },
-            { "highMz","HighestMz" },
-            { "basePeakMz","BasePeakMz" },
-            { "basePeakIntensity","BasePeakIntensity" }
-        };
-
-        public Dictionary<string, string> mzxmlMsnAttributes = new Dictionary<string, string>()
-        {
-            { "totIonCurrent","TotalIonCurrent" },
-            { "collisionEnergy","CollisionEnergy" }
-        };
-
-        public Dictionary<string, string> mzxmlPrecursorAttributes = new Dictionary<string, string>()
-        {
-            // Precusor information
-            { "precursorMz","PrecursorMz" },
-            { "precursorScanNum","PrecursorMasterScanNumber" },
-            { "precursorIntensity","PrecursorIntensity" },
-            { "precursorCharge","PrecursorCharge" },
-            { "activationMethod","PrecursorActivationMethod" }
-        };
-
-        public Dictionary<string, string> mzxmlPeaksAttributes = new Dictionary<string, string>()
-        {
-            // Peaks information
-            { "peaks","Peaks" },
-            { "precision","PeaksPrecision" },
-            { "byteOrder","PeaksByteOrder" },
-            { "contentType","PeaksContentType" },
-            { "compressionType", "PeaksCompressionType" },
-            { "compressedLen", "PeaksCompressedLength" }
-        };
 
         public double CalculateIsolationSpecificity(Centroid centroid, double isolationWindow)
         {

@@ -97,34 +97,20 @@ namespace Monocle
                         }
                         CurrentProgress = CalculateProgress(1, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress);
-                        // Start reading file
-                        if (Path.GetExtension(newFile).ToLower() == ".mzxml")
-                        {
-                            MZXML.Consume(newFile, Scans);
+                        
+                        IScanReader reader = ScanReaderFactory.GetReader(newFile);
+                        reader.Open(newFile);
+                        foreach (Scan scan in reader) {
+                            Scans.Add(scan);
                         }
-                        else if (Path.GetExtension(newFile).ToLower() == ".raw")
-                        {
-                            RAW.Consume(newFile, Scans);
-                        }
-                        else
-                        {
-                            return;
-                        }
+
                         CurrentProgress = CalculateProgress(2, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true);
                         // Start Run across Scans
                         Monocle.Run(ref Scans, monocleOptions);
 
                         TrackProcess(newFile, CurrentProgress, true, true);
-                        if(outputFileType == OutputFileType.mzxml)
-                        {
-                            // Start writing mzXML
-                            MZXML.Write(newFile, Scans);
-                        } else if (outputFileType == OutputFileType.csv)
-                        {
-                            // Start writing mzXML
-                            CSV.Write(newFile, Scans);
-                        }
+                        CSV.Write(newFile, Scans);
 
                         CurrentProgress = CalculateProgress(3, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true, true, true);
@@ -156,35 +142,20 @@ namespace Monocle
                             }
                             CurrentProgress = CalculateProgress(1, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress);
-                            // Start reading file
-                            if (Path.GetExtension(newFile).ToLower() == ".mzxml")
-                            {
-                                MZXML.Consume(newFile, Scans);
+                            
+                            IScanReader reader = ScanReaderFactory.GetReader(newFile);
+                            reader.Open(newFile);
+                            foreach (Scan scan in reader) {
+                                Scans.Add(scan);
                             }
-                            else if (Path.GetExtension(newFile).ToLower() == ".raw")
-                            {
-                                RAW.Consume(newFile, Scans);
-                            }
-                            else
-                            {
-                                return;
-                            }
+
                             CurrentProgress = CalculateProgress(2, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress, true);
                             // Start Run across Scans
                             Monocle.Run(ref Scans, monocleOptions);
 
                             TrackProcess(newFile, CurrentProgress, true, true);
-                            if (outputFileType == OutputFileType.mzxml)
-                            {
-                                // Start writing mzXML
-                                MZXML.Write(newFile, Scans);
-                            }
-                            else if (outputFileType == OutputFileType.csv)
-                            {
-                                // Start writing mzXML
-                                CSV.Write(newFile, Scans);
-                            }
+                            CSV.Write(newFile, Scans);
 
                             CurrentProgress = CalculateProgress(3, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress, true, true, true);
