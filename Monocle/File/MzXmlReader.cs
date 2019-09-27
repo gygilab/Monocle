@@ -52,7 +52,6 @@ namespace Monocle.File
         public Dictionary<string, string> mzxmlPeaksAttributes = new Dictionary<string, string>()
         {
             // Peaks information
-            { "peaks","Peaks" },
             { "precision","PeaksPrecision" },
             { "byteOrder","PeaksByteOrder" },
             { "contentType","PeaksContentType" },
@@ -93,7 +92,12 @@ namespace Monocle.File
                         {
                             SetAttribute(scan, attr.Name, attr.Value);
                         }
+
+                        if(child.Name == "peaks" && scan.MsOrder == 1) {
+                            scan.Centroids = ReadPeaks(child.InnerText, scan.PeakCount);
+                        }
                     }
+
                     yield return scan;
                 }
             }
@@ -210,11 +214,11 @@ namespace Monocle.File
         /// <param name="peakCount"></param>
         /// <returns></returns>
         private List<Centroid> ReadPeaks(string str,int peakCount) {
-            int count = peakCount;
-            int size = count * 2;
+            List<Centroid> peaks = new List<Centroid>();
+            int size = peakCount * 2;
             if (String.Compare(str, "AAAAAAAAAAA=") == 0)
             {
-                return null;// No data.
+                return peaks;
             }
             byte[] byteEncoded = Convert.FromBase64String(str);
             Array.Reverse(byteEncoded);
@@ -224,8 +228,7 @@ namespace Monocle.File
                 values[i] = BitConverter.ToSingle(byteEncoded, i * 4);
             }
             Array.Reverse(values);
-            List<Centroid> peaks = new List<Centroid>();
-            for (int i = 0; i < count; ++i)
+            for (int i = 0; i < peakCount; ++i)
             {
                 Centroid tempCent = new Centroid(values[2 * i], values[(2 * i) + 1]);
                 peaks.Add(tempCent);
