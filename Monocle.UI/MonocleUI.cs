@@ -141,7 +141,7 @@ namespace MonocleUI
 
         private void NumberOfScansToAverageNUD_ValueChanged(object sender, EventArgs e)
         {
-            if(numberOfScansToAverageNUD.Value > 1 && numberOfScansToAverageNUD.Value < 10)
+            if(numberOfScansToAverageNUD.Value >= 1 && numberOfScansToAverageNUD.Value <= 20)
             {
                 FileProcessor.monocleOptions.Number_Of_Scans_To_Average = (int)numberOfScansToAverageNUD.Value;
             }
