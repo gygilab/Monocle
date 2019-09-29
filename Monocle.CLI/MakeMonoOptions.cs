@@ -18,7 +18,7 @@ namespace MakeMono
         public bool ChargeDetection { get; set; } = false;
 
         [Option('z', "CustomChargeRange", Required = false, HelpText = "Set charge range, default: 2:6, max: -100/100")]
-        public string ChargeRange { get; set; }
+        public string ChargeRange { get; set; } = "2:6";
 
         [Option('q', "QuietRun", Required = false, HelpText = "Do not display file progress in console.")]
         public bool RunQuiet { get; set; } = false;
