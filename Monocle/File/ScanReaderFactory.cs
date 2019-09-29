@@ -1,7 +1,7 @@
 using System.IO;
 
 namespace Monocle.File {
-    class ScanReaderFactory {
+    public class ScanReaderFactory {
         public static IScanReader GetReader(string path) {
             if (Path.GetExtension(path).ToLower() == ".mzxml")
             {

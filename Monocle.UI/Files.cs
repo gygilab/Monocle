@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Monocle;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace Monocle
+namespace MonocleUI
 {
     public class Files
     {
@@ -48,17 +48,4 @@ namespace Monocle
         }
     }
 
-    public enum InputFileType
-    {
-        mzxml,
-        mzml,
-        raw,
-        mgf
-    }
-
-    public enum OutputFileType
-    {
-        mzxml,
-        csv
-    }
 }
