@@ -59,7 +59,13 @@ namespace Monocle.Data
 
         public ChargeRange(string cli_arg = "2:6")
         {
+            if(cli_arg == null) {
+                return;
+            }
             string[] args = cli_arg.Split(':');
+            if (args.Length < 2) {
+                return;
+            }
             int tempLow = int.Parse(args[0]);
             int tempHigh = int.Parse(args[1]);
             Polarity = (tempLow > 0) ? Polarity.Positive : Polarity.Negative;
