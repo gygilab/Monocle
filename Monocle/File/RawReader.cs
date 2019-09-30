@@ -58,7 +58,7 @@ namespace Monocle.File
                     EndMz = scanStatistics.HighMass,
                     ScanType = scanStatistics.ScanType,
                     MsOrder = (int)scanFilter.MSOrder,
-                    Polarity = (scanFilter.Polarity == PolarityType.Positive) ? "+" : "-",
+                    Polarity = (scanFilter.Polarity == PolarityType.Positive) ? Data.Polarity.Positive : Data.Polarity.Negative,
                     FilterLine = scanFilter.ToString(),
                     RetentionTime = rawFile.RetentionTimeFromScanNumber(iScanNumber)
                 };
