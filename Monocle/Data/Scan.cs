@@ -20,7 +20,7 @@ namespace Monocle.Data
         /// </summary>
         public int ScanEvent { get; set; }
         /// <summary>
-        /// The order (e.g. MS1, MS2, MS3, MSn)
+        /// The scan order (e.g. 1 = MS1, 2 = MS2, 3 = MS3, MSn)
         /// </summary>
         public int MsOrder { get; set; }
         /// <summary>
@@ -36,11 +36,11 @@ namespace Monocle.Data
         /// </summary>
         public string ScanDescription { get; set; } = "";
         /// <summary>
-        /// Injection time used to acquire the scan ions
+        /// Injection time used to acquire the scan ions (milliseconds, max = 5000)
         /// </summary>
         public double IonInjectionTime { get; set; }
         /// <summary>
-        /// Total time, including injection time, to acquire the current scan
+        /// Total time, including injection time, to acquire the current scan (milliseconds)
         /// </summary>
         public double ElapsedScanTime { get; set; }
         /// <summary>
@@ -57,7 +57,7 @@ namespace Monocle.Data
         public string FilterLine { get; set; } = "";
         public string RetentionTimeString { get; set; } = "";
         /// <summary>
-        /// Scan retention time
+        /// Scan retention time (minutes)
         /// </summary>
         private double _RetentionTime { get; set; } = 0;
         public double RetentionTime {
@@ -93,7 +93,7 @@ namespace Monocle.Data
         public double BasePeakMz { get; set; }
         public double BasePeakIntensity { get; set; } = 0;
         /// <summary>
-        /// FAIMS compensation voltage, if used
+        /// FAIMS compensation voltage, if used (in volts)
         /// </summary>
         public int FaimsCV { get; set; } = 0;
         /// <summary>
@@ -159,10 +159,6 @@ namespace Monocle.Data
         /// </summary>
         public int PrecursorMasterScanNumber { get; set; }
         /// <summary>
-        /// If a dependent MS3 scan, the isolated peak for the precursor
-        /// </summary>
-        public double PrecursorMz2 { get; set; }
-        /// <summary>
         /// If a dependent scan, the isolated peak charge for the precursor
         /// </summary>
         public int PrecursorCharge { get; set; }
@@ -179,7 +175,11 @@ namespace Monocle.Data
         /// </summary>
         public int CentroidCount { get; private set; }
         /// <summary>
-        /// If an SPS/MSX scan, the SPS/MSX precursor ions used to generate the current scan.
+        /// If a dependent MS3 scan, the isolated peak for the precursor
+        /// </summary>
+        public double PrecursorMz2 { get; set; }
+        /// <summary>
+        /// If an SPS/MSX scan, the SPS/MSX precursor ions used to generate the current scan (max = 20).
         /// </summary>
         public List<double> SpsIons { get; set; } = new List<double>();
         public string SpsIonsString

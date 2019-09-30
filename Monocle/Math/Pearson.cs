@@ -6,6 +6,12 @@ namespace Monocle.Math
 {
     public static class Pearson
     {
+        /// <summary>
+        /// Calculate Pearson correlation from two lists
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public static double P(List<double> x, List<double> y)
         {
 
@@ -30,6 +36,11 @@ namespace Monocle.Math
             }
         }
 
+        /// <summary>
+        /// Calculate average value
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         private static double Avg(List<double> x)
         {
             double sum = 0;

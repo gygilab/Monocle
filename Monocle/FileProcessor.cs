@@ -35,6 +35,9 @@ namespace Monocle
 
     }
 
+    /// <summary>
+    /// Processor class to run Monocle over files and track progress.
+    /// </summary>
     public class FileProcessor
     {
         /// <summary>
