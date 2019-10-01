@@ -8,7 +8,7 @@ namespace MakeMono
     {
         public MakeMonoOptions Parse(string[] args)
         {
-            MakeMonoOptions output = null;
+            MakeMonoOptions output = new MakeMonoOptions();
             Parser.Default.ParseArguments<MakeMonoOptions>(args)
                 .WithParsed<MakeMonoOptions>(opt => { output = opt; })
                 .WithNotParsed<MakeMonoOptions>(HandleParseError);
@@ -17,13 +17,15 @@ namespace MakeMono
 
         private void HandleParseError(IEnumerable<Error> Errors)
         {
+            List<string> errors = new List<string>();
             foreach(Error error in Errors)
             {
                 if(error.Tag != ErrorType.VersionRequestedError && error.Tag != ErrorType.HelpRequestedError)
                 {
-                    Console.WriteLine("Error: " + error.Tag.ToString());
+                    errors.Add(error.Tag.ToString());
                 }
             }
+            throw new Exception(String.Join("\n", errors));
         }
     }
 }
