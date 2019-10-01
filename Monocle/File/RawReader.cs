@@ -12,6 +12,10 @@ namespace Monocle.File
     public class RawReader : IScanReader
     {
         private IRawDataPlus rawFile;
+        /// <summary>
+        /// Open new Raw file with warning messages.
+        /// </summary>
+        /// <param name="path"></param>
         public void Open(string path)
         {
             rawFile = RawFileReaderAdapter.FileFactory(path);
@@ -30,6 +34,10 @@ namespace Monocle.File
             }
         }
 
+        /// <summary>
+        /// Open the given file and import scans into the reader.
+        /// </summary>
+        /// <returns></returns>
         public System.Collections.IEnumerator GetEnumerator()
         {
             rawFile.SelectInstrument(Device.MS, 1);
@@ -58,7 +66,7 @@ namespace Monocle.File
                     EndMz = scanStatistics.HighMass,
                     ScanType = scanStatistics.ScanType,
                     MsOrder = (int)scanFilter.MSOrder,
-                    Polarity = (scanFilter.Polarity == PolarityType.Positive) ? "+" : "-",
+                    Polarity = (scanFilter.Polarity == PolarityType.Positive) ? Data.Polarity.Positive : Data.Polarity.Negative,
                     FilterLine = scanFilter.ToString(),
                     RetentionTime = rawFile.RetentionTimeFromScanNumber(iScanNumber)
                 };
@@ -128,6 +136,12 @@ namespace Monocle.File
             }
         }
 
+        /// <summary>
+        /// Generate centroids from two arrays of m/z and intensity
+        /// </summary>
+        /// <param name="scan"></param>
+        /// <param name="mzArray"></param>
+        /// <param name="intensityArray"></param>
         public void CentroidsFromArrays(Data.Scan scan, double[] mzArray, double[] intensityArray)
         {
             if(mzArray.Length != intensityArray.Length)

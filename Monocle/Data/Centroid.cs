@@ -27,14 +27,28 @@ namespace Monocle.Data
             }
             set
             {
-                iBin = Bin.AssignBin(value);
                 mz = value;
             }
         }
+        /// <summary>
+        /// Precursor m/z
+        /// </summary>
         public double Precursor { get; set; } = 500;
+        /// <summary>
+        /// Centroid intensity
+        /// </summary>
         public double Intensity { get; set; } = 0;
+        /// <summary>
+        /// Centroid Noise
+        /// </summary>
         public double Noise { get; set; } = 0;
+        /// <summary>
+        /// Bin that the centroid exists in
+        /// </summary>
         public int iBin { get; private set; } = 0;
+        /// <summary>
+        /// Centroid isolation purity, 0-1.
+        /// </summary>
         public double IsolationSpecificity { get; set; } = 0;
 
         public int CompareTo(object obj)
@@ -49,22 +63,6 @@ namespace Monocle.Data
             {
                 throw new ArgumentException("Object is not a Centroid");
             }
-        }
-    }
-
-    /// <summary>
-    /// Bin m/z values based on the Comet binning approach
-    /// </summary>
-    public static class Bin
-    {
-        public static double fragment_bin_tol { get; set; } = 1;
-        public static double fragment_bin_offset { get; set; } = 0.4;
-        public static double dInverseBinWidth { get; } = 1 / fragment_bin_tol;
-        public static double dOneMinusBinOffset { get; } = 1.0 - fragment_bin_offset;
-
-        public static int AssignBin(double dMass)
-        {
-            return (int)(dMass * dInverseBinWidth + dOneMinusBinOffset);
         }
     }
 }
