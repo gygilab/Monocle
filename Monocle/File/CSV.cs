@@ -20,7 +20,7 @@ namespace Monocle.File
             string fileName = Path.GetFileNameWithoutExtension(csvFilePath);
             string path = Path.GetDirectoryName(csvFilePath)
                 + Path.DirectorySeparatorChar
-                + Path.GetFileNameWithoutExtension(csvFilePath)
+                + fileName
                 + "_monocle.csv";
 
             var writer = new StreamWriter(System.IO.File.Open(path, FileMode.Create, FileAccess.Write, FileShare.ReadWrite));

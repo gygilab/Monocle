@@ -10,8 +10,8 @@ namespace MakeMono
         {
             MakeMonoOptions output = new MakeMonoOptions();
             Parser.Default.ParseArguments<MakeMonoOptions>(args)
-                .WithParsed<MakeMonoOptions>(opt => { output = opt; })
-                .WithNotParsed<MakeMonoOptions>(HandleParseError);
+                .WithParsed(opt => { output = opt; })
+                .WithNotParsed(HandleParseError);
             return output;
         }
 
