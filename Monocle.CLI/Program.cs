@@ -19,7 +19,7 @@ namespace MakeMono
             public string InputFilePath { get; set; } = "";
             [Option('n', "NumOfScans", Required = false, HelpText = "The number of scans to average, default: +/- 6")]
             public int NumOfScans { get; set; }
-            [Option('c', "ChargeDetection", Required = false, HelpText = "Toggle charge detection, default: true | T")]
+            [Option('c', "ChargeDetection", Required = false, HelpText = "Toggle charge detection, default: false | F")]
             public bool ChargeDetection { get; set; } = false;
             [Option('z', "CustomChargeRange", Required = false, HelpText = "Set charge range, default: 2:6, max: -100/100")]
             public string ChargeRange { get; set; }
