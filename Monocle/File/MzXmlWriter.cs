@@ -42,6 +42,7 @@ namespace Monocle.File {
 
             output = new StreamWriter(path);
             writer = XmlWriter.Create(output, settings);
+            writer.WriteStartDocument();
         }
 
         /// <summary>
@@ -101,14 +102,13 @@ namespace Monocle.File {
         /// <param name="header"></param>
         public void WriteHeader(ScanFileHeader header)
         {
-            writer.WriteStartElement("mzXML");
-            writer.WriteAttributeString("xmlns", "http://sashimi.sourceforge.net/schema_revision/mzXML_3.1");
-            writer.WriteAttributeString("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-            writer.WriteAttributeString("xsi:schemaLocation", "http://sashimi.sourceforge.net/schema_revision/mzXML_3.1 http://sashimi.sourceforge.net/schema_revision/mzXML_3.1/mzXML_idx_3.1.xsd");
+            writer.WriteStartElement("mzXML", "http://sashimi.sourceforge.net/schema_revision/mzXML_3.1");
+            writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
+            writer.WriteAttributeString("xsi", "schemaLocation", null, "http://sashimi.sourceforge.net/schema_revision/mzXML_3.1 http://sashimi.sourceforge.net/schema_revision/mzXML_3.1/mzXML_idx_3.1.xsd");
 
             writer.WriteStartElement("msRun");
             writer.WriteAttributeString("scanCount", header.ScanCount.ToString());
-            writer.WriteAttributeString("startTtime", header.StartTime.ToString());
+            writer.WriteAttributeString("startTime", header.StartTime.ToString());
             writer.WriteAttributeString("endTime", header.EndTime.ToString());
 
             writer.WriteStartElement("parentFile");
@@ -168,11 +168,11 @@ namespace Monocle.File {
 
             for (int i = 0; i < scan.PeakCount; ++i) {
                 var peak = scan.Centroids[i];
-                var mzBytes = BitConverter.GetBytes(peak.Mz);
+                var mzBytes = BitConverter.GetBytes((float)peak.Mz);
                 Array.Reverse(mzBytes);
                 mzBytes.CopyTo(bytes, i * 8);
 
-                var intBytes = BitConverter.GetBytes(peak.Intensity);
+                var intBytes = BitConverter.GetBytes((float)peak.Intensity);
                 Array.Reverse(intBytes);
                 intBytes.CopyTo(bytes, (i * 8) + 4);
             }
