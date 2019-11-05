@@ -36,7 +36,13 @@ namespace MakeMono
 
                 Monocle.Monocle.Run(ref Scans, monocleOptions);
 
-                CSV.Write(file, Scans);
+                IScanWriter writer = ScanWriterFactory.GetWriter(file, options.OutputFileType);
+                writer.Open(file);
+                writer.WriteHeader(new ScanFileHeader());
+                foreach (Scan scan in Scans) {
+                    writer.WriteScan(scan);
+                }
+                writer.Close();
             }
             catch(Exception e) {
                 Console.WriteLine("An error occurred:\n");

@@ -105,7 +105,12 @@ namespace MonocleUI
                         Monocle.Monocle.Run(ref Scans, monocleOptions);
 
                         TrackProcess(newFile, CurrentProgress, true, true);
-                        CSV.Write(newFile, Scans);
+                        var writer = new CsvWriter();
+                        writer.Open(newFile);
+                        foreach (Scan scan in Scans) {
+                            writer.WriteScan(scan);
+                        }
+                        writer.Close();
 
                         CurrentProgress = CalculateProgress(3, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true, true, true);
