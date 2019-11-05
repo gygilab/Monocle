@@ -3,11 +3,10 @@ using Monocle.File;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
-using static Monocle.Monocle;
+using Monocle;
 
-namespace Monocle
+namespace MonocleUI
 {
     public delegate void FileEventHandler(object sender, FileEventArgs e);
     public class FileEventArgs : EventArgs
@@ -23,7 +22,8 @@ namespace Monocle
         {
             FilePath = "";
         }
-        public FileEventArgs(string filePath, double currentProgress, bool read, bool processed, bool written, bool finished) {
+        public FileEventArgs(string filePath, double currentProgress, bool read, bool processed, bool written, bool finished)
+        {
             FilePath = filePath;
             CurrentProgress = currentProgress;
             Read = read;
@@ -35,6 +35,9 @@ namespace Monocle
 
     }
 
+    /// <summary>
+    /// Processor class to run Monocle over files and track progress.
+    /// </summary>
     public class FileProcessor
     {
         /// <summary>
@@ -60,12 +63,7 @@ namespace Monocle
 
         public event FileEventHandler FileTracker;
 
-        FileWriter Writer;
         public Files files { get; set; } = new Files();
-        public FileProcessor()
-        {
-            Writer = new FileWriter();
-        }
 
         public static MonocleOptions monocleOptions { get; set; } = new MonocleOptions()
         {
@@ -80,34 +78,31 @@ namespace Monocle
             monocleOptions = newOptions;
         }
 
-        List<Data.Scan> Scans = new List<Data.Scan>();
-
-        public async void Run(bool console = false)
+        public async void Run()
         {
-            if (console)
+            await Task.Run(() =>
             {
                 try
                 {
                     int filesCompleted = 0;
                     foreach (string newFile in files.FileList)
                     {
-                        if(Scans == null)
-                        {
-                            Scans = new List<Data.Scan>();
-                        }
                         CurrentProgress = CalculateProgress(1, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress);
-                        
+
                         IScanReader reader = ScanReaderFactory.GetReader(newFile);
                         reader.Open(newFile);
-                        foreach (Scan scan in reader) {
+
+                        var Scans = new List<Monocle.Data.Scan>();
+                        foreach (Scan scan in reader)
+                        {
                             Scans.Add(scan);
                         }
 
                         CurrentProgress = CalculateProgress(2, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true);
                         // Start Run across Scans
-                        Monocle.Run(ref Scans, monocleOptions);
+                        Monocle.Monocle.Run(ref Scans, monocleOptions);
 
                         TrackProcess(newFile, CurrentProgress, true, true);
                         CSV.Write(newFile, Scans);
@@ -115,7 +110,7 @@ namespace Monocle
                         CurrentProgress = CalculateProgress(3, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true, true, true);
                         // Clear data
-                        EmptyScans();
+                        EmptyScans(Scans);
                         filesCompleted++;
                         CurrentProgress = CalculateProgress(4, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true, true, true, true);
@@ -124,55 +119,9 @@ namespace Monocle
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex + " file processing failed.");
+                    Debug.WriteLine("File processing failed: " + ex);
                 }
-            }
-            else
-            {
-                await Task.Run(() =>
-                {
-                    try
-                    {
-                        int filesCompleted = 0;
-                        foreach (string newFile in files.FileList)
-                        {
-                            if (Scans == null)
-                            {
-                                Scans = new List<Data.Scan>();
-                            }
-                            CurrentProgress = CalculateProgress(1, filesCompleted, files.FileList.Count);
-                            TrackProcess(newFile, CurrentProgress);
-                            
-                            IScanReader reader = ScanReaderFactory.GetReader(newFile);
-                            reader.Open(newFile);
-                            foreach (Scan scan in reader) {
-                                Scans.Add(scan);
-                            }
-
-                            CurrentProgress = CalculateProgress(2, filesCompleted, files.FileList.Count);
-                            TrackProcess(newFile, CurrentProgress, true);
-                            // Start Run across Scans
-                            Monocle.Run(ref Scans, monocleOptions);
-
-                            TrackProcess(newFile, CurrentProgress, true, true);
-                            CSV.Write(newFile, Scans);
-
-                            CurrentProgress = CalculateProgress(3, filesCompleted, files.FileList.Count);
-                            TrackProcess(newFile, CurrentProgress, true, true, true);
-                            // Clear data
-                            EmptyScans();
-                            filesCompleted++;
-                            CurrentProgress = CalculateProgress(4, filesCompleted, files.FileList.Count);
-                            TrackProcess(newFile, CurrentProgress, true, true, true, true);
-                        }
-                        AllFilesFinished(true);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine("File processing failed: " + ex);
-                    }
-                });
-            }
+            });
         }
 
         public double CalculateProgress(int currentStage, int filesCompleted, int totalFileCount, int stages = 4)
@@ -181,7 +130,7 @@ namespace Monocle
             return (CurrentProgress > 100) ? 100 : CurrentProgress;
         }
 
-        public void EmptyScans()
+        public void EmptyScans(List<Scan> Scans)
         {
             foreach (Scan scan in Scans)
             {

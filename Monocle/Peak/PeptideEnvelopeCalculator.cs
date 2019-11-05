@@ -36,12 +36,17 @@ namespace Monocle.Peak
 		/// precursor m/z and charge.
         /// </summary>
 		/// 
+        /// Original monocle: mz = 111; carbons = 5.1
+        /// Senko et al 1995: mz = 111.1254; carbons = 4.9384
+        /// DKS Uniprot TREMBL 2019_08: mz = 110.3963; carbons = 4.9243
+        /// Quantities represent frequency weighted means of mz and # of carbons
+        /// 
         /// <returns>Number of carbons</returns>
         /// <param name="mz">mz</param>
         /// <param name="charge">charge</param>
         private static int EstimateCarbons(double mz, int charge)
         {
-            return (int)System.Math.Floor((((mz * charge) - (1.00728 * charge)) / 111) * 5.1);
+            return (int)System.Math.Floor((((mz * charge) - (1.00728 * charge)) / 110.3963) * 4.9243);
         }
 
         /// <summary>

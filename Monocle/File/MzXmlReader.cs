@@ -11,7 +11,8 @@ namespace Monocle.File
     public class MzXmlReader : IScanReader
     {
         private XmlDocument doc;
-        
+
+        #region Attributes for the MZXML file
         public Dictionary<string, string> mzxmlAttributes = new Dictionary<string, string>()
         {
             { "num" , "ScanNumber" },
@@ -58,7 +59,11 @@ namespace Monocle.File
             { "compressionType", "PeaksCompressionType" },
             { "compressedLen", "PeaksCompressedLength" }
         };
-
+        #endregion
+        /// <summary>
+        /// Open new fileStream to mzXML file.
+        /// </summary>
+        /// <param name="path"></param>
         public void Open(string path) {
             if (!System.IO.File.Exists(path)) {
                 throw new IOException("File not found: " + path);
@@ -71,6 +76,10 @@ namespace Monocle.File
             }
         }
 
+        /// <summary>
+        /// Open the given file and import scans into the reader.
+        /// </summary>
+        /// <returns></returns>
         public System.Collections.IEnumerator GetEnumerator() {
             using (XmlNodeList scanElems = doc.GetElementsByTagName("scan"))
             {

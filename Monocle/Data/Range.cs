@@ -45,11 +45,11 @@ namespace Monocle.Data
             IsSet = true;
         }
     }
-
+    /// <summary>
+    /// Class to handle a charge range
+    /// </summary>
     public class ChargeRange
     {
-        private int _Low { get; set; } = 2;
-        private int _High { get; set; } = 6; 
         public int High { get; set; } = 6;
         public int Low { get; set; } = 2;
 
@@ -59,7 +59,13 @@ namespace Monocle.Data
 
         public ChargeRange(string cli_arg = "2:6")
         {
+            if(cli_arg == null) {
+                return;
+            }
             string[] args = cli_arg.Split(':');
+            if (args.Length < 2) {
+                return;
+            }
             int tempLow = int.Parse(args[0]);
             int tempHigh = int.Parse(args[1]);
             Polarity = (tempLow > 0) ? Polarity.Positive : Polarity.Negative;
@@ -85,10 +91,13 @@ namespace Monocle.Data
         }
     }
 
+    /// <summary>
+    /// Instrument polarity
+    /// </summary>
     public enum Polarity
     {
-        Positive,
-        Negative,
-        None
+        Positive = 0,
+        Negative = 1,
+        None = 2
     }
 }
