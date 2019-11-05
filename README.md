@@ -32,7 +32,7 @@ Copyright (C) 2019 Monocle.CLI
 
   -n, --NumOfScans          The number of scans to average, default: +/- 6
 
-  -c, --Charge detection    Toggle charge detection, default: true|T
+  -c, --Charge detection    Toggle charge detection, default: false|F
 
   -z, --Charge range        Set charge range, default: 2:6
 
