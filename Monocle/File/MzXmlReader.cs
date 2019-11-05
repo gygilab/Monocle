@@ -101,7 +101,7 @@ namespace Monocle.File
                             SetAttribute(scan, attr.Name, attr.Value);
                         }
 
-                        if(child.Name == "peaks" && scan.MsOrder == 1) {
+                        if(child.Name == "peaks") {
                             scan.Centroids = ReadPeaks(child.InnerText, scan.PeakCount);
                         }
                     }
