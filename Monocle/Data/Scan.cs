@@ -55,22 +55,10 @@ namespace Monocle.Data
         /// Scan filter line from RAW file
         /// </summary>
         public string FilterLine { get; set; } = "";
-        public string RetentionTimeString { get; set; } = "";
         /// <summary>
         /// Scan retention time (minutes)
         /// </summary>
-        private double _RetentionTime { get; set; } = 0;
-        public double RetentionTime {
-            get
-            {
-                return _RetentionTime;
-            }
-            set
-            {
-                _RetentionTime = value;
-                RetentionTimeString = "PT" + value.ToString();
-            }
-        }
+        public double RetentionTime = 0;
         /// <summary>
         /// Mz that scan starts at
         /// </summary>

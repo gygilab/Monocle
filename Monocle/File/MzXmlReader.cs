@@ -25,7 +25,6 @@ namespace Monocle.File
             { "polarity" , "Polarity" },
             { "scanType" , "ScanType" },
             { "filterLine" , "FilterLine" },
-            { "retentionTime","RetentionTimeString" },
             { "startMz","StartMz" },
             { "endMz","EndMz" },
             { "lowMz","LowestMz" },
@@ -118,6 +117,11 @@ namespace Monocle.File
         /// <param name="value"></param>
         public void SetAttribute(Scan scan, string attribute, string value)
         {
+            if (attribute == "retentionTime") {
+                // Parse time and change to minutes.
+                scan.RetentionTime = double.Parse(value.Trim("PTS ".ToCharArray())) / 60d;
+            }
+
             string tempAttr = "";
             if (mzxmlAttributes.ContainsKey(attribute))
             {
