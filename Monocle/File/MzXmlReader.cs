@@ -169,57 +169,6 @@ namespace Monocle.File
         }
 
         /// <summary>
-        /// Check and GET attribute based on attributes dictionary
-        /// </summary>
-        /// <param name="attribute"></param>
-        /// <param name="value"></param>
-        public string GetAttribute(string attribute)
-        {
-            string tempAttr = "";
-            if (mzxmlAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlAttributes[attribute];
-            }
-            else if (mzxmlPrecursorAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlPrecursorAttributes[attribute];
-            }
-            else if (mzxmlPeaksAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlPeaksAttributes[attribute];
-            }
-            else if (mzxmlMsnAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlMsnAttributes[attribute];
-            }
-
-            if (tempAttr != "") {
-                if (typeof(Scan).GetProperty(tempAttr) != null) //check names even though readOnly DGV
-                {
-                    object output = GetType().GetProperty(tempAttr).GetValue(this, null);
-                    if(output.GetType() == typeof(int))
-                    {
-                        return int.Parse(output.ToString()).ToString();
-                    }
-                    else if (output.GetType() == typeof(bool))
-                    {
-                        return bool.Parse(output.ToString()).ToString();
-                    }
-                    else if (output.GetType() == typeof(double))
-                    {
-                        return double.Parse(output.ToString()).ToString();
-                    }
-                    else if (output.GetType() == typeof(string))
-                    {
-                        return output.ToString();
-                    }
-                    return "";
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Read mzXML peaks property
         /// </summary>
         /// <param name="str"></param>
