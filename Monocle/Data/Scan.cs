@@ -159,10 +159,6 @@ namespace Monocle.Data
         /// </summary>
         public string PrecursorActivationMethod { get; set; } = "";
         /// <summary>
-        /// Total number of centroids observed for the current scan
-        /// </summary>
-        public int CentroidCount { get; private set; }
-        /// <summary>
         /// If a dependent MS3 scan, the isolated peak for the precursor
         /// </summary>
         public double PrecursorMz2 { get; set; }
