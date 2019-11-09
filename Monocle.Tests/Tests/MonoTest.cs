@@ -62,7 +62,7 @@ namespace Monocle.Tests.Tests
         }
 
         // The test mzxml contains 4 ms2 scans with +/- 10 ms1 scans 
-        // around each. This method read one ms2 scan and its ms1 scans.
+        // around each. This method reads one ms2 scan and its ms1 scans.
         private void GetBlock(MzXmlReader reader, int block, ref Scan ms2Scan, ref Scan parentScan, ref List<Scan> ms1Scans) {
             int skipCount = (block - 1) * 21;
             Scan lastMs1 = null;
