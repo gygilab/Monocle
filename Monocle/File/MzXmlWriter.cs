@@ -96,6 +96,10 @@ namespace Monocle.File {
                     writer.WriteAttributeString("activationMethod", scan.PrecursorActivationMethod.ToString());
                     writer.WriteString(spsIon.ToString());
                     writer.WriteEndElement(); // precursorMz
+
+                    writer.WriteStartElement("SPSMass");
+                    writer.WriteAttributeString("mz", spsIon.ToString());
+                    writer.WriteEndElement(); // SPSMass
                 }
             }
             else if (scan.MsOrder > 1)
@@ -138,7 +142,7 @@ namespace Monocle.File {
 
             writer.WriteStartElement("parentFile");
             writer.WriteAttributeString("fileName", header.FileName);
-            writer.WriteAttributeString("fileType", FileNameToType(header.FileName));
+            writer.WriteAttributeString("fileType", "processedData");
             writer.WriteEndElement(); // parentFile
             
             writer.WriteStartElement("msInstrument");
@@ -212,12 +216,12 @@ namespace Monocle.File {
         private string FileNameToType(string name)
         {
             switch(Path.GetExtension(name).ToUpper()) {
-                case "RAW":
-                return "RawFile";
-                case "MZXML":
-                return "mzXML";
+                case ".RAW":
+                    return "RawFile";
+                case ".MZXML":
+                    return "mzXML";
                 default:
-                break;
+                    break;
             }
             return "unknown";
         }

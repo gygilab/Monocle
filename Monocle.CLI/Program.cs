@@ -13,42 +13,57 @@ namespace MakeMono
         {
             try {
                 Console.WriteLine("MakeMono, a console application wrapper for Monocle.");
-
                 var parser = new CliOptionsParser();
                 MakeMonoOptions options = parser.Parse(args);
-                var file = options.InputFilePath;
+                string file = options.InputFilePath;
 
-                var monocleOptions = new MonocleOptions
+                MonocleOptions monocleOptions = new MonocleOptions
                 {
                     AveragingVector = AveragingVector.Both,
                     Charge_Detection = options.ChargeDetection,
                     Charge_Range = new ChargeRange(options.ChargeRange),
+                    MS_Level = options.MS_Level,
                     Number_Of_Scans_To_Average = options.NumOfScans
                 };
-
+                ConditionalConsoleLine(!options.RunQuiet, "Start Processing.");
                 IScanReader reader = ScanReaderFactory.GetReader(file);
                 reader.Open(file);
-
-                var Scans = new List<Scan>();
+                ConditionalConsoleLine(!options.RunQuiet, "Read file: " + file);
+                List<Scan> Scans = new List<Scan>();
                 foreach (Scan scan in reader)
                 {
                     Scans.Add(scan);
                 }
-
+                ConditionalConsoleLine(!options.RunQuiet, "All scans read in.");
                 Monocle.Monocle.Run(ref Scans, monocleOptions);
+                ConditionalConsoleLine(!options.RunQuiet, "Finished monoisotopic assignment.");
                 IScanWriter writer = ScanWriterFactory.GetWriter(file, options.OutputFileType);
                 string outputFilePath = Path.GetDirectoryName(file) + "\\" + Path.GetFileNameWithoutExtension(file) + "_monocle" + Path.GetExtension(file);
-                Console.WriteLine(outputFilePath);
                 writer.Open(outputFilePath);
                 writer.WriteHeader(new ScanFileHeader());
+                int scanCounter = 0;
                 foreach (Scan scan in Scans) {
+                    scanCounter++;
+                    if((scanCounter % 1000) == 0)
+                    {
+                        ConditionalConsoleLine(!options.RunQuiet, (scanCounter / Scans.Count) + "% Done");
+                    }
                     writer.WriteScan(scan);
                 }
                 writer.Close();
+                ConditionalConsoleLine(!options.RunQuiet, "File output completed: " + outputFilePath);
             }
             catch(Exception e) {
                 Console.WriteLine("An error occurred:\n");
                 Console.WriteLine(e.Message);
+            }
+        }
+
+        public static void ConditionalConsoleLine(bool writeLine, string newLine)
+        {
+            if (writeLine)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": " + newLine);
             }
         }
     }

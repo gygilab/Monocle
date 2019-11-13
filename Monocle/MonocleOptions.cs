@@ -21,6 +21,20 @@ namespace Monocle
 
         public bool Charge_Detection { get; set; } = false;
 
+        private int _MS_Level { get; set; } = 2;
+        public int MS_Level { get
+            {
+                return _MS_Level;
+            }
+            set
+            {
+                if(value > 0 && value < 20)
+                {
+                    _MS_Level = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Default to charges 2 - 6.
         /// </summary>

@@ -20,7 +20,7 @@ namespace Monocle
         {
             foreach (Scan scan in AllScans)
             {
-                if (scan.MsOrder == 1)
+                if (scan.MsOrder != Options.MS_Level)
                 {
                     continue;
                 }

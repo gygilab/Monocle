@@ -20,6 +20,9 @@ namespace MakeMono
         [Option('z', "CustomChargeRange", Required = false, HelpText = "Set charge range, default: 2:6, max: -100/100")]
         public string ChargeRange { get; set; } = "2:6";
 
+        [Option('m', "CustomChargeRange", Required = false, HelpText = "Select the MS level at which monoisotopic m/z will be adjusted.")]
+        public int MS_Level { get; set; } = 2;
+
         [Option('q', "QuietRun", Required = false, HelpText = "Do not display file progress in console.")]
         public bool RunQuiet { get; set; } = false;
 
