@@ -91,7 +91,6 @@ namespace Monocle.File {
                 writer.WriteAttributeString("precursorIntensity", scan.PrecursorIntensity.ToString());
                 writer.WriteAttributeString("precursorCharge", scan.PrecursorCharge.ToString());
                 writer.WriteAttributeString("activationMethod", scan.PrecursorActivationMethod.ToString());
-                writer.WriteString(EncodePeaks(scan));
                 writer.WriteString(scan.MonoisotopicMz.ToString());
                 writer.WriteEndElement(); // peaks
             }
