@@ -3,6 +3,7 @@ using Monocle.Data;
 using Monocle.File;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MakeMono
 {
@@ -35,9 +36,10 @@ namespace MakeMono
                 }
 
                 Monocle.Monocle.Run(ref Scans, monocleOptions);
-
                 IScanWriter writer = ScanWriterFactory.GetWriter(file, options.OutputFileType);
-                writer.Open(file);
+                string outputFilePath = Path.GetDirectoryName(file) + "\\" + Path.GetFileNameWithoutExtension(file) + "_monocle" + Path.GetExtension(file);
+                Console.WriteLine(outputFilePath);
+                writer.Open(outputFilePath);
                 writer.WriteHeader(new ScanFileHeader());
                 foreach (Scan scan in Scans) {
                     writer.WriteScan(scan);

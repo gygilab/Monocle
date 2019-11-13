@@ -15,13 +15,15 @@ namespace Monocle.File
         public static IScanWriter GetWriter(string file, OutputFileType type)
         {
             file = MakeTargetFileName(file, type);
-            switch (Path.GetExtension(file).ToUpper()) {
-                case "CSV":
-                return new CsvWriter();
-                case "MZXML":
-                return new MzXmlWriter();
+            switch (Path.GetExtension(file).ToUpper())
+            {
+
+                case ".CSV":
+                    return new CsvWriter();
+                case ".MZXML":
+                    return new MzXmlWriter();
                 default:
-                break;
+                    break;
             }
             throw new Exception("Unrecognized file type selected for output");
         }
@@ -37,13 +39,13 @@ namespace Monocle.File
             string ext = "";
             switch (type) {
                 case OutputFileType.csv:
-                ext = "csv";
-                break;
+                    ext = "csv";
+                    break;
                 case OutputFileType.mzxml:
-                ext = "mzXML";
-                break;
+                    ext = "mzXML";
+                    break;
                 default:
-                break;
+                    break;
             }
             return Path.ChangeExtension(filename, ext);
         }
