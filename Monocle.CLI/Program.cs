@@ -41,13 +41,7 @@ namespace MakeMono
                 string outputFilePath = Path.GetDirectoryName(file) + "\\" + Path.GetFileNameWithoutExtension(file) + "_monocle" + Path.GetExtension(file);
                 writer.Open(outputFilePath);
                 writer.WriteHeader(new ScanFileHeader());
-                int scanCounter = 0;
                 foreach (Scan scan in Scans) {
-                    scanCounter++;
-                    if((scanCounter % 1000) == 0)
-                    {
-                        ConditionalConsoleLine(!options.RunQuiet, (scanCounter / Scans.Count) + "% Done");
-                    }
                     writer.WriteScan(scan);
                 }
                 writer.Close();
