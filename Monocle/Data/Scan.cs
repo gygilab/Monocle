@@ -172,7 +172,7 @@ namespace Monocle.Data
             {
                 if(SpsIons.Count > 0)
                 {
-                    return String.Join(",", SpsIons.ToArray());
+                    return string.Join(",", SpsIons.ToArray());
                 }
                 else
                 {
