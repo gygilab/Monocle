@@ -194,27 +194,7 @@ namespace Monocle.Data
         /// The observed centroid peaks in the scan
         /// </summary>
         public List<Centroid> Centroids { get; set; } = new List<Centroid>();
-        /// <summary>
-        /// The peak precison in the scan (mzXML property)
-        /// </summary>
-        public int PeaksPrecision { get; set; }
-        /// <summary>
-        /// The peak byte order in the scan (mzXML property)
-        /// </summary>
-        public string PeaksByteOrder { get; set; } = "";
-        /// <summary>
-        /// The content type (mzXML property)
-        /// </summary>
-        public string PeaksContentType { get; set; } = "";
-        /// <summary>
-        /// Peak compression type, if any (mzXML property)
-        /// </summary>
-        public string PeaksCompressionType { get; set; } = "";
-        /// <summary>
-        /// Peak compression length, if any (mzXML property)
-        /// </summary>
-        public int PeaksCompressedLength { get; set; }
-
+ 
         /// <summary>
         /// If a dependent scan, the precursor isolation purity (0 = no signal, 1 = only precursor in window)
         /// </summary>
