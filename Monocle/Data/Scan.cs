@@ -223,23 +223,6 @@ namespace Monocle.Data
         /// If a dependent scan, the precursor isolation width to assess purity
         /// </summary>
         public double PrecursorIsolationWidth { get; set; } = 0.5;
-        /// <summary>
-        /// Calculate the isolation specificity based on the centroid list and a given window
-        /// </summary>
-        /// <param name="centroid"></param>
-        /// <param name="isolationWindow"></param>
-        /// <returns></returns>
-        public double CalculateIsolationSpecificity(Centroid centroid, double isolationWindow)
-        {
-            double halfIsolationWindow = isolationWindow / 2;
-
-            List<Centroid> tempCentroid = new List<Centroid>();
-            tempCentroid = Centroids.Where(x => x.Mz <= centroid.Mz + halfIsolationWindow && x.Mz >= centroid.Mz - halfIsolationWindow).ToList();
-
-            double isolationSpecificity = centroid.Intensity / tempCentroid.Sum(cent => cent.Intensity);
-
-            return isolationSpecificity;
-        }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
