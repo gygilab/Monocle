@@ -28,7 +28,7 @@ namespace MakeMono
                 ConditionalConsoleLine(!options.RunQuiet, "Start Processing.");
                 IScanReader reader = ScanReaderFactory.GetReader(file);
                 reader.Open(file);
-                ConditionalConsoleLine(!options.RunQuiet, "Read file: " + file);
+                ConditionalConsoleLine(!options.RunQuiet, "Begin reading scans: " + file);
                 List<Scan> Scans = new List<Scan>();
                 foreach (Scan scan in reader)
                 {
@@ -38,7 +38,7 @@ namespace MakeMono
                 Monocle.Monocle.Run(ref Scans, monocleOptions);
                 ConditionalConsoleLine(!options.RunQuiet, "Finished monoisotopic assignment.");
                 IScanWriter writer = ScanWriterFactory.GetWriter(file, options.OutputFileType);
-                string outputFilePath = Path.GetDirectoryName(file) + "\\" + Path.GetFileNameWithoutExtension(file) + "_monocle" + Path.GetExtension(file);
+                string outputFilePath = Path.GetDirectoryName(file) + "\\" + Path.GetFileNameWithoutExtension(file) + "_monocle." + options.OutputFileType.ToString();
                 writer.Open(outputFilePath);
                 writer.WriteHeader(new ScanFileHeader());
                 foreach (Scan scan in Scans) {
