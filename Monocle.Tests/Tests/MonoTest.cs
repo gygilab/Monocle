@@ -26,10 +26,8 @@ namespace Monocle.Tests.Tests
             Assert.Equal(687.39195, ms2Scan.MonoisotopicMz, 3);
         }
         
-        // d00810.raw scan 6516
-        // Correct mono m/z is 1010.54995
-        // but there is a less intense overlapping envelope
-        // with mono m/z near 1009.9
+        // d00810.raw scan 4734
+        // Correct mono m/z is 1009.98842
         [Fact]
         public void Mono2()
         {
@@ -41,8 +39,7 @@ namespace Monocle.Tests.Tests
             GetBlock(reader, 2, ref ms2Scan, ref parentScan, ref scans);
             MonocleOptions options = new MonocleOptions();
             Monocle.Run(scans.ToArray(), parentScan, ms2Scan, options);
-            // test stubbed
-            // Assert.Equal(1010.54995, ms2Scan.MonoisotopicMz, 2);
+            Assert.Equal(1009.98842, ms2Scan.MonoisotopicMz, 2);
         }
 
         // d00810.raw scan 5020
