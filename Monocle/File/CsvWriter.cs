@@ -56,16 +56,17 @@ namespace Monocle.File {
         /// <param name="scan"></param>
         public void WriteScan(Scan scan)
         {
+            var precursor = scan.Precursors[0];
             writer.WriteLine(scan.ScanNumber + delimiter + //scan number
-                scan.MonoisotopicMz + delimiter +
-                scan.MonoisotopicMH + delimiter +
-                scan.MonoisotopicCharge + delimiter +
-                scan.PrecursorMz + delimiter + // Original precursor m/z
-                scan.PrecursorCharge + delimiter + // Original precursor charge
+                precursor.Mz + delimiter +
+                precursor.Mh + delimiter +
+                precursor.Charge + delimiter +
+                precursor.Mz + delimiter + // Original precursor m/z
+                precursor.Charge + delimiter + // Original precursor charge
                 0 + delimiter + //isolation m/z
                 0 + delimiter + //isolation width
-                scan.PrecursorIsolationSpecificity + delimiter +
-                scan.PrecursorIntensity);
+                precursor.IsolationSpecificity + delimiter +
+                precursor.Intensity);
         }
     }
 }

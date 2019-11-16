@@ -145,11 +145,11 @@ namespace Monocle
 
                 if (best_charge > 0)
                 {
-                    DependentScan.MonoisotopicCharge = best_charge;
+                    DependentScan.PrecursorCharge = best_charge;
                 }
 
                 newMonoisotopicMz = (newMonoisotopicMz == 0) ? precursorMz : newMonoisotopicMz;
-                DependentScan.MonoisotopicMz = newMonoisotopicMz;
+                DependentScan.PrecursorMz = newMonoisotopicMz;
             }
             catch (Exception ex)
             {

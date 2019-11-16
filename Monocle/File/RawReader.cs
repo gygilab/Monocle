@@ -89,7 +89,7 @@ namespace Monocle.File
                             scan.ElapsedScanTime = double.Parse(trailer.Values[i]);
                             break;
                         case "Monoisotopic M/Z:":
-                            scan.MonoisotopicMz = double.Parse(trailer.Values[i]);
+                            scan.PrecursorMz = double.Parse(trailer.Values[i]);
                             break;
                         case "Charge State:":
                             scan.PrecursorCharge = int.Parse(trailer.Values[i]);
@@ -100,9 +100,6 @@ namespace Monocle.File
                         case "FAIMS CV:":
                             scan.FaimsCV = (int)double.Parse(trailer.Values[i]);
                             break;
-                        case "SPS Masses:":
-                            scan.SpsIonsString = trailer.Values[i];
-                            break;
                     }
                 }
 
@@ -110,7 +107,7 @@ namespace Monocle.File
                 //write current scan filter:
                 //Console.WriteLine("Scan " + iScanNumber + ": " + scanEvent.ToString());
                 // handle dependent scans and not SPS (processed above)
-                if (scan.MsOrder > 1 && scan.SpsIonsString == "")
+                if (scan.MsOrder > 1)
                 {
                     IReaction reaction = scanEvent.GetReaction(0);
                     scan.PrecursorMz = reaction.PrecursorMass;

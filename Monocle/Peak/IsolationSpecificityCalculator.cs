@@ -8,7 +8,7 @@ namespace Monocle.Peak {
     /// Return the proportion of intensity belonging to the peak given by
     /// mz and intensity within the window given by isolationWindow.
     /// </summary>
-    public class IsolationSpecificityCalculator {
+    public static class IsolationSpecificityCalculator {
         public static double calculate(List<Centroid> peaks, double mz, double intensity, double isolationWindow) {
             double halfIsolationWindow = isolationWindow / 2;
 

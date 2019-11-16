@@ -9,201 +9,161 @@ namespace Monocle.Data
     /// </summary>
     public class Scan : IDisposable
     {
-        const double protonMass = 1.007276466879000;
+        /// <summary>
+        /// Constructor for Scan class.
+        /// </summary>
+        public Scan() {
+            Precursors = new List<Precursor>(1);
+            Precursors.Add(new Precursor());
+        }
 
         /// <summary>
         /// Current scan number
         /// </summary>
-        public int ScanNumber { get; set; }
+        public int ScanNumber;
+
         /// <summary>
         /// Scan event order
         /// </summary>
-        public int ScanEvent { get; set; }
+        public int ScanEvent;
+
         /// <summary>
         /// The scan order (e.g. 1 = MS1, 2 = MS2, 3 = MS3, MSn)
         /// </summary>
-        public int MsOrder { get; set; }
+        public int MsOrder;
+
         /// <summary>
         /// Total number of peaks in the current scan
         /// </summary>
-        public int PeakCount { get; set; } = 0;
+        public int PeakCount;
+
         /// <summary>
         /// Thermo variable for master scan number
         /// </summary>
-        public int MasterIndex { get; set; }
+        public int MasterIndex;
+
         /// <summary>
         /// The current scan description
         /// </summary>
-        public string ScanDescription { get; set; } = "";
+        public string ScanDescription;
+
         /// <summary>
         /// Injection time used to acquire the scan ions (milliseconds, max = 5000)
         /// </summary>
-        public double IonInjectionTime { get; set; }
+        public double IonInjectionTime;
+
         /// <summary>
         /// Total time, including injection time, to acquire the current scan (milliseconds)
         /// </summary>
-        public double ElapsedScanTime { get; set; }
+        public double ElapsedScanTime;
+
         /// <summary>
         /// Bool representation of polarity (true = positive)
         /// </summary>
-        public Polarity Polarity { get; set; } = Polarity.Positive;
+        public Polarity Polarity = Polarity.Positive;
+
         /// <summary>
         /// String description of scan type
         /// </summary>
-        public string ScanType { get; set; } = "";
+        public string ScanType;
+
         /// <summary>
         /// Scan filter line from RAW file
         /// </summary>
-        public string FilterLine { get; set; } = "";
+        public string FilterLine;
+
         /// <summary>
         /// Scan retention time (minutes)
         /// </summary>
         public double RetentionTime = 0;
+
         /// <summary>
         /// Mz that scan starts at
         /// </summary>
-        public double StartMz { get; set; }
+        public double StartMz;
+
         /// <summary>
         /// Mz that scan ends at
         /// </summary>
-        public double EndMz { get; set; }
+        public double EndMz;
+
         /// <summary>
         /// Lowest Mz observed in scan
         /// </summary>
-        public double LowestMz { get; set; }
+        public double LowestMz;
+
         /// <summary>
         /// Highest Mz observed in scan
         /// </summary>
-        public double HighestMz { get; set; }
+        public double HighestMz;
         /// <summary>
         /// The most intense Mz peak in the scan
         /// </summary>
-        public double BasePeakMz { get; set; }
-        public double BasePeakIntensity { get; set; } = 0;
+        public double BasePeakMz;
+
+        public double BasePeakIntensity;
+
         /// <summary>
         /// FAIMS compensation voltage, if used (in volts)
         /// </summary>
-        public int FaimsCV { get; set; } = 0;
-        /// <summary>
-        /// If a dependent scan, the monoisotopic peak for the precursor
-        /// </summary>
-        public double MonoisotopicMz { get; set; }
-        private int? _MonoisotopicCharge { get; set; } = null;
-        /// <summary>
-        /// If a dependent scan, the monoisotopic peak charge for the precursor
-        /// </summary>
-        public int? MonoisotopicCharge {
-            get
-            {
-                if (_MonoisotopicCharge == null)
-                {
-                    return PrecursorCharge;
-                }
-                else
-                {
-                    return _MonoisotopicCharge;
-                }
-            }
-            set
-            {
-                if(value == null || System.Math.Abs((int)value) < 100)
-                {
-                    _MonoisotopicCharge = value;
-                }
-            }
-        }
-        /// <summary>
-        /// If a dependent scan, the monoisotopic peak MH+ for the precursor
-        /// </summary>
-        public double MonoisotopicMH
-        {
-            get
-            {
-                return (MonoisotopicMz * PrecursorCharge) - (protonMass * (PrecursorCharge - 1));
-            }
-        }
+        public int FaimsCV;
+        
         /// <summary>
         /// Total ion current for the current scan
         /// </summary>
-        public double TotalIonCurrent { get; set; }
+        public double TotalIonCurrent;
+
         /// <summary>
         /// If a dependent scan, the fragmentation energy used
         /// </summary>
-        public double CollisionEnergy { get; set; }
-        /// <summary>
-        /// If a dependent scan, the isolated peak for the precursor
-        /// </summary>
-        public double PrecursorMz { get; set; }
-        /// <summary>
-        /// If a dependent scan, the isolated peak MH+ for the precursor
-        /// </summary>
-        public double PrecursorMH { get
-            {
-                return (PrecursorMz * PrecursorCharge) - (protonMass * (PrecursorCharge - 1));
-            }
-        }
+        public double CollisionEnergy;
+        
         /// <summary>
         /// If a dependent scan, the parent scan number
         /// </summary>
-        public int PrecursorMasterScanNumber { get; set; }
-        /// <summary>
-        /// If a dependent scan, the isolated peak charge for the precursor
-        /// </summary>
-        public int PrecursorCharge { get; set; }
-        /// <summary>
-        /// If a dependent scan, the isolated peak intensity for the precursor
-        /// </summary>
-        public double PrecursorIntensity { get; set; }
+        public int PrecursorMasterScanNumber;
+        
         /// <summary>
         /// If a dependent scan, the activation method used to generate the scan fragments
         /// </summary>
-        public string PrecursorActivationMethod { get; set; } = "";
-        /// <summary>
-        /// If a dependent MS3 scan, the isolated peak for the precursor
-        /// </summary>
-        public double PrecursorMz2 { get; set; }
-        /// <summary>
-        /// If an SPS/MSX scan, the SPS/MSX precursor ions used to generate the current scan (max = 20).
-        /// </summary>
-        public List<double> SpsIons { get; set; } = new List<double>();
-        public string SpsIonsString
-        {
-            get
-            {
-                if(SpsIons.Count > 0)
-                {
-                    return string.Join(",", SpsIons.ToArray());
-                }
-                else
-                {
-                    return "";
-                }
-            }
-            set
-            {
-                string tempString = value.Trim();
-                if(tempString != "" && tempString != null && tempString != String.Empty)
-                {
-                    List<string> tempStringList = value.Split(',').Where(c => c.Trim() != "").ToList();
-                    SpsIons = tempStringList.Select(b => double.Parse(b.Trim())).ToList();
-                    PrecursorMz = SpsIons.First();
-                }
-            }
-        }
+        public string PrecursorActivationMethod;
+        
         /// <summary>
         /// The observed centroid peaks in the scan
         /// </summary>
-        public List<Centroid> Centroids { get; set; } = new List<Centroid>();
- 
-        /// <summary>
-        /// If a dependent scan, the precursor isolation purity (0 = no signal, 1 = only precursor in window)
-        /// </summary>
-        public double PrecursorIsolationSpecificity { get; set; } = 0;
-        /// <summary>
-        /// If a dependent scan, the precursor isolation width to assess purity
-        /// </summary>
-        public double PrecursorIsolationWidth { get; set; } = 0.5;
+        public List<Centroid> Centroids = new List<Centroid>();
 
+        /// <summary>
+        /// Holds precursor information for dependent scans.
+        /// There may be multiple precursors for a single scan.
+        /// </summary>
+        /// <typeparam name="Precursor"></typeparam>
+        /// <returns></returns>
+        public List<Precursor> Precursors = new List<Precursor>();
+
+        /// <summary>
+        /// Returns the m/z of the first precursor. 
+        /// </summary>
+        /// <value></value>
+        public double PrecursorMz {
+            get { return Precursors[0].Mz; }
+            set { Precursors[0].Mz = value; }
+        }
+
+        /// <summary>
+        /// Returns the charge of the first precursor.
+        /// </summary>
+        /// <value></value>
+        public int PrecursorCharge {
+            get { return Precursors[0].Charge; }
+            set { Precursors[0].Charge = value; }
+        }
+
+        public double PrecursorIntensity {
+            get { return Precursors[0].Intensity; }
+            set { Precursors[0].Intensity = value; }
+        }
+ 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
