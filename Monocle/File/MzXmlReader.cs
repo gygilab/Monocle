@@ -79,8 +79,8 @@ namespace Monocle.File
             Scan scan = null;
             while(Reader.Read()) {
                 switch (Reader.NodeType) {
-                    case XmlNodeType.Element:  
-                        if (Reader.Name == "scan") {  
+                    case XmlNodeType.Element:
+                        if (Reader.Name == "scan") {
                             scan = new Scan();
                             while (Reader.MoveToNextAttribute()) {
                                 SetAttribute(scan, Reader.Name, Reader.Value);
@@ -96,7 +96,7 @@ namespace Monocle.File
                             Reader.MoveToContent();
                             SetAttribute(scan, "precursorMz", Reader.ReadElementContentAsString());
                         }
-                        break;  
+                        break;
                     case XmlNodeType.EndElement:
                         if (Reader.Name == "scan") {
                             yield return scan;
