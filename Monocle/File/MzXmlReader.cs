@@ -10,7 +10,7 @@ namespace Monocle.File
 {
     public class MzXmlReader : IScanReader
     {
-        private XmlDocument doc;
+        private XmlReader Reader;
 
         #region Attributes for the MZXML file
         public Dictionary<string, string> mzxmlAttributes = new Dictionary<string, string>()
@@ -68,11 +68,7 @@ namespace Monocle.File
                 throw new IOException("File not found: " + path);
             }
 
-            doc = new XmlDocument();
-            using (FileStream fs = new FileStream(path, FileMode.Open))
-            {
-                doc.Load(fs);
-            }
+            Reader = XmlReader.Create(path);
         }
 
         /// <summary>
@@ -80,32 +76,34 @@ namespace Monocle.File
         /// </summary>
         /// <returns></returns>
         public System.Collections.IEnumerator GetEnumerator() {
-            using (XmlNodeList scanElems = doc.GetElementsByTagName("scan"))
-            {
-                foreach (XmlNode node in scanElems)
-                {
-                    Scan scan = new Scan();
-                    foreach (XmlAttribute attr in node.Attributes)
-                    {
-                        SetAttribute(scan, attr.Name, attr.Value);
-                    }
-
-                    //Process child nodes
-                    XmlNodeList children = node.ChildNodes;
-                    foreach (XmlNode child in children)
-                    {
-                        SetAttribute(scan, child.Name, child.InnerText);
-                        foreach (XmlAttribute attr in child.Attributes)
-                        {
-                            SetAttribute(scan, attr.Name, attr.Value);
+            Scan scan = null;
+            while(Reader.Read()) {
+                switch (Reader.NodeType) {
+                    case XmlNodeType.Element:  
+                        if (Reader.Name == "scan") {  
+                            scan = new Scan();
+                            while (Reader.MoveToNextAttribute()) {
+                                SetAttribute(scan, Reader.Name, Reader.Value);
+                            }
                         }
-
-                        if(child.Name == "peaks") {
-                            scan.Centroids = ReadPeaks(child.InnerText, scan.PeakCount);
+                        if (Reader.Name == "peaks" && scan != null) {
+                            scan.Centroids = ReadPeaks(Reader.ReadElementContentAsString(), scan.PeakCount);
                         }
-                    }
-
-                    yield return scan;
+                        else if (Reader.Name == "precursorMz" && scan != null) {
+                            while (Reader.MoveToNextAttribute()) {
+                                SetAttribute(scan, Reader.Name, Reader.Value);
+                            }
+                            Reader.MoveToContent();
+                            SetAttribute(scan, "precursorMz", Reader.ReadElementContentAsString());
+                        }
+                        break;  
+                    case XmlNodeType.EndElement:
+                        if (Reader.Name == "scan") {
+                            yield return scan;
+                        }
+                        break;
+                    default:
+                    break;
                 }
             }
         }
@@ -195,6 +193,12 @@ namespace Monocle.File
                 peaks.Add(tempCent);
             }
             return peaks;
+        }
+
+        private void Cleanup() {
+            if (Reader != null) {
+                ((IDisposable)Reader).Dispose();
+            }
         }
    }
 }
