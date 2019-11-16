@@ -23,7 +23,7 @@ namespace Monocle.Tests.Tests
             GetBlock(reader, 1, ref ms2Scan, ref parentScan, ref scans);
             MonocleOptions options = new MonocleOptions();
             Monocle.Run(scans.ToArray(), parentScan, ms2Scan, options);
-            Assert.Equal(687.39195, ms2Scan.MonoisotopicMz, 3);
+            Assert.Equal(687.39195, ms2Scan.PrecursorMz, 3);
         }
         
         // d00810.raw scan 4734
@@ -39,7 +39,7 @@ namespace Monocle.Tests.Tests
             GetBlock(reader, 2, ref ms2Scan, ref parentScan, ref scans);
             MonocleOptions options = new MonocleOptions();
             Monocle.Run(scans.ToArray(), parentScan, ms2Scan, options);
-            Assert.Equal(1009.98842, ms2Scan.MonoisotopicMz, 2);
+            Assert.Equal(1009.98842, ms2Scan.PrecursorMz, 2);
         }
 
         // d00810.raw scan 5020
@@ -55,7 +55,7 @@ namespace Monocle.Tests.Tests
             GetBlock(reader, 3, ref ms2Scan, ref parentScan, ref scans);
             MonocleOptions options = new MonocleOptions();
             Monocle.Run(scans.ToArray(), parentScan, ms2Scan, options);
-            Assert.Equal(869.449817, ms2Scan.MonoisotopicMz, 3);
+            Assert.Equal(869.449817, ms2Scan.PrecursorMz, 3);
         }
 
         // The test mzxml contains 4 ms2 scans with +/- 10 ms1 scans 
