@@ -20,113 +20,113 @@ namespace Monocle.Data
         /// <summary>
         /// Current scan number
         /// </summary>
-        public int ScanNumber;
+        public int ScanNumber { get; set; }
 
         /// <summary>
         /// Scan event order
         /// </summary>
-        public int ScanEvent;
+        public int ScanEvent { get; set; }
 
         /// <summary>
         /// The scan order (e.g. 1 = MS1, 2 = MS2, 3 = MS3, MSn)
         /// </summary>
-        public int MsOrder;
+        public int MsOrder { get; set; }
 
         /// <summary>
         /// Total number of peaks in the current scan
         /// </summary>
-        public int PeakCount;
+        public int PeakCount { get; set; }
 
         /// <summary>
         /// Thermo variable for master scan number
         /// </summary>
-        public int MasterIndex;
+        public int MasterIndex { get; set; }
 
         /// <summary>
         /// The current scan description
         /// </summary>
-        public string ScanDescription;
+        public string ScanDescription { get; set; }
 
         /// <summary>
         /// Injection time used to acquire the scan ions (milliseconds, max = 5000)
         /// </summary>
-        public double IonInjectionTime;
+        public double IonInjectionTime { get; set; }
 
         /// <summary>
         /// Total time, including injection time, to acquire the current scan (milliseconds)
         /// </summary>
-        public double ElapsedScanTime;
+        public double ElapsedScanTime { get; set; }
 
         /// <summary>
         /// Bool representation of polarity (true = positive)
         /// </summary>
-        public Polarity Polarity = Polarity.Positive;
+        public Polarity Polarity { get; set; } = Polarity.Positive;
 
         /// <summary>
         /// String description of scan type
         /// </summary>
-        public string ScanType;
+        public string ScanType { get; set; }
 
         /// <summary>
         /// Scan filter line from RAW file
         /// </summary>
-        public string FilterLine;
+        public string FilterLine { get; set; }
 
         /// <summary>
         /// Scan retention time (minutes)
         /// </summary>
-        public double RetentionTime = 0;
+        public double RetentionTime { get; set; } = 0;
 
         /// <summary>
         /// Mz that scan starts at
         /// </summary>
-        public double StartMz;
+        public double StartMz { get; set; }
 
         /// <summary>
         /// Mz that scan ends at
         /// </summary>
-        public double EndMz;
+        public double EndMz { get; set; }
 
         /// <summary>
         /// Lowest Mz observed in scan
         /// </summary>
-        public double LowestMz;
+        public double LowestMz { get; set; }
 
         /// <summary>
         /// Highest Mz observed in scan
         /// </summary>
-        public double HighestMz;
+        public double HighestMz { get; set; }
         /// <summary>
         /// The most intense Mz peak in the scan
         /// </summary>
-        public double BasePeakMz;
+        public double BasePeakMz { get; set; }
 
-        public double BasePeakIntensity;
+        public double BasePeakIntensity { get; set; }
 
         /// <summary>
         /// FAIMS compensation voltage, if used (in volts)
         /// </summary>
-        public int FaimsCV;
+        public int FaimsCV { get; set; }
         
         /// <summary>
         /// Total ion current for the current scan
         /// </summary>
-        public double TotalIonCurrent;
+        public double TotalIonCurrent { get; set; }
 
         /// <summary>
         /// If a dependent scan, the fragmentation energy used
         /// </summary>
-        public double CollisionEnergy;
+        public double CollisionEnergy { get; set; }
         
         /// <summary>
         /// If a dependent scan, the parent scan number
         /// </summary>
-        public int PrecursorMasterScanNumber;
+        public int PrecursorMasterScanNumber { get; set; }
         
         /// <summary>
         /// If a dependent scan, the activation method used to generate the scan fragments
         /// </summary>
-        public string PrecursorActivationMethod;
+        public string PrecursorActivationMethod { get; set; }
         
         /// <summary>
         /// The observed centroid peaks in the scan
