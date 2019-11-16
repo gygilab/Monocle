@@ -189,7 +189,7 @@ namespace Monocle.File
             Array.Reverse(values);
             for (int i = 0; i < peakCount; ++i)
             {
-                Centroid tempCent = new Centroid(values[2 * i], values[(2 * i) + 1]);
+                Centroid tempCent = new Centroid(values[2 * i], (float) (values[(2 * i) + 1]));
                 peaks.Add(tempCent);
             }
             return peaks;
