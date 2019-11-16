@@ -49,6 +49,7 @@ namespace MakeMono
             }
             catch(Exception e) {
                 Console.WriteLine("An error occurred:\n");
+                Console.WriteLine(e.GetType().ToString());
                 Console.WriteLine(e.Message);
             }
         }
