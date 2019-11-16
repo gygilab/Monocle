@@ -38,7 +38,7 @@ namespace MakeMono
                 Monocle.Monocle.Run(ref Scans, monocleOptions);
                 ConditionalConsoleLine(!options.RunQuiet, "Finished monoisotopic assignment.");
                 IScanWriter writer = ScanWriterFactory.GetWriter(file, options.OutputFileType);
-                string outputFilePath = Path.GetDirectoryName(file) + "\\" + Path.GetFileNameWithoutExtension(file) + "_monocle." + options.OutputFileType.ToString();
+                string outputFilePath = Path.Join(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + "_monocle." + options.OutputFileType.ToString());
                 writer.Open(outputFilePath);
                 writer.WriteHeader(new ScanFileHeader());
                 foreach (Scan scan in Scans) {
