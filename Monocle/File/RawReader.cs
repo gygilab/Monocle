@@ -151,7 +151,7 @@ namespace Monocle.File
                 Centroid tempCentroid = new Centroid()
                 {
                     Mz = mzArray[i],
-                    Intensity = (float)intensityArray[i],
+                    Intensity = intensityArray[i],
                 };
                 scan.Centroids.Add(tempCentroid);
             }

@@ -7,7 +7,7 @@ namespace Monocle.Data
     /// </summary>
     public struct Centroid
     {
-        public Centroid(double mz, float intensity)
+        public Centroid(double mz, double intensity)
         {
             Mz = mz;
             Intensity = intensity;
@@ -18,6 +18,6 @@ namespace Monocle.Data
         /// <summary>
         /// Centroid intensity
         /// </summary>
-        public float Intensity;
+        public double Intensity;
     }
 }
