@@ -8,7 +8,7 @@ namespace Monocle.Peak
     {
         const double AVERAGINE_DIFF = 1.00286864;
 
-        public static PeptideEnvelope Extract(Scan[] scans, double targetMz, int charge, int left, int numIsotopes)
+        public static PeptideEnvelope Extract(List<Scan> scans, double targetMz, int charge, int left, int numIsotopes)
         {
             List<double> isotopeWidths = new List<double>(new double[numIsotopes]);
             for (int i = left; i - left < numIsotopes; ++i)

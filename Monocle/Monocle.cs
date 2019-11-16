@@ -16,35 +16,44 @@ namespace Monocle
         /// <param name="AllScans"></param>
         /// <param name="DependentScan"></param>
         /// <param name="Number_Of_Scans_To_Average"></param>
-        public static void Run(ref List<Scan> AllScans, MonocleOptions Options)
+        public static void Run(ref List<Scan> scans, MonocleOptions Options)
         {
-            foreach (Scan scan in AllScans)
+            foreach (Scan scan in scans)
             {
                 if (scan.MsOrder != Options.MS_Level)
                 {
                     continue;
                 }
 
-                int masterScanNumber = scan.PrecursorMasterScanNumber;
-                int currentScanNumber = scan.ScanNumber;
-                Scan PrecursorScan = AllScans.Where(b => b.PrecursorMasterScanNumber == masterScanNumber).First();
-                List<Scan> NearbyMs1Scans = new List<Scan>();
-                int plusMinusN = (Options.Number_Of_Scans_To_Average / 2);
-                if (Options.AveragingVector == AveragingVector.Both)
-                {
-                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).Take(plusMinusN).ToList();
-                    NearbyMs1Scans.AddRange(AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).Take(plusMinusN).ToList());
+                int window = Options.Number_Of_Scans_To_Average / 2;
+                var NearbyMs1Scans = new List<Scan>(window * 2);
+                int scanCount = 0;
+                int index = scan.PrecursorMasterScanNumber - 1;
+                if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both) {
+                    // Reel backward.
+                    for ( ; index >= 0 && scanCount < window; --index) {
+                        if (scans[index].MsOrder == 1) {
+                            ++scanCount;
+                        }
+                    }
                 }
-                else if (Options.AveragingVector == AveragingVector.Before)
-                {
-                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).Take(plusMinusN).ToList();
+
+                // Collect scans.
+                scanCount = 0;
+                for ( ; index < scans.Count && scanCount < window; ++index) {
+                    if (scans[index].MsOrder == 1) {
+                        if (scans[index].ScanNumber > scan.PrecursorMasterScanNumber) {
+                            if(Options.AveragingVector == AveragingVector.Before) {
+                                break;
+                            }
+                            ++scanCount;
+                        }
+                        NearbyMs1Scans.Add(scans[index]);
+                    }
                 }
-                else if (Options.AveragingVector == AveragingVector.After)
-                {
-                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).Take(plusMinusN).ToList();
-                }
-                Scan[] Ms1ScansCentroids = NearbyMs1Scans.ToArray();
-                Run(Ms1ScansCentroids, PrecursorScan, scan, Options);
+
+                Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
+                Run(NearbyMs1Scans, precursorScan, scan, Options);
             }
         }
 
@@ -54,7 +63,7 @@ namespace Monocle
         /// <param name="Ms1ScansCentroids"></param>
         /// <param name="ParentScan"></param>
         /// <param name="DependentScan"></param>
-        public static void Run(Scan[] Ms1ScansCentroids, Scan ParentScan, Scan DependentScan, MonocleOptions Options)
+        public static void Run(List<Scan> Ms1ScansCentroids, Scan ParentScan, Scan DependentScan, MonocleOptions Options)
         {
             try
             {
