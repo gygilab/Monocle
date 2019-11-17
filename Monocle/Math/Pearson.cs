@@ -9,14 +9,11 @@ namespace Monocle.Math
         /// <summary>
         /// Calculate Pearson correlation from two lists
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
         public static double P(List<double> x, List<double> y)
         {
 
-            double avgX = Avg(x);
-            double avgY = Avg(y);
+            double avgX = Vector.Average(x);
+            double avgY = Vector.Average(y);
             double numerator = 0;
             double ex = 0; // Sum errors of x
             double ey = 0; // Sum errors of y
@@ -30,29 +27,7 @@ namespace Monocle.Math
             {
                 return (numerator / System.Math.Pow(ex * ey, 0.5));
             }
-            else
-            {
-                return 0;
-            }
+            return 0;
         }
-
-        /// <summary>
-        /// Calculate average value
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        private static double Avg(List<double> x)
-        {
-            double sum = 0;
-            int count = 0;
-            foreach (var v in x)
-            {
-                sum += v;
-                ++count;
-            }
-            return count > 0 ? sum / count : 0;
-        }
-
     }
-
 }
