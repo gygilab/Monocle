@@ -9,8 +9,6 @@ namespace Monocle.Peak
 
         public List<List<double>> intensities;
 
-        public List<double> averageMz;
-
         public List<double> averageIntensity;
 
         public PeptideEnvelope(int numIsotopes)
@@ -22,7 +20,6 @@ namespace Monocle.Peak
                 mzs.Add(new List<double>());
                 intensities.Add(new List<double>());
             }
-            averageMz = new List<double>();
             averageIntensity = new List<double>();
         }
     }

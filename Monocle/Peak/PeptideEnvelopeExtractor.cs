@@ -1,5 +1,6 @@
 
 using Monocle.Data;
+using Monocle.Math;
 using System.Collections.Generic;
 
 namespace Monocle.Peak 
@@ -41,37 +42,9 @@ namespace Monocle.Peak
                 }
             }
 
-            foreach (var mzs in output.mzs)
-            {
-                double sum = 0;
-                int count = 0;
-                foreach (var x in mzs)
-                {
-                    sum += x;
-                    ++count;
-                }
-                double avg = 0;
-                if (count > 0)
-                {
-                    avg = sum / count;
-                }
-                output.averageMz.Add(avg);
-            }
             foreach (var intensities in output.intensities)
             {
-                double sum = 0;
-                int count = 0;
-                foreach (var x in intensities)
-                {
-                    sum += x;
-                    ++count;
-                }
-                double avg = 0;
-                if (count > 0)
-                {
-                    avg = sum / count;
-                }
-                output.averageIntensity.Add(avg);
+                output.averageIntensity.Add(Vector.Average(intensities));
             }
             return output;
         }
