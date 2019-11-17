@@ -30,5 +30,31 @@ namespace Monocle.Math {
             }
             return count > 0 ? sum / count : 0;
         }
+
+        /// <summary>
+        /// Calculated weighted average of x
+        /// </summary>
+        /// <param name="x">The list to average</param>
+        /// <param name="weights">the weights of each value in x</param>
+        /// <returns>The weighted average</returns>
+        public static double WeightedAverage(List<double> x, List<double> weights) {
+            if (x.Count == 0) {
+                return 0;
+            }
+            double sumWeightedX = 0;
+            double sumX = 0;
+            double sumWeights = 0;
+            for (int i = 0; i < x.Count && i < weights.Count; ++i)
+            {
+                sumWeightedX += x[i] * weights[i];
+                sumX += x[i];
+                sumWeights += weights[i];
+            }
+            if (sumWeights > 0)
+            {
+                return sumWeightedX / sumWeights;
+            }
+            return sumX / x.Count;
+        }
     }
 }
