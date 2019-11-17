@@ -62,6 +62,7 @@ namespace Monocle.File {
         /// <param name="scan"></param>
         public void WriteScan(Scan scan)
         {
+            writer.Flush();
             long pos = output.BaseStream.Position;
             scanIndex.Add(scan.ScanNumber, pos);
 
@@ -147,6 +148,7 @@ namespace Monocle.File {
         {
             writer.WriteEndElement(); // msRun
 
+            writer.Flush();
             long indexOffset = output.BaseStream.Position;
             writer.WriteStartElement("index");
             foreach(var entry in scanIndex) {
