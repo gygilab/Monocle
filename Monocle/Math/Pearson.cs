@@ -11,7 +11,6 @@ namespace Monocle.Math
         /// </summary>
         public static double P(List<double> x, List<double> y)
         {
-
             double avgX = Vector.Average(x);
             double avgY = Vector.Average(y);
             double numerator = 0;
