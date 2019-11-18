@@ -70,6 +70,11 @@ namespace Monocle.File
                     FilterLine = scanFilter.ToString(),
                     RetentionTime = rawFile.RetentionTimeFromScanNumber(iScanNumber)
                 };
+                // Get the current scan's activation method while ignoring upstream activation
+                if(scan.MsOrder > 1)
+                {
+                    scan.PrecursorActivationMethod = scanFilter.GetActivation(scan.MsOrder - 2).ToString();
+                }
 
                 RunHeader runHeader = rawFile.RunHeader;
                 LogEntry trailer = rawFile.GetTrailerExtraInformation(iScanNumber);

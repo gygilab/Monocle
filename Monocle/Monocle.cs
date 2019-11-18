@@ -18,42 +18,57 @@ namespace Monocle
         /// <param name="Number_Of_Scans_To_Average"></param>
         public static void Run(ref List<Scan> scans, MonocleOptions Options)
         {
-            foreach (Scan scan in scans)
+            try
             {
-                if (scan.MsOrder != Options.MS_Level)
+                foreach (Scan scan in scans)
                 {
-                    continue;
-                }
-
-                int window = Options.Number_Of_Scans_To_Average / 2;
-                var NearbyMs1Scans = new List<Scan>(window * 2);
-                int scanCount = 0;
-                int index = scan.PrecursorMasterScanNumber - 1;
-                if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both) {
-                    // Reel backward.
-                    for ( ; index >= 0 && scanCount < window; --index) {
-                        if (scans[index].MsOrder == 1) {
-                            ++scanCount;
-                        }
+                    if (scan.MsOrder != Options.MS_Level)
+                    {
+                        continue;
                     }
-                }
 
-                // Collect scans.
-                scanCount = 0;
-                for ( ; index < scans.Count && scanCount < window; ++index) {
-                    if (scans[index].MsOrder == 1) {
-                        if (scans[index].ScanNumber > scan.PrecursorMasterScanNumber) {
-                            if(Options.AveragingVector == AveragingVector.Before) {
-                                break;
+                    int window = Options.Number_Of_Scans_To_Average / 2;
+                    var NearbyMs1Scans = new List<Scan>(window * 2);
+                    int scanCount = 0;
+                    int index = scan.PrecursorMasterScanNumber - 1;
+                    if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both)
+                    {
+                        // Reel backward.
+                        for (; index >= 0 && scanCount < window; --index)
+                        {
+                            if (scans[index].MsOrder == 1)
+                            {
+                                ++scanCount;
                             }
-                            ++scanCount;
                         }
-                        NearbyMs1Scans.Add(scans[index]);
                     }
-                }
 
-                Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
-                Run(NearbyMs1Scans, precursorScan, scan, Options);
+                    // Collect scans.
+                    scanCount = 0;
+                    index = scan.PrecursorMasterScanNumber - 1;
+                    for (; index < scans.Count && scanCount < window; ++index)
+                    {
+                        if (scans[index].MsOrder == 1)
+                        {
+                            if (scans[index].ScanNumber > scan.PrecursorMasterScanNumber)
+                            {
+                                if (Options.AveragingVector == AveragingVector.Before)
+                                {
+                                    break;
+                                }
+                                ++scanCount;
+                            }
+                            NearbyMs1Scans.Add(scans[index]);
+                        }
+                    }
+
+                    Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
+                    Run(NearbyMs1Scans, precursorScan, scan, Options);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Monocle Run Error: " + ex);
             }
         }
 

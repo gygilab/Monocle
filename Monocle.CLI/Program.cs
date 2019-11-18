@@ -35,7 +35,16 @@ namespace MakeMono
                     Scans.Add(scan);
                 }
                 ConditionalConsoleLine(!options.RunQuiet, "All scans read in.");
-                Monocle.Monocle.Run(ref Scans, monocleOptions);
+                try
+                {
+                    Monocle.Monocle.Run(ref Scans, monocleOptions);
+                }
+                catch(Exception ex)
+                {
+                    ConditionalConsoleLine(true, "~~!!!!Monocle encountered an error while running!!!!~~");
+                    ConditionalConsoleLine(true, ex.ToString());
+                    return;
+                }
                 ConditionalConsoleLine(!options.RunQuiet, "Finished monoisotopic assignment.");
                 IScanWriter writer = ScanWriterFactory.GetWriter(file, options.OutputFileType);
                 string outputFilePath = Path.Join(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + "_monocle." + options.OutputFileType.ToString());
@@ -51,6 +60,7 @@ namespace MakeMono
                 Console.WriteLine("An error occurred:\n");
                 Console.WriteLine(e.GetType().ToString());
                 Console.WriteLine(e.Message);
+                Console.WriteLine(e);
             }
         }
 
