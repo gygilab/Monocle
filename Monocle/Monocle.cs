@@ -26,7 +26,6 @@ namespace Monocle
                     {
                         continue;
                     }
-
                     int window = Options.Number_Of_Scans_To_Average / 2;
                     var NearbyMs1Scans = new List<Scan>(window * 2);
                     int scanCount = 0;

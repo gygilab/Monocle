@@ -101,6 +101,10 @@ namespace Monocle.File
                         case "Master Scan Number:":
                             scan.PrecursorMasterScanNumber = int.Parse(trailer.Values[i]);
                             break;
+                        case "Master Index:":
+                            // Legacy implementation of master scan number
+                            scan.PrecursorMasterScanNumber = int.Parse(trailer.Values[i]);
+                            break;
                         case "FAIMS CV:":
                             scan.FaimsCV = (int)double.Parse(trailer.Values[i]);
                             break;
