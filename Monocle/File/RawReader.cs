@@ -1,6 +1,6 @@
 ﻿using Monocle.Data;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using ThermoFisher.CommonCore.Data.Business;
 using ThermoFisher.CommonCore.Data.FilterEnums;
@@ -78,7 +78,6 @@ namespace Monocle.File
 
                 RunHeader runHeader = rawFile.RunHeader;
                 LogEntry trailer = rawFile.GetTrailerExtraInformation(iScanNumber);
-
                 for (int i = 0; i < trailer.Length; i++)
                 {
                     if (trailer.Values[i] == null)
@@ -104,6 +103,16 @@ namespace Monocle.File
                             break;
                         case "FAIMS CV:":
                             scan.FaimsCV = (int)double.Parse(trailer.Values[i]);
+                            break;
+                        case "SPS Masses:":
+                            string[] spsIonStringArray = trailer.Values[i].TrimEnd(',').Split(',');
+                            for(int spsIndex = 0; spsIndex < spsIonStringArray.Length; spsIndex++)
+                            {
+                                if(double.TryParse(spsIonStringArray[spsIndex],out double spsIon))
+                                {
+                                    scan.Precursors.Add(new Data.Precursor(spsIon));
+                                }
+                            }
                             break;
                     }
                 }

@@ -85,15 +85,22 @@ namespace Monocle.File {
             writer.WriteAttributeString("basePeakMz", scan.BasePeakMz.ToString());
             writer.WriteAttributeString("basePeakIntensity", scan.BasePeakIntensity.ToString());
 
-            if (scan.MsOrder > 1)
+            //tSIM/MSX methods could be MS1s with "SPS" ions so no ms order consideration here
+            if (scan.MsOrder > 1 && scan.Precursors.Count > 0)
             {
-                writer.WriteStartElement("precursorMz");
-                writer.WriteAttributeString("precursorScanNum", scan.PrecursorMasterScanNumber.ToString());
-                writer.WriteAttributeString("precursorIntensity", scan.PrecursorIntensity.ToString());
-                writer.WriteAttributeString("precursorCharge", scan.PrecursorCharge.ToString());
-                writer.WriteAttributeString("activationMethod", scan.PrecursorActivationMethod.ToString());
-                writer.WriteString(scan.PrecursorMz.ToString());
-                writer.WriteEndElement(); // precursorMz
+                foreach (Precursor spsIon in scan.Precursors)
+                {
+                    writer.WriteStartElement("precursorMz");
+                    writer.WriteAttributeString("precursorScanNum", scan.PrecursorMasterScanNumber.ToString());
+                    writer.WriteAttributeString("precursorIntensity", "-1");
+                    writer.WriteAttributeString("precursorCharge", "-1");
+                    writer.WriteAttributeString("activationMethod", scan.PrecursorActivationMethod.ToString());
+                    writer.WriteString(spsIon.Mz.ToString());
+                    writer.WriteEndElement(); // precursorMz
+                    writer.WriteStartElement("SPSMass");
+                    writer.WriteAttributeString("mz", spsIon.ToString());
+                    writer.WriteEndElement(); // SPSMass
+                }
             }
 
             writer.WriteStartElement("peaks");

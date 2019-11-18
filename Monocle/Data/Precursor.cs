@@ -2,6 +2,19 @@
 namespace Monocle.Data {
     public class Precursor {
         /// <summary>
+        /// Constructor for Precursor
+        /// </summary>
+        /// <param name="mz"></param>
+        public Precursor(double mz)
+        {
+            Mz = mz;
+            Intensity = 1;
+            Charge = 1;
+        }
+        public Precursor()
+        {
+        }
+        /// <summary>
         /// The m/z of the precursor peak.
         /// This is often the (putative) monoisotopic m/z of the molecule.
         /// </summary>

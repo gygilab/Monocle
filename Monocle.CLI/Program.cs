@@ -11,7 +11,7 @@ namespace MakeMono
     {
         static void Main(string[] args)
         {
-            try {
+
                 Console.WriteLine("MakeMono, a console application wrapper for Monocle.");
                 var parser = new CliOptionsParser();
                 MakeMonoOptions options = parser.Parse(args);
@@ -26,6 +26,9 @@ namespace MakeMono
                     Number_Of_Scans_To_Average = options.NumOfScans,
                     WriteDebugString = options.WriteDebug
                 };
+
+            try
+            {
                 ConditionalConsoleLine(!options.RunQuiet, "Start Processing.");
                 IScanReader reader = ScanReaderFactory.GetReader(file);
                 reader.Open(file);
@@ -58,10 +61,10 @@ namespace MakeMono
                 ConditionalConsoleLine(!options.RunQuiet, "File output completed: " + outputFilePath);
             }
             catch(Exception e) {
-                Console.WriteLine("An error occurred:");
-                Console.WriteLine(e.GetType().ToString());
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e);
+                Console.WriteLine("An error occurred.");
+                ConditionalConsoleLine(monocleOptions.WriteDebugString, e.GetType().ToString());
+                ConditionalConsoleLine(monocleOptions.WriteDebugString, e.Message);
+                ConditionalConsoleLine(monocleOptions.WriteDebugString, e.ToString());
             }
         }
 

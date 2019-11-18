@@ -139,7 +139,7 @@ namespace Monocle.Data
         /// </summary>
         /// <typeparam name="Precursor"></typeparam>
         /// <returns></returns>
-        public List<Precursor> Precursors = new List<Precursor>();
+        public List<Precursor> Precursors { get; set; } = new List<Precursor>();
 
         /// <summary>
         /// Returns the m/z of the first precursor. 
