@@ -76,6 +76,15 @@ namespace Monocle.File
                     scan.PrecursorActivationMethod = scanFilter.GetActivation(scan.MsOrder - 2).ToString();
                 }
 
+                IScanEvent scanEvent = rawFile.GetScanEventForScanNumber(iScanNumber);
+
+                // handle dependent scans and not SPS (processed below)
+                if (scan.MsOrder > 1)
+                {
+                    IReaction reaction = scanEvent.GetReaction(0);
+                    scan.PrecursorMz = reaction.PrecursorMass;
+                }
+
                 RunHeader runHeader = rawFile.RunHeader;
                 LogEntry trailer = rawFile.GetTrailerExtraInformation(iScanNumber);
                 for (int i = 0; i < trailer.Length; i++)
@@ -123,15 +132,6 @@ namespace Monocle.File
                             }
                             break;
                     }
-                }
-
-                IScanEvent scanEvent = rawFile.GetScanEventForScanNumber(iScanNumber);
-
-                // handle dependent scans and not SPS (processed above)
-                if (scan.MsOrder > 1)
-                {
-                    IReaction reaction = scanEvent.GetReaction(0);
-                    scan.PrecursorMz = reaction.PrecursorMass;
                 }
 
                 // Centroid or profile?:

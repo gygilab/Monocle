@@ -88,34 +88,21 @@ namespace Monocle.File {
             //tSIM/MSX methods could be MS1s with "SPS" ions so no ms order consideration here
             if (scan.MsOrder > 1 && scan.Precursors.Count > 0)
             {
-                if (monocleOptions.WriteSps)
-                {
-                    foreach (Precursor precursor in scan.Precursors)
-                    {
-                        writer.WriteStartElement("precursorMz");
-                        writer.WriteAttributeString("precursorScanNum", scan.PrecursorMasterScanNumber.ToString());
-                        writer.WriteAttributeString("precursorIntensity", "-1");
-                        writer.WriteAttributeString("precursorCharge", "-1");
-                        writer.WriteAttributeString("activationMethod", scan.PrecursorActivationMethod.ToString());
-                        writer.WriteString(precursor.Mz.ToString());
-                        writer.WriteEndElement(); // precursorMz
-                        if (scan.Precursors.Count > 1)
-                        {
-                            writer.WriteStartElement("SPSMass");
-                            writer.WriteAttributeString("mz", precursor.Mz.ToString());
-                            writer.WriteEndElement(); // SPSMass
-                        }
-                    }
-                }
-                else
+                foreach (Precursor precursor in scan.Precursors)
                 {
                     writer.WriteStartElement("precursorMz");
                     writer.WriteAttributeString("precursorScanNum", scan.PrecursorMasterScanNumber.ToString());
                     writer.WriteAttributeString("precursorIntensity", "-1");
                     writer.WriteAttributeString("precursorCharge", "-1");
                     writer.WriteAttributeString("activationMethod", scan.PrecursorActivationMethod.ToString());
-                    writer.WriteString(scan.PrecursorMz.ToString());
+                    writer.WriteString(precursor.Mz.ToString());
                     writer.WriteEndElement(); // precursorMz
+                    if (scan.Precursors.Count > 1 & monocleOptions.WriteSps)
+                    {
+                        writer.WriteStartElement("SPSMass");
+                        writer.WriteAttributeString("mz", precursor.Mz.ToString());
+                        writer.WriteEndElement(); // SPSMass
+                    }
                 }
             }
 
