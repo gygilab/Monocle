@@ -23,7 +23,8 @@ namespace MakeMono
                     Charge_Detection = options.ChargeDetection,
                     Charge_Range = new ChargeRange(options.ChargeRange),
                     MS_Level = options.MS_Level,
-                    Number_Of_Scans_To_Average = options.NumOfScans
+                    Number_Of_Scans_To_Average = options.NumOfScans,
+                    WriteDebugString = options.WriteDebug
                 };
                 ConditionalConsoleLine(!options.RunQuiet, "Start Processing.");
                 IScanReader reader = ScanReaderFactory.GetReader(file);
@@ -41,8 +42,8 @@ namespace MakeMono
                 }
                 catch(Exception ex)
                 {
-                    ConditionalConsoleLine(true, "~~!!!!Monocle encountered an error while running!!!!~~");
-                    ConditionalConsoleLine(true, ex.ToString());
+                    ConditionalConsoleLine(monocleOptions.WriteDebugString, "~~!!!!Monocle encountered an error while running!!!!~~");
+                    ConditionalConsoleLine(monocleOptions.WriteDebugString, ex.ToString());
                     return;
                 }
                 ConditionalConsoleLine(!options.RunQuiet, "Finished monoisotopic assignment.");
@@ -57,7 +58,7 @@ namespace MakeMono
                 ConditionalConsoleLine(!options.RunQuiet, "File output completed: " + outputFilePath);
             }
             catch(Exception e) {
-                Console.WriteLine("An error occurred:\n");
+                Console.WriteLine("An error occurred:");
                 Console.WriteLine(e.GetType().ToString());
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e);

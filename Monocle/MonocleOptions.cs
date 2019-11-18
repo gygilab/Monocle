@@ -39,5 +39,7 @@ namespace Monocle
         /// Default to charges 2 - 6.
         /// </summary>
         public ChargeRange Charge_Range { get; set; } = new ChargeRange(2, 6);
+
+        public bool WriteDebugString { get; set; } = false;
     }
 }

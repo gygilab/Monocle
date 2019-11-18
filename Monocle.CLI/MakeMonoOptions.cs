@@ -28,5 +28,8 @@ namespace MakeMono
 
         [Option('o', "OutputFileType", Required = false, HelpText = "Choose to output an mzXML (mzxml | 0) or CSV file (csv | 1).")]
         public OutputFileType OutputFileType { get; set; } = OutputFileType.csv;
+
+        [Option('d', "Debug", Hidden = true, Required = false, HelpText = "Verbose debug output.")]
+        public bool WriteDebug { get; set; } = false;
     }
 }
