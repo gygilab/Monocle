@@ -97,9 +97,12 @@ namespace Monocle.File {
                     writer.WriteAttributeString("activationMethod", scan.PrecursorActivationMethod.ToString());
                     writer.WriteString(spsIon.Mz.ToString());
                     writer.WriteEndElement(); // precursorMz
-                    writer.WriteStartElement("SPSMass");
-                    writer.WriteAttributeString("mz", spsIon.Mz.ToString());
-                    writer.WriteEndElement(); // SPSMass
+                    if(scan.Precursors.Count > 1)
+                    {
+                        writer.WriteStartElement("SPSMass");
+                        writer.WriteAttributeString("mz", spsIon.Mz.ToString());
+                        writer.WriteEndElement(); // SPSMass
+                    }
                 }
             }
 

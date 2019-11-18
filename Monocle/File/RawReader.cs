@@ -110,11 +110,15 @@ namespace Monocle.File
                             break;
                         case "SPS Masses:":
                             string[] spsIonStringArray = trailer.Values[i].TrimEnd(',').Split(',');
-                            for(int spsIndex = 0; spsIndex < spsIonStringArray.Length; spsIndex++)
+                            if(spsIonStringArray.Length > 0)
                             {
-                                if(double.TryParse(spsIonStringArray[spsIndex],out double spsIon))
+                                scan.Precursors.Clear();
+                                for (int spsIndex = 0; spsIndex < spsIonStringArray.Length; spsIndex++)
                                 {
-                                    scan.Precursors.Add(new Data.Precursor(spsIon));
+                                    if (double.TryParse(spsIonStringArray[spsIndex], out double spsIon))
+                                    {
+                                        scan.Precursors.Add(new Data.Precursor(spsIon));
+                                    }
                                 }
                             }
                             break;
@@ -122,8 +126,7 @@ namespace Monocle.File
                 }
 
                 IScanEvent scanEvent = rawFile.GetScanEventForScanNumber(iScanNumber);
-                //write current scan filter:
-                //Console.WriteLine("Scan " + iScanNumber + ": " + scanEvent.ToString());
+
                 // handle dependent scans and not SPS (processed above)
                 if (scan.MsOrder > 1)
                 {
