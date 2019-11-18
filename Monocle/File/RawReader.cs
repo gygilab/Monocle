@@ -110,7 +110,7 @@ namespace Monocle.File
                             break;
                         case "SPS Masses:":
                             string[] spsIonStringArray = trailer.Values[i].TrimEnd(',').Split(',');
-                            if(spsIonStringArray.Length > 0)
+                            if(!string.IsNullOrWhiteSpace(spsIonStringArray[0]) && spsIonStringArray.Length > 0)
                             {
                                 scan.Precursors.Clear();
                                 for (int spsIndex = 0; spsIndex < spsIonStringArray.Length; spsIndex++)

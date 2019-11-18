@@ -41,5 +41,7 @@ namespace Monocle
         public ChargeRange Charge_Range { get; set; } = new ChargeRange(2, 6);
 
         public bool WriteDebugString { get; set; } = false;
+
+        public bool WriteSps { get; set; } = false;
     }
 }
