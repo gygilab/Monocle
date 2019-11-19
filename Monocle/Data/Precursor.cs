@@ -18,17 +18,17 @@ namespace Monocle.Data {
         /// The m/z of the precursor peak.
         /// This is often the (putative) monoisotopic m/z of the molecule.
         /// </summary>
-        public double Mz;
+        public double Mz { get; set; }
 
         /// <summary>
         /// Intensity of the precursor peak.
         /// </summary>
-        public double Intensity;
+        public double Intensity { get; set; }
 
         /// <summary>
         /// Charge state of the precursor.
         /// </summary>
-        public int Charge;
+        public int Charge { get; set; }
 
         /// <summary>
         /// Precursor M+H
@@ -42,12 +42,12 @@ namespace Monocle.Data {
         /// <summary>
         /// The m/z that the instrument targeted for isolation.
         /// </summary>
-        public double IsolationMz;
+        public double IsolationMz { get; set; }
 
         /// <summary>
         /// The size of the window that the instrument targeted for isolation.
         /// </summary>
-        public double IsolationWidth;
+        public double IsolationWidth { get; set; }
 
         /// <summary>
         /// Proportion of the intensity in the isolation window
@@ -55,6 +55,6 @@ namespace Monocle.Data {
         /// 
         /// This should be a value from zero to one.
         /// </summary>
-        public double IsolationSpecificity;
+        public double IsolationSpecificity { get; set; }
     }
 }

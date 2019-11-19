@@ -26,6 +26,7 @@ namespace Monocle
                     {
                         continue;
                     }
+
                     int window = Options.Number_Of_Scans_To_Average / 2;
                     var NearbyMs1Scans = new List<Scan>(window * 2);
                     int scanCount = 0;
@@ -38,10 +39,10 @@ namespace Monocle
                             if (scans[index].MsOrder == 1)
                             {
                                 ++scanCount;
+                                NearbyMs1Scans.Add(scans[index]);
                             }
                         }
                     }
-
                     // Collect scans.
                     scanCount = 0;
                     index = scan.PrecursorMasterScanNumber - 1;
@@ -60,7 +61,6 @@ namespace Monocle
                             NearbyMs1Scans.Add(scans[index]);
                         }
                     }
-
                     Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
                     Run(NearbyMs1Scans, precursorScan, scan, Options);
                 }
@@ -86,7 +86,8 @@ namespace Monocle
             int bestCharge = 0;
             double bestScore = -1;
             int bestIndex = 0;
-            double newMonoisotopicMz = 0;
+            List<double> bestPeaks = new List<double>();
+            List<double> bestPeakIntensities = new List<double>();
 
             //Create new class to maintain ref class options
             ChargeRange chargeRange = new ChargeRange(precursorCharge, precursorCharge);
@@ -95,7 +96,7 @@ namespace Monocle
                 chargeRange.Low = Options.Charge_Range.Low;
                 chargeRange.High = Options.Charge_Range.High;
             }
-
+            
             for (int charge = chargeRange.Low; charge <= chargeRange.High; charge++)
             {
                 // Restrict number of isotopes to consider based on precursor mass.
@@ -120,8 +121,8 @@ namespace Monocle
                 {
                     List<double> observed = envelope.averageIntensity.GetRange(i, expected.Count);
                     PeptideEnvelopeCalculator.Scale(observed);
-                    double score = Vector.Dot(observed, expected);
-
+                    //double scoreP = Vector.Dot(observed, expected);
+                    double score = Pearson.P(observed, expected);
                     // add 5% to give bias toward left peaks.
                     if (score > bestScore * 1.05)
                     {
@@ -132,7 +133,8 @@ namespace Monocle
                             // offset to get monoisotopic index.
                             bestIndex = i + 1;
                             bestCharge = charge;
-                            newMonoisotopicMz = Vector.WeightedAverage(envelope.mzs[bestIndex], envelope.intensities[bestIndex]);
+                            bestPeaks = envelope.mzs[bestIndex];
+                            bestPeakIntensities = envelope.mzs[bestIndex];
                         }
                     }
                 }
@@ -143,7 +145,15 @@ namespace Monocle
                 DependentScan.PrecursorCharge = bestCharge;
             }
 
-            DependentScan.PrecursorMz = (newMonoisotopicMz == 0) ? precursorMz : newMonoisotopicMz;
+            // Calculate m/z
+            if (bestPeaks.Count > 0)
+            {
+                DependentScan.PrecursorMz = Vector.WeightedAverage(bestPeaks, bestPeakIntensities);
+            }
+            else
+            {
+                DependentScan.PrecursorMz = precursorMz;
+            }
         }
     }
 }
