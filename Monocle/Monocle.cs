@@ -86,8 +86,7 @@ namespace Monocle
             int bestCharge = 0;
             double bestScore = -1;
             int bestIndex = 0;
-            List<double> bestPeaks = new List<double>();
-            List<double> bestPeakIntensities = new List<double>();
+            double newMonoisotopicMz = 0;
 
             //Create new class to maintain ref class options
             ChargeRange chargeRange = new ChargeRange(precursorCharge, precursorCharge);
@@ -133,8 +132,7 @@ namespace Monocle
                             // offset to get monoisotopic index.
                             bestIndex = i + 1;
                             bestCharge = charge;
-                            bestPeaks = envelope.mzs[bestIndex];
-                            bestPeakIntensities = envelope.mzs[bestIndex];
+                            newMonoisotopicMz = Vector.WeightedAverage(envelope.mzs[bestIndex], envelope.intensities[bestIndex]);
                         }
                     }
                 }
@@ -145,15 +143,7 @@ namespace Monocle
                 DependentScan.PrecursorCharge = bestCharge;
             }
 
-            // Calculate m/z
-            if (bestPeaks.Count > 0)
-            {
-                DependentScan.PrecursorMz = Vector.WeightedAverage(bestPeaks, bestPeakIntensities);
-            }
-            else
-            {
-                DependentScan.PrecursorMz = precursorMz;
-            }
+            DependentScan.PrecursorMz = (newMonoisotopicMz == 0) ? precursorMz : newMonoisotopicMz;
         }
     }
 }
