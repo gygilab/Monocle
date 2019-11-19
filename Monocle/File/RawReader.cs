@@ -73,7 +73,7 @@ namespace Monocle.File
                 // Get the current scan's activation method while ignoring upstream activation
                 if(scan.MsOrder > 1)
                 {
-                    scan.PrecursorActivationMethod = scanFilter.GetActivation(scan.MsOrder - 2).ToString();
+                    scan.PrecursorActivationMethod = ConvertActivationType(scanFilter.GetActivation(scan.MsOrder - 2));
                 }
 
                 IScanEvent scanEvent = rawFile.GetScanEventForScanNumber(iScanNumber);
@@ -176,6 +176,38 @@ namespace Monocle.File
                 };
                 scan.Centroids.Add(tempCentroid);
             }
+        }
+
+        /// <summary>
+        /// Converts the ActivationType Enum to a string
+        /// </summary>
+        /// <returns>The activation type.</returns>
+        /// <param name="type">Type.</param>
+        private static string ConvertActivationType(ActivationType type)
+        {
+            string output = "";
+            switch (type)
+            {
+                case ActivationType.CollisionInducedDissociation:
+                    output = "CID";
+                    break;
+                case ActivationType.ElectronCaptureDissociation:
+                    output = "ECD";
+                    break;
+                case ActivationType.ElectronTransferDissociation:
+                    output = "ETD";
+                    break;
+                case ActivationType.HigherEnergyCollisionalDissociation:
+                    output = "HCD";
+                    break;
+                case ActivationType.PQD:
+                    output = "PQD";
+                    break;
+                case ActivationType.UltraVioletPhotoDissociation:
+                    output = "UVPD";
+                    break;
+            }
+            return output;
         }
 
     }
