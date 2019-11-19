@@ -77,7 +77,7 @@ namespace Monocle.File {
             writer.WriteAttributeString("polarity", scan.Polarity == Polarity.Positive ? "+" : "-");
             writer.WriteAttributeString("scanType", scan.ScanType.ToString());
             writer.WriteAttributeString("filterLine", scan.FilterLine);
-            writer.WriteAttributeString("retentionTime", makeRetentionTimeString(scan.RetentionTime));
+            writer.WriteAttributeString("retentionTime", MakeRetentionTimeString(scan.RetentionTime));
             writer.WriteAttributeString("startMz", scan.StartMz.ToString());
             writer.WriteAttributeString("endMz", scan.EndMz.ToString());
             writer.WriteAttributeString("lowMz", scan.LowestMz.ToString());
@@ -226,7 +226,7 @@ namespace Monocle.File {
         /// </summary>
         /// <param name="time">The retention time of the scan in minutes.</param>
         /// <returns>The string representation of the time in seconds.</returns>
-        private string makeRetentionTimeString(double time) {
+        private string MakeRetentionTimeString(double time) {
             return "PT" + System.Math.Round(time * 60, 2).ToString() + "S";
         }
     }

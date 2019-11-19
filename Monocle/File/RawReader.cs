@@ -56,7 +56,7 @@ namespace Monocle.File
                 Data.Scan scan = new Data.Scan()
                 {
                     ScanNumber = iScanNumber,
-                    ScanEvent = iScanNumber,
+                    ScanEvent = scanStatistics.ScanEventNumber,
                     BasePeakIntensity = scanStatistics.BasePeakIntensity,
                     BasePeakMz = scanStatistics.BasePeakMass,
                     TotalIonCurrent = scanStatistics.TIC,
