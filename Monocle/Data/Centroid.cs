@@ -13,11 +13,19 @@ namespace Monocle.Data
             Intensity = intensity;
         }
 
-        public double Mz;
+        /// <summary>
+        /// Centroid intensity
+        /// </summary>
+        public double Mz { get; set; }
 
         /// <summary>
         /// Centroid intensity
         /// </summary>
-        public double Intensity;
+        public double Intensity { get; set; }
+
+        /// <summary>
+        /// Centroid intensity
+        /// </summary>
+        public double Noise { get; set; }
     }
 }

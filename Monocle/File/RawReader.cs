@@ -138,9 +138,9 @@ namespace Monocle.File
                 if (scanStatistics.IsCentroidScan && (scanStatistics.SpectrumPacketType == SpectrumPacketType.FtCentroid))
                 {
                     // High res data
-                    var centroidStream = rawFile.GetCentroidStream(iScanNumber, false);
+                    var centroidStream = rawFile.GetCentroidStream(iScanNumber, true);
                     PeakCount = centroidStream.Length;
-                    CentroidsFromArrays(scan, centroidStream.Masses, centroidStream.Intensities);
+                    CentroidsFromArrays(scan, centroidStream.Masses, centroidStream.Intensities, centroidStream.Noises);
                 }
                 else
                 {
@@ -160,7 +160,7 @@ namespace Monocle.File
         /// <param name="scan"></param>
         /// <param name="mzArray"></param>
         /// <param name="intensityArray"></param>
-        public void CentroidsFromArrays(Data.Scan scan, double[] mzArray, double[] intensityArray)
+        public void CentroidsFromArrays(Data.Scan scan, double[] mzArray, double[] intensityArray, double[] noise = null)
         {
             if(mzArray.Length != intensityArray.Length)
             {
@@ -174,6 +174,10 @@ namespace Monocle.File
                     Mz = mzArray[i],
                     Intensity = intensityArray[i],
                 };
+                if(noise != null)
+                {
+                    tempCentroid.Noise = noise[i];
+                }
                 scan.Centroids.Add(tempCentroid);
             }
         }
