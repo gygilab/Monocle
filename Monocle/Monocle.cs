@@ -28,6 +28,12 @@ namespace Monocle
                         continue;
                     }
 
+                    if (scan.PrecursorMasterScanNumber <= 0)
+                    {
+                        Console.WriteLine(String.Format("Scan {0} does not have a precursor scan number assigned.", scan.ScanNumber));
+                        continue;
+                    }
+
                     var NearbyMs1Scans = new List<Scan>(window * 2);
                     int scanCount = 0;
                     int index = scan.PrecursorMasterScanNumber - 1;
