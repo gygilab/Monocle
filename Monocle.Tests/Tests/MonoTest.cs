@@ -68,7 +68,7 @@ namespace Monocle.Tests.Tests
                 scans.Add(scan);
             }
             MonocleOptions options = new MonocleOptions();
-            options.AveragingVector = AveragingVector.After;
+            options.AveragingVector = AveragingVector.Both;
             Monocle.Run(ref scans, options);
 
             Assert.Equal(687.39195, scans[10].PrecursorMz, 3);
