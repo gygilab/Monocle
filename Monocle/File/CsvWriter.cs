@@ -54,7 +54,7 @@ namespace Monocle.File {
         /// Writes scan data to a line at the end of the CSV file.
         /// </summary>
         /// <param name="scan"></param>
-        public void WriteScan(Scan scan, MonocleOptions monocleOptions)
+        public void WriteScan(Scan scan)
         {
             var precursor = scan.Precursors[0];
             writer.WriteLine(scan.ScanNumber + delimiter + //scan number

@@ -60,7 +60,7 @@ namespace Monocle.File {
         /// Writes a scan tag.
         /// </summary>
         /// <param name="scan"></param>
-        public void WriteScan(Scan scan, MonocleOptions monocleOptions)
+        public void WriteScan(Scan scan)
         {
             writer.Flush();
             long pos = output.BaseStream.Position;
@@ -97,12 +97,6 @@ namespace Monocle.File {
                     writer.WriteAttributeString("activationMethod", scan.PrecursorActivationMethod.ToString());
                     writer.WriteString(precursor.Mz.ToString());
                     writer.WriteEndElement(); // precursorMz
-                    if (scan.Precursors.Count > 1 & monocleOptions.WriteSps)
-                    {
-                        writer.WriteStartElement("SPSMass");
-                        writer.WriteAttributeString("mz", precursor.Mz.ToString());
-                        writer.WriteEndElement(); // SPSMass
-                    }
                 }
             }
 

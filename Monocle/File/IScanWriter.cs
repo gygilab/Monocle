@@ -27,6 +27,6 @@ namespace Monocle.File {
         /// Writes a single scan to the output.
         /// </summary>
         /// <param name="scan">The scan to write.</param>
-        void WriteScan(Scan scan, MonocleOptions monocleOptions);
+        void WriteScan(Scan scan);
     }
 }
