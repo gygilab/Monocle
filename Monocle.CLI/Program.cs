@@ -55,7 +55,7 @@ namespace MakeMono
                 writer.Open(outputFilePath);
                 writer.WriteHeader(new ScanFileHeader());
                 foreach (Scan scan in Scans) {
-                    writer.WriteScan(scan, monocleOptions);
+                    writer.WriteScan(scan);
                 }
                 writer.Close();
                 ConditionalConsoleLine(!options.RunQuiet, "File output completed: " + outputFilePath);
