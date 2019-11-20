@@ -40,7 +40,7 @@ namespace Monocle
                     if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both)
                     {
                         // Reel backward.
-                        for (; index >= 0 && scanCount < window - 1; --index)
+                        for (; index > 0 && scanCount < window - 1; --index)
                         {
                             if (scans[index].MsOrder == 1)
                             {
