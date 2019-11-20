@@ -20,6 +20,7 @@ namespace Monocle
         {
             try
             {
+                int window = Options.Number_Of_Scans_To_Average / 2;
                 foreach (Scan scan in scans)
                 {
                     if (scan.MsOrder != Options.MS_Level)
@@ -27,7 +28,6 @@ namespace Monocle
                         continue;
                     }
 
-                    int window = Options.Number_Of_Scans_To_Average / 2;
                     var NearbyMs1Scans = new List<Scan>(window * 2);
                     int scanCount = 0;
                     int index = scan.PrecursorMasterScanNumber - 1;
