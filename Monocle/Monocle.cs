@@ -40,18 +40,16 @@ namespace Monocle
                     if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both)
                     {
                         // Reel backward.
-                        for (; index >= 0 && scanCount < window; --index)
+                        for (; index >= 0 && scanCount < window - 1; --index)
                         {
                             if (scans[index].MsOrder == 1)
                             {
                                 ++scanCount;
-                                NearbyMs1Scans.Add(scans[index]);
                             }
                         }
                     }
-                    // Collect scans.
                     scanCount = 0;
-                    index = scan.PrecursorMasterScanNumber - 1;
+                    // Collect scans.
                     for (; index < scans.Count && scanCount < window; ++index)
                     {
                         if (scans[index].MsOrder == 1)
@@ -118,7 +116,7 @@ namespace Monocle
 
                 // Generate expected relative intensities.
                 List<double> expected = PeptideEnvelopeCalculator.GetTheoreticalEnvelope(precursorMz, charge, isotopeRange.CompareSize);
-                PeptideEnvelopeCalculator.Scale(expected);
+                Vector.Scale(expected);
 
                 PeptideEnvelope envelope = PeptideEnvelopeExtractor.Extract(Ms1ScansCentroids, precursorMz, charge, isotopeRange.Left, isotopeRange.Isotopes);
 
@@ -126,9 +124,10 @@ namespace Monocle
                 for (int i = 0; i < (isotopeRange.Isotopes - (expected.Count - 1)); ++i)
                 {
                     List<double> observed = envelope.averageIntensity.GetRange(i, expected.Count);
-                    PeptideEnvelopeCalculator.Scale(observed);
-                    //double scoreP = Vector.Dot(observed, expected);
-                    double score = Pearson.P(observed, expected);
+                    Vector.Scale(observed);
+                    PeptideEnvelopeExtractor.ScaleByPeakCount(observed, envelope, i);
+                    double score = Vector.Dot(observed, expected);
+
                     // add 5% to give bias toward left peaks.
                     if (score > bestScore * 1.05)
                     {

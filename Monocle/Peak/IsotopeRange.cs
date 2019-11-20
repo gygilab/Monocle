@@ -30,13 +30,13 @@ namespace Monocle.Peak {
             if (mass > 2900)
             {
                 Isotopes = 14;
-                Left = -6;
+                Left = -7;
                 CompareSize = 7;
             }
             else if (mass > 1200)
             {
                 Isotopes = 10;
-                Left = -4;
+                Left = -5;
                 CompareSize = 5;
             }
             else

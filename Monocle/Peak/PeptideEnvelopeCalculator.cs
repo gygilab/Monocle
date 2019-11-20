@@ -48,30 +48,5 @@ namespace Monocle.Peak
         {
             return (int)System.Math.Floor((((mz * charge) - (1.00728 * charge)) / 111) * 5.1);
         }
-
-        /// <summary>
-        /// Scales all values in the input so that the max is 1
-        /// </summary>
-		/// 
-        /// <param name="x">The input list.</param>
-        public static void Scale(List<double> x)
-        {
-            double max = 0;
-            for (int j = 0; j < x.Count; ++j)
-            {
-                if (x[j] > max)
-                {
-                    max = x[j];
-                }
-            }
-            if (max > 0)
-            {
-                for (int j = 0; j < x.Count; ++j)
-                {
-                    x[j] = x[j] / max;
-                }
-            }
-        }
-
     }
 }

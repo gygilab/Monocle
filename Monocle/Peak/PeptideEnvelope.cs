@@ -11,16 +11,18 @@ namespace Monocle.Peak
 
         public List<double> averageIntensity;
 
-        public PeptideEnvelope(int numIsotopes)
+        public int MaxPeakCount;
+
+        public PeptideEnvelope(int numIsotopes, int reserve)
         {
-            mzs = new List<List<double>>();
-            intensities = new List<List<double>>();
+            mzs = new List<List<double>>(numIsotopes);
+            intensities = new List<List<double>>(numIsotopes);
             for (int i = 0; i < numIsotopes; ++i)
             {
-                mzs.Add(new List<double>());
-                intensities.Add(new List<double>());
+                mzs.Add(new List<double>(reserve));
+                intensities.Add(new List<double>(reserve));
             }
-            averageIntensity = new List<double>();
+            averageIntensity = new List<double>(reserve);
         }
     }
 }
