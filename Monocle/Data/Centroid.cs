@@ -7,10 +7,11 @@ namespace Monocle.Data
     /// </summary>
     public struct Centroid
     {
-        public Centroid(double mz, double intensity)
+        public Centroid(double mz, double intensity, double noise = 0)
         {
             Mz = mz;
             Intensity = intensity;
+            Noise = noise;
         }
 
         /// <summary>

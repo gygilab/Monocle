@@ -101,9 +101,6 @@ namespace Monocle.File
                         case "Elapsed Scan Time (sec):":
                             scan.ElapsedScanTime = double.Parse(trailer.Values[i]);
                             break;
-                        case "Monoisotopic M/Z:":
-                            scan.PrecursorMz = double.Parse(trailer.Values[i]);
-                            break;
                         case "Charge State:":
                             scan.PrecursorCharge = int.Parse(trailer.Values[i]);
                             break;

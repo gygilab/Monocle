@@ -120,7 +120,7 @@ namespace Monocle
 
                 PeptideEnvelope envelope = PeptideEnvelopeExtractor.Extract(Ms1ScansCentroids, precursorMz, charge, isotopeRange.Left, isotopeRange.Isotopes);
 
-                // Get best match using pearson correlation.
+                // Get best match using dot product.
                 for (int i = 0; i < (isotopeRange.Isotopes - (expected.Count - 1)); ++i)
                 {
                     List<double> observed = envelope.averageIntensity.GetRange(i, expected.Count);
