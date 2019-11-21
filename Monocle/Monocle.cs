@@ -40,7 +40,7 @@ namespace Monocle
                     if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both)
                     {
                         // Reel backward.
-                        for (; index > 0 && scanCount < window - 1; --index)
+                        for (; index > 0 && scanCount < window; --index)
                         {
                             if (scans[index].MsOrder == 1)
                             {
@@ -83,7 +83,10 @@ namespace Monocle
         /// <param name="DependentScan"></param>
         public static void Run(List<Scan> Ms1ScansCentroids, Scan ParentScan, Scan DependentScan, MonocleOptions Options)
         {
-            double precursorMz = DependentScan.PrecursorMz; // This should be precursorMz or raw mono?
+            double precursorMz = DependentScan.IsolationMz;
+            if (precursorMz < 1) {
+                precursorMz = DependentScan.PrecursorMz;
+            }
             int precursorCharge = DependentScan.PrecursorCharge;
 
             // For charge detection
@@ -139,7 +142,7 @@ namespace Monocle
                             bestIndex = i + 1;
                             bestCharge = charge;
                             bestPeaks = envelope.mzs[bestIndex];
-                            bestPeakIntensities = envelope.mzs[bestIndex];
+                            bestPeakIntensities = envelope.intensities[bestIndex];
                         }
                     }
                 }

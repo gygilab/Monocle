@@ -163,6 +163,11 @@ namespace Monocle.Data
             get { return Precursors[0].Intensity; }
             set { Precursors[0].Intensity = value; }
         }
+
+        public double IsolationMz {
+            get { return Precursors[0].IsolationMz; }
+            set { Precursors[0].IsolationMz = value; }
+        }
  
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
