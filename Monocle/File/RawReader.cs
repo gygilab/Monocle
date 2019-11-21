@@ -1,6 +1,5 @@
 ﻿using Monocle.Data;
 using System;
-using System.Linq;
 using System.IO;
 using ThermoFisher.CommonCore.Data.Business;
 using ThermoFisher.CommonCore.Data.FilterEnums;
@@ -81,8 +80,15 @@ namespace Monocle.File
                 // handle dependent scans and not SPS (processed below)
                 if (scan.MsOrder > 1)
                 {
-                    IReaction reaction = scanEvent.GetReaction(0);
-                    scan.PrecursorMz = reaction.PrecursorMass;
+                    scan.Precursors.Clear();
+                    for (int i = 0; i < scanEvent.MassCount; ++i){
+                        var reaction = scanEvent.GetReaction(i);
+                        var precursor = new Data.Precursor();
+                        precursor.IsolationWidth = reaction.IsolationWidth;
+                        precursor.IsolationMz = reaction.PrecursorMass;
+                        precursor.Mz = reaction.PrecursorMass;
+                        scan.Precursors.Add(precursor);
+                    }
                 }
 
                 RunHeader runHeader = rawFile.RunHeader;
