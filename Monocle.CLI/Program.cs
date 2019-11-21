@@ -1,5 +1,4 @@
-﻿using CommandLine;
-using Monocle;
+﻿using Monocle;
 using Monocle.Data;
 using Monocle.File;
 using System;
@@ -10,137 +9,71 @@ namespace MakeMono
 {
     internal class Program
     {
-        /// <summary>
-        /// MakeMono Input options
-        /// </summary>
-        public class Options
-        {
-            [Option('f', "File", Required = true, HelpText = "Input file for monoisotopic peak correction")]
-            public string InputFilePath { get; set; } = "";
-            [Option('n', "NumOfScans", Required = false, HelpText = "The number of scans to average, default: +/- 6")]
-            public int NumOfScans { get; set; }
-            [Option('c', "ChargeDetection", Required = false, HelpText = "Toggle charge detection, default: false | F")]
-            public bool ChargeDetection { get; set; } = false;
-            [Option('z', "CustomChargeRange", Required = false, HelpText = "Set charge range, default: 2:6, max: -100/100")]
-            public string ChargeRange { get; set; }
-            [Option('q', "QuietRun", Required = false, HelpText = "Do not display file progress in console.")]
-            public bool RunQuiet { get; set; } = false;
-            [Option('o', "OutputFileType", Required = false, HelpText = "Choose to output an mzXML (mzxml | 0) or CSV file (csv | 1).")]
-            public OutputFileType outputFileType { get; set; } = OutputFileType.mzxml;
-        }
-
         static void Main(string[] args)
         {
-            Console.WriteLine("MakeMono, a console application wrapper for Monocle.");
-            FileProcessor Processor = new FileProcessor();
 
-            if (args.Length < 1)
-            {
-                Console.WriteLine("The first argument should be a valid input type (e.g. mzXML)");
-                Console.WriteLine("Example: MakeMono.exe 'C:\\MY_FILE.mzXML'");
-                return;
-            }
-            
-            string filePath = "";
-            Monocle.Monocle.MonocleOptions tempOptions = new Monocle.Monocle.MonocleOptions();
-            /// Parse input arguments
-            Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(opt =>
-            {
-                if (Processor.files.Add(opt.InputFilePath))
+                Console.WriteLine("MakeMono, a console application wrapper for Monocle.");
+                var parser = new CliOptionsParser();
+                MakeMonoOptions options = parser.Parse(args);
+                string file = options.InputFilePath;
+
+                MonocleOptions monocleOptions = new MonocleOptions
                 {
-                    filePath = opt.InputFilePath;
-                    Files.ExportPath = Path.GetFullPath(opt.InputFilePath).Replace(Path.GetFileName(opt.InputFilePath), "");
+                    AveragingVector = AveragingVector.Both,
+                    Charge_Detection = options.ChargeDetection,
+                    Charge_Range = new ChargeRange(options.ChargeRange),
+                    MS_Level = options.MS_Level,
+                    Number_Of_Scans_To_Average = options.NumOfScans,
+                    WriteDebugString = options.WriteDebug
+                };
+
+            try
+            {
+                ConditionalConsoleLine(!options.RunQuiet, "Start Processing.");
+                IScanReader reader = ScanReaderFactory.GetReader(file);
+                reader.Open(file);
+                ConditionalConsoleLine(!options.RunQuiet, "Begin reading scans: " + file);
+                List<Scan> Scans = new List<Scan>();
+                foreach (Scan scan in reader)
+                {
+                    Scans.Add(scan);
                 }
-                else
+                ConditionalConsoleLine(!options.RunQuiet, "All scans read in.");
+                try
                 {
-                    HandleParseError("The input file is not an acceptable type or does not exist: the file extension should be: .mzXML or .RAW");
+                    Monocle.Monocle.Run(ref Scans, monocleOptions);
+                }
+                catch(Exception ex)
+                {
+                    ConditionalConsoleLine(monocleOptions.WriteDebugString, "~~!!!!Monocle encountered an error while running!!!!~~");
+                    ConditionalConsoleLine(monocleOptions.WriteDebugString, ex.ToString());
                     return;
                 }
-
-                if (opt.NumOfScans > 0 && opt.NumOfScans < 50)
-                {
-                    MZXML.Num_Ms1_Scans_To_Average = opt.NumOfScans;
+                ConditionalConsoleLine(!options.RunQuiet, "Finished monoisotopic assignment.");
+                IScanWriter writer = ScanWriterFactory.GetWriter(file, options.OutputFileType);
+                string outputFilePath = Path.Join(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + "_monocle." + options.OutputFileType.ToString());
+                writer.Open(outputFilePath);
+                writer.WriteHeader(new ScanFileHeader());
+                foreach (Scan scan in Scans) {
+                    writer.WriteScan(scan);
                 }
-
-                Processor.outputFileType = opt.outputFileType;
-                Console.WriteLine("Output file type set to: " + Processor.outputFileType.ToString());
-
-                if (opt.RunQuiet)
-                {
-                    silenceConsole = true;
-                }
-
-                if(opt.ChargeDetection)
-                {
-                    tempOptions.Charge_Detection = true;
-
-                    Console.WriteLine("Using Charge Detection");
-                    if (opt.ChargeRange != null && opt.ChargeRange != "")
-                    {
-                        Console.WriteLine("Charge Detection Range: " + opt.ChargeRange);
-                        ChargeRange cr = new ChargeRange(opt.ChargeRange);
-                        // This only works for positively charged precursors
-                        if (cr.Low > 0 && cr.Low <= cr.High && cr.High < 100)
-                        {
-                            tempOptions.Charge_Range = cr;
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Charge Detection Range: default 2-6");
-                        tempOptions.Charge_Range = new ChargeRange(2,6);
-                    }
-                }
-
-            }).WithNotParsed<Options>((errs) => HandleParseError(errs));
-
-            Processor.ResetMonocleOptions(tempOptions);
-
-            Processor.FileTracker += FileListener;
-            /// RUN MONOCLE:
-            Processor.Run(true);
-        }
-
-        private static bool silenceConsole = false;
-
-        private static void FileListener(object sender, FileEventArgs e)
-        {
-            if (!silenceConsole)
-            {
-                if (e.FilePath != "" && e.Finished)
-                {
-                    Console.WriteLine("File Finished: " + e.FilePath);
-                }
-                else if (e.FilePath != "" && e.Written)
-                {
-                    Console.WriteLine("Writing Complete: " + e.FilePath);
-                }
-                else if (e.FilePath != "" && e.Processed)
-                {
-                    Console.WriteLine("Processing Complete: " + e.FilePath);
-                }
-                else if (e.FilePath != "" && e.Read)
-                {
-                    Console.WriteLine("File Read Complete: " + e.FilePath);
-                }
+                writer.Close();
+                ConditionalConsoleLine(!options.RunQuiet, "File output completed: " + outputFilePath);
             }
-
-        }
-
-        private static void HandleParseError(IEnumerable<Error> Errors)
-        {
-            foreach(Error error in Errors)
-            {
-                if(error.Tag != ErrorType.VersionRequestedError && error.Tag != ErrorType.HelpRequestedError)
-                {
-                    Console.WriteLine("Error: " + error.Tag.ToString());
-                }
+            catch(Exception e) {
+                Console.WriteLine("An error occurred.");
+                ConditionalConsoleLine(monocleOptions.WriteDebugString, e.GetType().ToString());
+                ConditionalConsoleLine(monocleOptions.WriteDebugString, e.Message);
+                ConditionalConsoleLine(monocleOptions.WriteDebugString, e.ToString());
             }
         }
 
-        private static void HandleParseError(string error)
+        public static void ConditionalConsoleLine(bool writeLine, string newLine)
         {
-            Console.WriteLine("Error: " + error);
+            if (writeLine)
+            {
+                Console.WriteLine(DateTime.Now.ToString() + ": " + newLine);
+            }
         }
     }
 }

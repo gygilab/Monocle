@@ -14,7 +14,7 @@ namespace Monocle.Peak
         {
             int i = NearestIndex(scan, targetMz);
 
-            int count = scan.CentroidCount;
+            int count = scan.PeakCount;
             bool foundNext = false;
             double errorNext = 0;
             if (i < count)
@@ -57,7 +57,7 @@ namespace Monocle.Peak
         private static int NearestIndex(Scan scan, double target)
         {
             int low = 0;
-            int high = scan.CentroidCount;
+            int high = scan.PeakCount;
             int mid = 0;
 
             while (true)

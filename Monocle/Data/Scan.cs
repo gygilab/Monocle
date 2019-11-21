@@ -1,8 +1,6 @@
-﻿using Monocle.File;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Monocle.Data
 {
@@ -11,371 +9,166 @@ namespace Monocle.Data
     /// </summary>
     public class Scan : IDisposable
     {
-        const double protonMass = 1.007276466879000;
-
-        public int ScanNumber { get; set; }
-        public int ScanEvent { get; set; }
-        public int MsOrder { get; set; }
-        public int PeakCount { get; set; } = 0;
-        public int MasterIndex { get; set; }
-        public string ScanDescription { get; set; } = "";
-        public double IonInjectionTime { get; set; }
-        public double ElapsedScanTime { get; set; }
-        private bool _Polarity { get; set; } = true;
-        public string Polarity
-        {
-            get
-            {
-                if (_Polarity)
-                {
-                    return "+";
-                }
-                else
-                {
-                    return "-";
-                }
-            }
-            set
-            {
-                if (value == "-")
-                {
-                    _Polarity = false;
-                }
-                else
-                {
-                    _Polarity = true;
-                }
-            }
-        }
-        public string ScanType { get; set; } = "";
-        public string FilterLine { get; set; } = "";
-        public string RetentionTimeString { get; set; } = "";
-        private double _RetentionTime { get; set; } = 0;
-        public double RetentionTime {
-            get
-            {
-                return _RetentionTime;
-            }
-            set
-            {
-                _RetentionTime = value;
-                RetentionTimeString = "PT" + value.ToString();
-            }
-        }
-        public double StartMz { get; set; }
-        public double EndMz { get; set; }
-        public double LowestMz { get; set; }
-        public double HighestMz { get; set; }
-        public double BasePeakMz { get; set; }
-        public double BasePeakIntensity { get; set; } = 0;
-        public int FaimsCV { get; set; } = 0;
-        public double MonoisotopicMz { get; set; }
-        private int? _MonoisotopicCharge { get; set; } = null;
-        public int? MonoisotopicCharge {
-            get
-            {
-                if (_MonoisotopicCharge == null)
-                {
-                    return PrecursorCharge;
-                }
-                else
-                {
-                    return _MonoisotopicCharge;
-                }
-            }
-            set
-            {
-                if(value == null || System.Math.Abs((int)value) < 100)
-                {
-                    _MonoisotopicCharge = value;
-                }
-            }
-        }
-        public double MonoisotopicMH
-        {
-            get
-            {
-                return (MonoisotopicMz * PrecursorCharge) - (protonMass * (PrecursorCharge - 1));
-            }
-        }
         /// <summary>
-        /// MSn
+        /// Constructor for Scan class.
+        /// </summary>
+        public Scan() {
+            Precursors = new List<Precursor>(1);
+            Precursors.Add(new Precursor());
+        }
+
+        /// <summary>
+        /// Current scan number
+        /// </summary>
+        public int ScanNumber { get; set; }
+
+        /// <summary>
+        /// Scan event order
+        /// </summary>
+        public int ScanEvent { get; set; }
+
+        /// <summary>
+        /// The scan order (e.g. 1 = MS1, 2 = MS2, 3 = MS3, MSn)
+        /// </summary>
+        public int MsOrder { get; set; }
+
+        /// <summary>
+        /// Total number of peaks in the current scan
+        /// </summary>
+        public int PeakCount { get; set; }
+
+        /// <summary>
+        /// Thermo variable for master scan number
+        /// </summary>
+        public int MasterIndex { get; set; }
+
+        /// <summary>
+        /// The current scan description
+        /// </summary>
+        public string ScanDescription { get; set; }
+
+        /// <summary>
+        /// Injection time used to acquire the scan ions (milliseconds, max = 5000)
+        /// </summary>
+        public double IonInjectionTime { get; set; }
+
+        /// <summary>
+        /// Total time, including injection time, to acquire the current scan (milliseconds)
+        /// </summary>
+        public double ElapsedScanTime { get; set; }
+
+        /// <summary>
+        /// Bool representation of polarity (true = positive)
+        /// </summary>
+        public Polarity Polarity { get; set; } = Polarity.Positive;
+
+        /// <summary>
+        /// String description of scan type
+        /// </summary>
+        public string ScanType { get; set; }
+
+        /// <summary>
+        /// Scan filter line from RAW file
+        /// </summary>
+        public string FilterLine { get; set; }
+
+        /// <summary>
+        /// Scan retention time (minutes)
+        /// </summary>
+        public double RetentionTime { get; set; } = 0;
+
+        /// <summary>
+        /// Mz that scan starts at
+        /// </summary>
+        public double StartMz { get; set; }
+
+        /// <summary>
+        /// Mz that scan ends at
+        /// </summary>
+        public double EndMz { get; set; }
+
+        /// <summary>
+        /// Lowest Mz observed in scan
+        /// </summary>
+        public double LowestMz { get; set; }
+
+        /// <summary>
+        /// Highest Mz observed in scan
+        /// </summary>
+        public double HighestMz { get; set; }
+        /// <summary>
+        /// The most intense Mz peak in the scan
+        /// </summary>
+        public double BasePeakMz { get; set; }
+
+        public double BasePeakIntensity { get; set; }
+
+        /// <summary>
+        /// FAIMS compensation voltage, if used (in volts)
+        /// </summary>
+        public int FaimsCV { get; set; }
+        
+        /// <summary>
+        /// Total ion current for the current scan
         /// </summary>
         public double TotalIonCurrent { get; set; }
+
+        /// <summary>
+        /// If a dependent scan, the fragmentation energy used
+        /// </summary>
         public double CollisionEnergy { get; set; }
+        
         /// <summary>
-        /// Precursors
+        /// If a dependent scan, the parent scan number
         /// </summary>
-        public double PrecursorMz { get; set; }
-        public double PrecursorMH { get
-            {
-                return (PrecursorMz * PrecursorCharge) - (protonMass * (PrecursorCharge - 1));
-            }
-        }
         public int PrecursorMasterScanNumber { get; set; }
-        public double PrecursorMz2 { get; set; }
-        public int PrecursorCharge { get; set; }
-        public double PrecursorIntensity { get; set; }
-        public string PrecursorActivationMethod { get; set; } = "";
-        public int CentroidCount { get; private set; }
-        public List<double> SpsIons { get; set; } = new List<double>();
-        public string SpsIonsString
-        {
-            get
-            {
-                if(SpsIons.Count > 0)
-                {
-                    return String.Join(",", SpsIons.ToArray());
-                }
-                else
-                {
-                    return "";
-                }
-            }
-            set
-            {
-                string tempString = value.Trim();
-                if(tempString != "" && tempString != null && tempString != String.Empty)
-                {
-                    List<string> tempStringList = value.Split(',').Where(c => c.Trim() != "").ToList();
-                    SpsIons = tempStringList.Select(b => double.Parse(b.Trim())).ToList();
-                    PrecursorMz = SpsIons.First();
-                }
-            }
-        }
+        
         /// <summary>
-        /// Peaks
+        /// If a dependent scan, the activation method used to generate the scan fragments
         /// </summary>
-        public List<Centroid> Centroids { get; set; } = new List<Centroid>();
-        public int PeaksPrecision { get; set; }
-        public string PeaksByteOrder { get; set; } = "";
-        public string PeaksContentType { get; set; } = "";
-        public string PeaksCompressionType { get; set; } = "";
-        public int PeaksCompressedLength { get; set; }
-        public string Peaks
-        {
-            get
-            {
-                return MZXML.WritePeaks(Centroids);
-            }
-            set
-            {
-                if(PeakCount > 0 && value != "")
-                {
-                    Centroids = MZXML.ReadPeaks(value, PeakCount);
-                    CentroidCount = Centroids.Count();
-                }
-            }
-        }
+        public string PrecursorActivationMethod { get; set; }
+        
+        /// <summary>
+        /// The observed centroid peaks in the scan
+        /// </summary>
+        public List<Centroid> Centroids = new List<Centroid>();
 
         /// <summary>
-        /// Output data
+        /// Holds precursor information for dependent scans.
+        /// There may be multiple precursors for a single scan.
         /// </summary>
-        public double PrecursorIsolationSpecificity { get; set; } = 0;
-        public double PrecursorIsolationWidth { get; set; } = 0.5;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="outputMz"></param>
+        /// <typeparam name="Precursor"></typeparam>
         /// <returns></returns>
-        public double[] CentroidsToArray(bool outputMz)
-        {
-            if(Centroids == null)
-            {
-                return null;
-            }
-            double[] tempArray = new double[CentroidCount];
+        public List<Precursor> Precursors { get; set; } = new List<Precursor>();
 
-            for(int i = 0; i < CentroidCount; i++)
-            {
-                tempArray[i] = (outputMz) ? Centroids[i].Mz : Centroids[i].Intensity;
-            }
-
-            return tempArray;
-        }
-
-        public void CentroidsFromArrays(double[] mzArray, double[] intensityArray)
-        {
-            if(mzArray.Length != intensityArray.Length)
-            {
-                throw new Exception(" Error: MZ and Intensity Arrays of unequal length.");
-            }
-            PeakCount = mzArray.Length;
-            for (int i = 0; i < mzArray.Length; i++)
-            {
-                Centroid tempCentroid = new Centroid()
-                {
-                    Mz = mzArray[i],
-                    Intensity = intensityArray[i],
-                };
-                Centroids.Add(tempCentroid);
-            }
+        /// <summary>
+        /// Returns the m/z of the first precursor. 
+        /// </summary>
+        /// <value></value>
+        public double PrecursorMz {
+            get { return Precursors[0].Mz; }
+            set { Precursors[0].Mz = value; }
         }
 
         /// <summary>
-        /// Check and set attribute based on attributes dictionary
+        /// Returns the charge of the first precursor.
         /// </summary>
-        /// <param name="attribute"></param>
-        /// <param name="value"></param>
-        public void CheckSetMzxmlValue(string attribute, string value)
-        {
-            string tempAttr = "";
-            if (mzxmlAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlAttributes[attribute];
-            }
-            else if (mzxmlPrecursorAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlPrecursorAttributes[attribute];
-            }
-            else if (mzxmlPeaksAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlPeaksAttributes[attribute];
-            }
-            else if (mzxmlMsnAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlMsnAttributes[attribute];
-            }
-
-            if (tempAttr != "")
-            {
-                PropertyInfo piTmp;
-                double dTmp; bool bTmp;
-                if (typeof(Scan).GetProperty(tempAttr) != null) //check names even though readOnly DGV
-                {
-                    piTmp = typeof(Scan).GetProperty(tempAttr);
-
-                    if (piTmp.PropertyType == typeof(int) && Int32.TryParse(value, out int iTmp))
-                    {
-                        piTmp.SetValue(this, iTmp);
-                    }
-                    else if (piTmp.PropertyType == typeof(string))
-                    {
-                        piTmp.SetValue(this, value);
-                    }
-                    else if (piTmp.PropertyType == typeof(double) && Double.TryParse(value, out dTmp))
-                    {
-                        piTmp.SetValue(this, dTmp);
-                    }
-                    else if (piTmp.PropertyType == typeof(bool) && Boolean.TryParse(value, out bTmp))
-                    {
-                        piTmp.SetValue(this, bTmp);
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// Check and GET attribute based on attributes dictionary
-        /// </summary>
-        /// <param name="attribute"></param>
-        /// <param name="value"></param>
-        public string CheckGetMzxmlValue(string attribute)
-        {
-            string tempAttr = "";
-            if (mzxmlAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlAttributes[attribute];
-            }
-            else if (mzxmlPrecursorAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlPrecursorAttributes[attribute];
-            }
-            else if (mzxmlPeaksAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlPeaksAttributes[attribute];
-            }
-            else if (mzxmlMsnAttributes.ContainsKey(attribute))
-            {
-                tempAttr = mzxmlMsnAttributes[attribute];
-            }
-
-            if (tempAttr != "") {
-                if (typeof(Scan).GetProperty(tempAttr) != null) //check names even though readOnly DGV
-                {
-                    object output = GetType().GetProperty(tempAttr).GetValue(this, null);
-                    if(output.GetType() == typeof(int))
-                    {
-                        return int.Parse(output.ToString()).ToString();
-                    }
-                    else if (output.GetType() == typeof(bool))
-                    {
-                        return bool.Parse(output.ToString()).ToString();
-                    }
-                    else if (output.GetType() == typeof(double))
-                    {
-                        return double.Parse(output.ToString()).ToString();
-                    }
-                    else if (output.GetType() == typeof(string))
-                    {
-                        return output.ToString();
-                    }
-                    return "";
-                }
-            }
-            return null;
+        /// <value></value>
+        public int PrecursorCharge {
+            get { return Precursors[0].Charge; }
+            set { Precursors[0].Charge = value; }
         }
 
-        public Dictionary<string, string> mzxmlAttributes = new Dictionary<string, string>()
-        {
-            { "num" , "ScanNumber" },
-            { "msLevel" , "MsOrder" },
-            { "scanEvent" , "ScanEvent" },
-            { "masterIndex" , "MasterIndex" },
-            { "peaksCount" , "PeakCount" },
-            { "ionInjectionTime" , "IonInjectionTime" },
-            { "elapsedScanTime" , "ElapsedScanTime" },
-            { "polarity" , "Polarity" },
-            { "scanType" , "ScanType" },
-            { "filterLine" , "FilterLine" },
-            { "retentionTime","RetentionTimeString" },
-            { "startMz","StartMz" },
-            { "endMz","EndMz" },
-            { "lowMz","LowestMz" },
-            { "highMz","HighestMz" },
-            { "basePeakMz","BasePeakMz" },
-            { "basePeakIntensity","BasePeakIntensity" }
-        };
-
-        public Dictionary<string, string> mzxmlMsnAttributes = new Dictionary<string, string>()
-        {
-            { "totIonCurrent","TotalIonCurrent" },
-            { "collisionEnergy","CollisionEnergy" }
-        };
-
-        public Dictionary<string, string> mzxmlPrecursorAttributes = new Dictionary<string, string>()
-        {
-            // Precusor information
-            { "precursorMz","PrecursorMz" },
-            { "precursorScanNum","PrecursorMasterScanNumber" },
-            { "precursorIntensity","PrecursorIntensity" },
-            { "precursorCharge","PrecursorCharge" },
-            { "activationMethod","PrecursorActivationMethod" }
-        };
-
-        public Dictionary<string, string> mzxmlPeaksAttributes = new Dictionary<string, string>()
-        {
-            // Peaks information
-            { "peaks","Peaks" },
-            { "precision","PeaksPrecision" },
-            { "byteOrder","PeaksByteOrder" },
-            { "contentType","PeaksContentType" },
-            { "compressionType", "PeaksCompressionType" },
-            { "compressedLen", "PeaksCompressedLength" }
-        };
-
-        public double CalculateIsolationSpecificity(Centroid centroid, double isolationWindow)
-        {
-            double halfIsolationWindow = isolationWindow / 2;
-
-            List<Centroid> tempCentroid = new List<Centroid>();
-            tempCentroid = Centroids.Where(x => x.Mz <= centroid.Mz + halfIsolationWindow && x.Mz >= centroid.Mz - halfIsolationWindow).ToList();
-
-            double isolationSpecificity = centroid.Intensity / tempCentroid.Sum(cent => cent.Intensity);
-
-            return isolationSpecificity;
+        public double PrecursorIntensity {
+            get { return Precursors[0].Intensity; }
+            set { Precursors[0].Intensity = value; }
         }
 
+        public double IsolationMz {
+            get { return Precursors[0].IsolationMz; }
+            set { Precursors[0].IsolationMz = value; }
+        }
+ 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 

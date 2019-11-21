@@ -36,6 +36,11 @@ namespace Monocle.Peak
 		/// precursor m/z and charge.
         /// </summary>
 		/// 
+        /// Original monocle: mz = 111; carbons = 5.1
+        /// Senko et al 1995: mz = 111.1254; carbons = 4.9384
+        /// DKS Uniprot TREMBL 2019_08: mz = 110.3963; carbons = 4.9243
+        /// Quantities represent frequency weighted means of mz and # of carbons
+        /// 
         /// <returns>Number of carbons</returns>
         /// <param name="mz">mz</param>
         /// <param name="charge">charge</param>
@@ -43,30 +48,5 @@ namespace Monocle.Peak
         {
             return (int)System.Math.Floor((((mz * charge) - (1.00728 * charge)) / 111) * 5.1);
         }
-
-        /// <summary>
-        /// Scales all values in the input so that the max is 1
-        /// </summary>
-		/// 
-        /// <param name="x">The input list.</param>
-        public static void Scale(List<double> x)
-        {
-            double max = 0;
-            for (int j = 0; j < x.Count; ++j)
-            {
-                if (x[j] > max)
-                {
-                    max = x[j];
-                }
-            }
-            if (max > 0)
-            {
-                for (int j = 0; j < x.Count; ++j)
-                {
-                    x[j] = x[j] / max;
-                }
-            }
-        }
-
     }
 }

@@ -5,66 +5,28 @@ namespace Monocle.Data
     /// <summary>
     /// for pulling spectral information from API scans
     /// </summary>
-    public class Centroid : IComparable
+    public struct Centroid
     {
-        public Centroid()
-        {
-
-        }
-
-        public Centroid(double mz, double intensity)
+        public Centroid(double mz, double intensity, double noise = 0)
         {
             Mz = mz;
             Intensity = intensity;
+            Noise = noise;
         }
 
-        private double mz = 500;
-        public double Mz
-        {
-            get
-            {
-                return mz;
-            }
-            set
-            {
-                iBin = Bin.AssignBin(value);
-                mz = value;
-            }
-        }
-        public double Precursor { get; set; } = 500;
-        public double Intensity { get; set; } = 0;
-        public double Noise { get; set; } = 0;
-        public int iBin { get; private set; } = 0;
-        public double IsolationSpecificity { get; set; } = 0;
+        /// <summary>
+        /// Centroid intensity
+        /// </summary>
+        public double Mz { get; set; }
 
-        public int CompareTo(object obj)
-        {
-            if (obj == null) return 1;
+        /// <summary>
+        /// Centroid intensity
+        /// </summary>
+        public double Intensity { get; set; }
 
-            if (obj is Centroid otherCentroid)
-            {
-                return Intensity.CompareTo(otherCentroid.Intensity);
-            }
-            else
-            {
-                throw new ArgumentException("Object is not a Centroid");
-            }
-        }
-    }
-
-    /// <summary>
-    /// Bin m/z values based on the Comet binning approach
-    /// </summary>
-    public static class Bin
-    {
-        public static double fragment_bin_tol { get; set; } = 1;
-        public static double fragment_bin_offset { get; set; } = 0.4;
-        public static double dInverseBinWidth { get; } = 1 / fragment_bin_tol;
-        public static double dOneMinusBinOffset { get; } = 1.0 - fragment_bin_offset;
-
-        public static int AssignBin(double dMass)
-        {
-            return (int)(dMass * dInverseBinWidth + dOneMinusBinOffset);
-        }
+        /// <summary>
+        /// Centroid intensity
+        /// </summary>
+        public double Noise { get; set; }
     }
 }

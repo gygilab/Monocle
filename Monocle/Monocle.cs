@@ -11,61 +11,67 @@ namespace Monocle
     public static class Monocle
     {
         /// <summary>
-        /// Flexible options stack to run monocle
-        /// </summary>
-        public class MonocleOptions
-        {
-            public int Number_Of_Scans_To_Average { get; set; } = 12;
-            public AveragingVector AveragingVector { get; set; } = AveragingVector.Both;
-            public bool Charge_Detection { get; set; } = false;
-            /// <summary>
-            /// Default to charges 2 - 6.
-            /// </summary>
-            public ChargeRange Charge_Range { get; set; } = new ChargeRange(2, 6);
-        }
-
-        public enum AveragingVector
-        {
-            Before,
-            After,
-            Both
-        }
-
-        /// <summary>
         /// Overload to handle all available scans allowing for Ms1 inclusion of before + after
         /// </summary>
         /// <param name="AllScans"></param>
         /// <param name="DependentScan"></param>
         /// <param name="Number_Of_Scans_To_Average"></param>
-        public static void Run(ref List<Scan> AllScans, MonocleOptions Options)
+        public static void Run(ref List<Scan> scans, MonocleOptions Options)
         {
-            foreach (Scan scan in AllScans)
+            try
             {
-                if (scan.MsOrder == 1)
+                int window = Options.Number_Of_Scans_To_Average / 2;
+                foreach (Scan scan in scans)
                 {
-                    continue;
-                }
+                    if (scan.MsOrder != Options.MS_Level)
+                    {
+                        continue;
+                    }
 
-                int masterScanNumber = scan.PrecursorMasterScanNumber;
-                int currentScanNumber = scan.ScanNumber;
-                Scan PrecursorScan = AllScans.Where(b => b.PrecursorMasterScanNumber == masterScanNumber).First();
-                List<Scan> NearbyMs1Scans = new List<Scan>();
-                int plusMinusN = (Options.Number_Of_Scans_To_Average / 2);
-                if (Options.AveragingVector == AveragingVector.Both)
-                {
-                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).Take(plusMinusN).ToList();
-                    NearbyMs1Scans.AddRange(AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).Take(plusMinusN).ToList());
+                    if (scan.PrecursorMasterScanNumber <= 0)
+                    {
+                        Console.WriteLine(String.Format("Scan {0} does not have a precursor scan number assigned.", scan.ScanNumber));
+                        continue;
+                    }
+
+                    var NearbyMs1Scans = new List<Scan>(window * 2);
+                    int scanCount = 0;
+                    int index = scan.PrecursorMasterScanNumber - 1;
+                    if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both)
+                    {
+                        // Reel backward.
+                        for (; index > 0 && scanCount < window; --index)
+                        {
+                            if (scans[index].MsOrder == 1)
+                            {
+                                ++scanCount;
+                            }
+                        }
+                    }
+                    scanCount = 0;
+                    // Collect scans.
+                    for (; index < scans.Count && scanCount < window; ++index)
+                    {
+                        if (scans[index].MsOrder == 1)
+                        {
+                            if (scans[index].ScanNumber > scan.PrecursorMasterScanNumber)
+                            {
+                                if (Options.AveragingVector == AveragingVector.Before)
+                                {
+                                    break;
+                                }
+                                ++scanCount;
+                            }
+                            NearbyMs1Scans.Add(scans[index]);
+                        }
+                    }
+                    Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
+                    Run(NearbyMs1Scans, precursorScan, scan, Options);
                 }
-                else if (Options.AveragingVector == AveragingVector.Before)
-                {
-                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber < currentScanNumber).OrderBy(b => currentScanNumber - b.ScanNumber).Take(plusMinusN).ToList();
-                }
-                else if (Options.AveragingVector == AveragingVector.After)
-                {
-                    NearbyMs1Scans = AllScans.Where(c => c.MsOrder == 1 && c.ScanNumber > currentScanNumber).OrderBy(b => b.ScanNumber - currentScanNumber).Take(plusMinusN).ToList();
-                }
-                Scan[] Ms1ScansCentroids = NearbyMs1Scans.ToArray();
-                Run(Ms1ScansCentroids, PrecursorScan, scan, Options);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Monocle Run Error: " + ex);
             }
         }
 
@@ -75,136 +81,87 @@ namespace Monocle
         /// <param name="Ms1ScansCentroids"></param>
         /// <param name="ParentScan"></param>
         /// <param name="DependentScan"></param>
-        public static void Run(Scan[] Ms1ScansCentroids, Scan ParentScan, Scan DependentScan, MonocleOptions Options)
+        public static void Run(List<Scan> Ms1ScansCentroids, Scan ParentScan, Scan DependentScan, MonocleOptions Options)
         {
-            try
+            double precursorMz = DependentScan.IsolationMz;
+            if (precursorMz < 1) {
+                precursorMz = DependentScan.PrecursorMz;
+            }
+            int precursorCharge = DependentScan.PrecursorCharge;
+
+            // For charge detection
+            int bestCharge = 0;
+            double bestScore = -1;
+            int bestIndex = 0;
+            List<double> bestPeaks = new List<double>();
+            List<double> bestPeakIntensities = new List<double>();
+
+            //Create new class to maintain ref class options
+            ChargeRange chargeRange = new ChargeRange(precursorCharge, precursorCharge);
+            if (Options.Charge_Detection)
             {
-                double precursorMz = DependentScan.PrecursorMz; // This should be precursorMz or raw mono?
-                int precursorCharge = DependentScan.PrecursorCharge;
+                chargeRange.Low = Options.Charge_Range.Low;
+                chargeRange.High = Options.Charge_Range.High;
+            }
+            
+            for (int charge = chargeRange.Low; charge <= chargeRange.High; charge++)
+            {
+                // Restrict number of isotopes to consider based on precursor mass.
+                double mass = DependentScan.PrecursorMz * charge;
+                var isotopeRange = new IsotopeRange(mass);
 
-                // For number of isotopes to consider
-                int numIsotopes = 0;
-                int monoisotopicIndex = 0;
-                int numTheo = 4;
-                int left = -7;
-
-                // For charge detection
-                int best_charge = 0;
-                double best_score = -1;
-                int bestIndex = monoisotopicIndex;
-                double newMonoisotopicMz = 0;
-
-                //Create new class to maintain ref class options
-                ChargeRange chargeRange = new ChargeRange(precursorCharge, precursorCharge);
-                if (Options.Charge_Detection)
+                // Search for ion in parent scan, use parent ion mz for future peaks
+                int index = PeakMatcher.Match(ParentScan, precursorMz, 50, PeakMatcher.PPM);
+                if (index >= 0)
                 {
-                    chargeRange.Low = Options.Charge_Range.Low;
-                    chargeRange.High = Options.Charge_Range.High;
+                    precursorMz = ParentScan.Centroids[index].Mz;
                 }
 
-                for (int charge_iterator = chargeRange.Low; charge_iterator <= chargeRange.High; charge_iterator++)
+                // Generate expected relative intensities.
+                List<double> expected = PeptideEnvelopeCalculator.GetTheoreticalEnvelope(precursorMz, charge, isotopeRange.CompareSize);
+                Vector.Scale(expected);
+
+                PeptideEnvelope envelope = PeptideEnvelopeExtractor.Extract(Ms1ScansCentroids, precursorMz, charge, isotopeRange.Left, isotopeRange.Isotopes);
+
+                // Get best match using dot product.
+                for (int i = 0; i < (isotopeRange.Isotopes - (expected.Count - 1)); ++i)
                 {
-                    double mass = DependentScan.PrecursorMz * charge_iterator;
-                    // Restrict number of isotopes to consider based on precursor mass.
-                    if (mass > 2900)
+                    List<double> observed = envelope.averageIntensity.GetRange(i, expected.Count);
+                    Vector.Scale(observed);
+                    PeptideEnvelopeExtractor.ScaleByPeakCount(observed, envelope, i);
+                    double score = Vector.Dot(observed, expected);
+
+                    // add 5% to give bias toward left peaks.
+                    if (score > bestScore * 1.05)
                     {
-                        numIsotopes = 14;
-                        left = -7;
-                        numTheo = 7;
-                    }
-                    else if (mass > 1200)
-                    {
-                        numIsotopes = 10;
-                        left = -5;
-                        numTheo = 5;
-                    }
-                    else
-                    {
-                        numIsotopes = 7;
-                        left = -3;
-                        numTheo = 4;
-                    }
-
-                    monoisotopicIndex = -1 * left;
-
-                    // Search for ion in parent scan, use parent ion mz for future peaks
-                    int index = PeakMatcher.Match(ParentScan, precursorMz, 50, PeakMatcher.PPM);
-                    if (index >= 0)
-                    {
-                        precursorMz = ParentScan.Centroids[index].Mz;
-                    }
-
-                    // Generate expected relative intensities.
-                    List<double> expected = PeptideEnvelopeCalculator.GetTheoreticalEnvelope(precursorMz, charge_iterator, numTheo);
-                    PeptideEnvelopeCalculator.Scale(expected);
-
-                    PeptideEnvelope envelope = PeptideEnvelopeExtractor.Extract(Ms1ScansCentroids, precursorMz, charge_iterator, left, numIsotopes);
-
-                    // Get best match using pearson correlation.
-                    for (int i = 0; i < (numIsotopes - (expected.Count - 1)); ++i)
-                    {
-                        List<double> observed = envelope.averageIntensity.GetRange(i, expected.Count);
-                        // Scale by numpeaks
-                        PeptideEnvelopeCalculator.Scale(observed);
-                        double p = Pearson.P(observed, expected);
-
-                        if (p > best_score * 1.05)
+                        bestScore = score;
+                        if (score > 0.1)
                         {
-                            // add 5% to give bias toward left peaks.
-                            best_score = p;
-                            if (p > 0.1)
-                            {
-                                // A peak to the left is included, so add
-                                // offset to get monoisotopic index.
-                                bestIndex = i + 1;
-                                best_charge = charge_iterator;
-                                newMonoisotopicMz = CalculateMz(envelope.mzs[bestIndex], envelope.intensities[bestIndex]);
-                            }
+                            // A peak to the left is included, so add
+                            // offset to get monoisotopic index.
+                            bestIndex = i + 1;
+                            bestCharge = charge;
+                            bestPeaks = envelope.mzs[bestIndex];
+                            bestPeakIntensities = envelope.intensities[bestIndex];
                         }
                     }
-                } // end charge for loop
-
-                if (best_charge > 0)
-                {
-                    DependentScan.MonoisotopicCharge = best_charge;
                 }
+            } // end charge for loop
 
-                newMonoisotopicMz = (newMonoisotopicMz == 0) ? precursorMz : newMonoisotopicMz;
-                DependentScan.MonoisotopicMz = newMonoisotopicMz;
-            }
-            catch (Exception ex)
+            if (bestCharge > 0)
             {
-                Console.WriteLine("Run error: " + ex);
-            }
-        } // Run
-
-        /// <summary>
-        /// Calculate intensity weighted m/z for each precursor
-        /// </summary>
-        /// <param name="mzs"></param>
-        /// <param name="intensities"></param>
-        /// <returns></returns>
-        public static double CalculateMz(List<double> mzs, List<double> intensities)
-        {
-            if (mzs.Count == 0)
-            {
-                return 0;
+                DependentScan.PrecursorCharge = bestCharge;
             }
 
-            double totalWeightedMz = 0;
-            double totalMz = 0;
-            double totalIntensity = 0;
-            for (int i = 0; i < mzs.Count; ++i)
+            // Calculate m/z
+            if (bestPeaks.Count > 0)
             {
-                totalWeightedMz += mzs[i] * intensities[i];
-                totalMz += mzs[i];
-                totalIntensity += intensities[i];
+                DependentScan.PrecursorMz = Vector.WeightedAverage(bestPeaks, bestPeakIntensities);
             }
-            if (totalIntensity > 0)
+            else
             {
-                return totalWeightedMz / totalIntensity;
+                DependentScan.PrecursorMz = precursorMz;
             }
-            return totalMz / mzs.Count;
         }
     }
 }
