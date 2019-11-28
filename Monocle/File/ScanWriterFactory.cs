@@ -22,6 +22,8 @@ namespace Monocle.File
                     return new CsvWriter();
                 case ".MZXML":
                     return new MzXmlWriter();
+                case ".MZML":
+                    return new MzMlWriter();
                 default:
                     break;
             }
@@ -43,6 +45,9 @@ namespace Monocle.File
                     break;
                 case OutputFileType.mzxml:
                     ext = "mzXML";
+                    break;
+                case OutputFileType.mzml:
+                    ext = "mzML";
                     break;
                 default:
                     break;
