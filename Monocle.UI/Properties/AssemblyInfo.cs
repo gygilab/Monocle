@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MonocleUI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Monoisotopic peak assignment for Mass spectrometry")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Gygi Lab")]
 [assembly: AssemblyProduct("MonocleUI")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Monocle;
+using System.IO;
 
 namespace MonocleUI
 {
@@ -98,15 +99,18 @@ namespace MonocleUI
                         {
                             Scans.Add(scan);
                         }
-
+                        reader.Close();
                         CurrentProgress = CalculateProgress(2, filesCompleted, files.FileList.Count);
                         TrackProcess(newFile, CurrentProgress, true);
                         // Start Run across Scans
                         Monocle.Monocle.Run(ref Scans, monocleOptions);
 
                         TrackProcess(newFile, CurrentProgress, true, true);
-                        var writer = new CsvWriter();
-                        writer.Open(newFile);
+                        string outputFilePath = Path.Combine(Path.GetDirectoryName(newFile), Path.GetFileNameWithoutExtension(newFile) +
+                            "_monocle." + monocleOptions.OutputFileType.ToString());
+                        IScanWriter writer = ScanWriterFactory.GetWriter(outputFilePath, monocleOptions.OutputFileType);
+                        writer.Open(outputFilePath);
+                        writer.WriteHeader(new ScanFileHeader());
                         foreach (Scan scan in Scans) {
                             writer.WriteScan(scan);
                         }

@@ -32,6 +32,13 @@ namespace Monocle.File
                 throw new IOException("Error while opening RAW file.");
             }
         }
+        /// <summary>
+        /// Dispose of the raw file when reading multiple files.
+        /// </summary>
+        public void Close()
+        {
+            rawFile.Dispose();
+        }
 
         /// <summary>
         /// Open the given file and import scans into the reader.

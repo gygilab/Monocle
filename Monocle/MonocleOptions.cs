@@ -43,5 +43,7 @@ namespace Monocle
         public bool WriteDebugString { get; set; } = false;
 
         public bool WriteSps { get; set; } = false;
+
+        public OutputFileType OutputFileType { get; set; } = OutputFileType.mzxml;
     }
 }
