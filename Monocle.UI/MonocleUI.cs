@@ -131,7 +131,17 @@ namespace MonocleUI
         {
             EnableRunUI(false);
             Processor.FileTracker += FileListener;
-            Processor.Run();
+            try
+            {
+                Processor.Run();
+            }
+            catch (Exception ex)
+            {
+                UpdateLog("Run cancelled.");
+#if DEBUG
+                UpdateLog(ex.ToString());
+#endif
+            }
         }
 
         private void GCCollectionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -166,21 +176,25 @@ namespace MonocleUI
 
         private void FileListener(object sender, FileEventArgs e)
         {
-            if (e.FilePath != "" && e.Finished)
+            if(e.FilePath != "")
             {
-                UpdateLog("File Finished: " + e.FilePath);
+                return;
             }
-            else if (e.FilePath != "" && e.Written)
+
+            switch (e.runStatus)
             {
-                UpdateLog("Writing Complete: " + e.FilePath);
-            }
-            else if (e.FilePath != "" && e.Processed)
-            {
-                UpdateLog("Processing Complete: " + e.FilePath);
-            }
-            else if (e.FilePath != "" && e.Read)
-            {
-                UpdateLog("File Read Complete: " + e.FilePath);
+                case RunStatus.Read:
+                    UpdateLog("File Read into Monocle: " + e.FilePath);
+                    break;
+                case RunStatus.Processed:
+                    UpdateLog("Monocle Adjustment Complete: " + e.FilePath);
+                    break;
+                case RunStatus.Written:
+                    UpdateLog("Output File Written: " + e.FilePath);
+                    break;
+                case RunStatus.Finished:
+                    UpdateLog("File Processing Finished: " + e.FilePath);
+                    break;
             }
             UpdateProgress((int)e.CurrentProgress);
             if (e.FinishedAllFiles)
@@ -200,7 +214,7 @@ namespace MonocleUI
                 else if (itemInd == file_output_format_CLB.SelectedIndex)
                 {
                     file_output_format_CLB.SetItemCheckState(itemInd, CheckState.Checked);
-                    Processor.outputFileType = (OutputFileType)itemInd;
+                    FileProcessor.monocleOptions.OutputFileType = (OutputFileType)itemInd;
                 }
             }
         }
@@ -250,6 +264,12 @@ namespace MonocleUI
                 polarity_checkBox.ForeColor = Color.MediumVioletRed;
                 polarity_checkBox.Text = "-";
             }
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            Processor.Cancel();
+            EnableRunUI(true);
         }
     }
 
