@@ -131,7 +131,7 @@ namespace Monocle.Data
         /// <summary>
         /// The observed centroid peaks in the scan
         /// </summary>
-        public List<Centroid> Centroids = new List<Centroid>();
+        public List<Centroid> Centroids { get; set; } = new List<Centroid>();
 
         /// <summary>
         /// Holds precursor information for dependent scans.

@@ -72,6 +72,14 @@ namespace Monocle.File
         }
 
         /// <summary>
+        /// Dispose of the reader when reading multiple files.
+        /// </summary>
+        public void Close()
+        {
+            Reader.Dispose();
+        }
+
+        /// <summary>
         /// Open the given file and import scans into the reader.
         /// </summary>
         /// <returns></returns>

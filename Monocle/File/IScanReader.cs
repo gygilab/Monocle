@@ -9,5 +9,6 @@ namespace Monocle.File
         /// </summary>
         /// <param name="path">Path to the data file.</param>
         void Open(string path);
+        void Close();
     }
 }

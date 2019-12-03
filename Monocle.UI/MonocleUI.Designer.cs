@@ -56,14 +56,15 @@
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.monocleOptionsBox = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.polarity_checkBox = new System.Windows.Forms.CheckBox();
             this.toggleChargeDetectionCB = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.highChargeSelectionNUD = new System.Windows.Forms.NumericUpDown();
             this.lowChargeSelectionNUD = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.numberOfScansToAverageNUD = new System.Windows.Forms.NumericUpDown();
-            this.polarity_checkBox = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.cancelButton = new System.Windows.Forms.Button();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
@@ -296,7 +297,7 @@
             // 
             this.log_toggle_checkbox.Appearance = System.Windows.Forms.Appearance.Button;
             this.log_toggle_checkbox.AutoSize = true;
-            this.log_toggle_checkbox.Location = new System.Drawing.Point(654, 491);
+            this.log_toggle_checkbox.Location = new System.Drawing.Point(19, 479);
             this.log_toggle_checkbox.Name = "log_toggle_checkbox";
             this.log_toggle_checkbox.Size = new System.Drawing.Size(100, 23);
             this.log_toggle_checkbox.TabIndex = 6;
@@ -330,6 +331,34 @@
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Charge Detection";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(156, 30);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(55, 17);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Polarity";
+            // 
+            // polarity_checkBox
+            // 
+            this.polarity_checkBox.Appearance = System.Windows.Forms.Appearance.Button;
+            this.polarity_checkBox.Enabled = false;
+            this.polarity_checkBox.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.Control;
+            this.polarity_checkBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.polarity_checkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.polarity_checkBox.ForeColor = System.Drawing.Color.MediumTurquoise;
+            this.polarity_checkBox.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.polarity_checkBox.Location = new System.Drawing.Point(217, 21);
+            this.polarity_checkBox.Name = "polarity_checkBox";
+            this.polarity_checkBox.Size = new System.Drawing.Size(32, 35);
+            this.polarity_checkBox.TabIndex = 6;
+            this.polarity_checkBox.Text = "+";
+            this.polarity_checkBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.polarity_checkBox.UseVisualStyleBackColor = false;
+            this.polarity_checkBox.CheckedChanged += new System.EventHandler(this.Polarity_checkBox_CheckedChanged);
             // 
             // toggleChargeDetectionCB
             // 
@@ -440,33 +469,15 @@
             0});
             this.numberOfScansToAverageNUD.ValueChanged += new System.EventHandler(this.NumberOfScansToAverageNUD_ValueChanged);
             // 
-            // polarity_checkBox
+            // cancelButton
             // 
-            this.polarity_checkBox.Appearance = System.Windows.Forms.Appearance.Button;
-            this.polarity_checkBox.Enabled = false;
-            this.polarity_checkBox.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.Control;
-            this.polarity_checkBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.polarity_checkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.polarity_checkBox.ForeColor = System.Drawing.Color.MediumTurquoise;
-            this.polarity_checkBox.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.polarity_checkBox.Location = new System.Drawing.Point(217, 21);
-            this.polarity_checkBox.Name = "polarity_checkBox";
-            this.polarity_checkBox.Size = new System.Drawing.Size(32, 35);
-            this.polarity_checkBox.TabIndex = 6;
-            this.polarity_checkBox.Text = "+";
-            this.polarity_checkBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.polarity_checkBox.UseVisualStyleBackColor = false;
-            this.polarity_checkBox.CheckedChanged += new System.EventHandler(this.Polarity_checkBox_CheckedChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(156, 30);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(55, 17);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Polarity";
+            this.cancelButton.Location = new System.Drawing.Point(679, 479);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 8;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // MonocleUI
             // 
@@ -474,6 +485,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(767, 724);
+            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.monocleOptionsBox);
             this.Controls.Add(this.log_toggle_checkbox);
             this.Controls.Add(this.start_monocle_button);
@@ -545,6 +557,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.CheckBox polarity_checkBox;
+        private System.Windows.Forms.Button cancelButton;
     }
 }
 
