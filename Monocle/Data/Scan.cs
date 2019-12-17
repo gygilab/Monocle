@@ -107,7 +107,12 @@ namespace Monocle.Data
         /// FAIMS compensation voltage, if used (in volts)
         /// </summary>
         public int FaimsCV { get; set; }
-        
+
+        /// <summary>
+        /// FAIMS state, it's possible to have a CV of 0 which is the int default.
+        /// </summary>
+        public FAIMS_State FaimsVoltageOn { get; set; } = FAIMS_State.Off;
+
         /// <summary>
         /// Total ion current for the current scan
         /// </summary>

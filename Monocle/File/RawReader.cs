@@ -127,6 +127,9 @@ namespace Monocle.File
                         case "FAIMS CV:":
                             scan.FaimsCV = (int)double.Parse(trailer.Values[i]);
                             break;
+                        case "FAIMS Voltage On:":
+                            scan.FaimsState = (trailer.Values[i] == "No") ? FAIMS_State.Off : FAIMS_State.On;
+                            break;
                         case "SPS Masses:":
                             string[] spsIonStringArray = trailer.Values[i].TrimEnd(',').Split(',');
                             if(!string.IsNullOrWhiteSpace(spsIonStringArray[0]) && spsIonStringArray.Length > 0)

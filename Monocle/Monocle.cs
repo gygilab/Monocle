@@ -37,12 +37,15 @@ namespace Monocle
                     var NearbyMs1Scans = new List<Scan>(window * 2);
                     int scanCount = 0;
                     int index = scan.PrecursorMasterScanNumber - 1;
+                    Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
+
                     if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both)
                     {
                         // Reel backward.
                         for (; index > 0 && scanCount < window; --index)
                         {
-                            if (scans[index].MsOrder == 1)
+                            if (scans[index].MsOrder == 1 && (scans[index].FaimsState == FAIMS_State.Off ||
+                                (scans[index].FaimsState == FAIMS_State.On && scans[index].FaimsCV == precursorScan.FaimsCV)))
                             {
                                 ++scanCount;
                             }
@@ -52,7 +55,8 @@ namespace Monocle
                     // Collect scans.
                     for (; index < scans.Count && scanCount < window; ++index)
                     {
-                        if (scans[index].MsOrder == 1)
+                        if (scans[index].MsOrder == 1 && (scans[index].FaimsState == FAIMS_State.Off ||
+                            (scans[index].FaimsState == FAIMS_State.On  && scans[index].FaimsCV == precursorScan.FaimsCV)))
                         {
                             if (scans[index].ScanNumber > scan.PrecursorMasterScanNumber)
                             {
@@ -65,7 +69,6 @@ namespace Monocle
                             NearbyMs1Scans.Add(scans[index]);
                         }
                     }
-                    Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
                     Run(NearbyMs1Scans, precursorScan, scan, Options);
                 }
             }
