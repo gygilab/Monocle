@@ -111,7 +111,7 @@ namespace Monocle.Data
         /// <summary>
         /// FAIMS state, it's possible to have a CV of 0 which is the int default.
         /// </summary>
-        public FAIMS_State FaimsVoltageOn { get; set; } = FAIMS_State.Off;
+        public TriState FaimsState { get; set; } = TriState.Off;
 
         /// <summary>
         /// Total ion current for the current scan

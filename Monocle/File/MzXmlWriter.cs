@@ -84,7 +84,7 @@ namespace Monocle.File {
             writer.WriteAttributeString("highMz", scan.HighestMz.ToString());
             writer.WriteAttributeString("basePeakMz", scan.BasePeakMz.ToString());
             writer.WriteAttributeString("basePeakIntensity", scan.BasePeakIntensity.ToString());
-            writer.WriteAttributeString("faimsVoltageOn", scan.FaimsVoltageOn.ToString());
+            writer.WriteAttributeString("faimsState", scan.FaimsState.ToString());
             writer.WriteAttributeString("faimsCv", scan.FaimsCV.ToString());
 
             //tSIM/MSX methods could be MS1s with "SPS" ions so no ms order consideration here

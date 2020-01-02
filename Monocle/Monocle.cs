@@ -44,8 +44,8 @@ namespace Monocle
                         // Reel backward.
                         for (; index > 0 && scanCount < window; --index)
                         {
-                            if (scans[index].MsOrder == 1 && (scans[index].FaimsState == FAIMS_State.Off ||
-                                (scans[index].FaimsState == FAIMS_State.On && scans[index].FaimsCV == precursorScan.FaimsCV)))
+                            if (scans[index].MsOrder == 1 && (scans[index].FaimsState == Data.TriState.Off ||
+                                (scans[index].FaimsState == Data.TriState.On && scans[index].FaimsCV == precursorScan.FaimsCV)))
                             {
                                 ++scanCount;
                             }
@@ -55,8 +55,8 @@ namespace Monocle
                     // Collect scans.
                     for (; index < scans.Count && scanCount < window; ++index)
                     {
-                        if (scans[index].MsOrder == 1 && (scans[index].FaimsState == FAIMS_State.Off ||
-                            (scans[index].FaimsState == FAIMS_State.On  && scans[index].FaimsCV == precursorScan.FaimsCV)))
+                        if (scans[index].MsOrder == 1 && (scans[index].FaimsState == Data.TriState.Off ||
+                            (scans[index].FaimsState == Data.TriState.On  && scans[index].FaimsCV == precursorScan.FaimsCV)))
                         {
                             if (scans[index].ScanNumber > scan.PrecursorMasterScanNumber)
                             {
