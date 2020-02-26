@@ -1,4 +1,7 @@
 pipeline {
+    environment {
+        HOME = '/tmp'
+    }
     agent {
         docker {
             label 'builder'
