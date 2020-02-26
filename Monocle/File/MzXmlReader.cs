@@ -30,7 +30,9 @@ namespace Monocle.File
             { "lowMz","LowestMz" },
             { "highMz","HighestMz" },
             { "basePeakMz","BasePeakMz" },
-            { "basePeakIntensity","BasePeakIntensity" }
+            { "basePeakIntensity","BasePeakIntensity" },
+            { "faimsVoltageOn","FaimsVoltageOn" },
+            { "faimsCv","FaimsCV" }
         };
 
         public Dictionary<string, string> mzxmlMsnAttributes = new Dictionary<string, string>()
@@ -69,6 +71,14 @@ namespace Monocle.File
             }
 
             Reader = XmlReader.Create(path);
+        }
+
+        /// <summary>
+        /// Dispose of the reader when reading multiple files.
+        /// </summary>
+        public void Close()
+        {
+            Reader.Dispose();
         }
 
         /// <summary>

@@ -24,7 +24,8 @@ namespace MakeMono
                     Charge_Range = new ChargeRange(options.ChargeRange),
                     MS_Level = options.MS_Level,
                     Number_Of_Scans_To_Average = options.NumOfScans,
-                    WriteDebugString = options.WriteDebug
+                    WriteDebugString = options.WriteDebug,
+                    OutputFileType = options.OutputFileType
                 };
 
             try
@@ -50,8 +51,8 @@ namespace MakeMono
                     return;
                 }
                 ConditionalConsoleLine(!options.RunQuiet, "Finished monoisotopic assignment.");
-                IScanWriter writer = ScanWriterFactory.GetWriter(file, options.OutputFileType);
-                string outputFilePath = Path.Join(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + "_monocle." + options.OutputFileType.ToString());
+                IScanWriter writer = ScanWriterFactory.GetWriter(file, monocleOptions.OutputFileType);
+                string outputFilePath = Path.Join(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + "_monocle." + monocleOptions.OutputFileType.ToString());
                 writer.Open(outputFilePath);
                 writer.WriteHeader(new ScanFileHeader());
                 foreach (Scan scan in Scans) {

@@ -107,7 +107,12 @@ namespace Monocle.Data
         /// FAIMS compensation voltage, if used (in volts)
         /// </summary>
         public int FaimsCV { get; set; }
-        
+
+        /// <summary>
+        /// FAIMS state, it's possible to have a CV of 0 which is the int default.
+        /// </summary>
+        public TriState FaimsState { get; set; } = TriState.Off;
+
         /// <summary>
         /// Total ion current for the current scan
         /// </summary>
@@ -131,7 +136,7 @@ namespace Monocle.Data
         /// <summary>
         /// The observed centroid peaks in the scan
         /// </summary>
-        public List<Centroid> Centroids = new List<Centroid>();
+        public List<Centroid> Centroids { get; set; } = new List<Centroid>();
 
         /// <summary>
         /// Holds precursor information for dependent scans.

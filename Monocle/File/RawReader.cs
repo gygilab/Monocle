@@ -32,6 +32,13 @@ namespace Monocle.File
                 throw new IOException("Error while opening RAW file.");
             }
         }
+        /// <summary>
+        /// Dispose of the raw file when reading multiple files.
+        /// </summary>
+        public void Close()
+        {
+            rawFile.Dispose();
+        }
 
         /// <summary>
         /// Open the given file and import scans into the reader.
@@ -119,6 +126,9 @@ namespace Monocle.File
                             break;
                         case "FAIMS CV:":
                             scan.FaimsCV = (int)double.Parse(trailer.Values[i]);
+                            break;
+                        case "FAIMS Voltage On:":
+                            scan.FaimsState = (trailer.Values[i] == "No") ? Data.TriState.Off : Data.TriState.On;
                             break;
                         case "SPS Masses:":
                             string[] spsIonStringArray = trailer.Values[i].TrimEnd(',').Split(',');

@@ -12,11 +12,14 @@ namespace Monocle.Data
         /// Compensation voltage
         /// </summary>
         public int CV { get; set; } = -55;
+
+        public TriState Faims_State = TriState.None;
     }
 
-    public enum FAIMS_State
+    public enum TriState
     {
         On,
-        Off
+        Off,
+        None
     }
 }
