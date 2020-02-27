@@ -34,5 +34,8 @@ namespace MakeMono
 
         [Option('s', "WriteSps", Hidden = true, Required = false, HelpText = "Write SPS ions as independent precursors.")]
         public bool WriteSps { get; set; } = false;
+
+        [Option('x', "ConvertOnly", Hidden = true, Required = false, HelpText = "Write output file with modifying precursors.")]
+        public bool ConvertOnly { get; set; } = false;
     }
 }
