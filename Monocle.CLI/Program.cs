@@ -36,6 +36,7 @@ namespace MakeMono
                 IScanReader reader = ScanReaderFactory.GetReader(file);
                 reader.Open(file);
                 var header = reader.GetHeader();
+                header.FileName = Path.GetFileName(file);
 
                 log.Info("Reading scans: " + file);
                 List<Scan> Scans = new List<Scan>();
