@@ -131,7 +131,7 @@ namespace Monocle.File {
 
             writer.WriteStartElement("parentFile");
             writer.WriteAttributeString("fileName", header.FileName);
-            writer.WriteAttributeString("fileType", "processedData");
+            writer.WriteAttributeString("fileType", "rawData");
             writer.WriteEndElement(); // parentFile
             
             writer.WriteStartElement("msInstrument");

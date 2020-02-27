@@ -35,6 +35,7 @@ namespace MakeMono
                 string file = options.InputFilePath;
                 IScanReader reader = ScanReaderFactory.GetReader(file);
                 reader.Open(file);
+                var header = reader.GetHeader();
 
                 log.Info("Reading scans: " + file);
                 List<Scan> Scans = new List<Scan>();
@@ -53,7 +54,7 @@ namespace MakeMono
                 log.Info("Writing output: " + outputFilePath);
                 IScanWriter writer = ScanWriterFactory.GetWriter(file, monocleOptions.OutputFileType);
                 writer.Open(outputFilePath);
-                writer.WriteHeader(new ScanFileHeader());
+                writer.WriteHeader(header);
                 foreach (Scan scan in Scans)
                 {
                     writer.WriteScan(scan);

@@ -1,7 +1,7 @@
-﻿using Monocle.Data;
+using Monocle.Data;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Xml;
@@ -11,6 +11,10 @@ namespace Monocle.File
     public class MzXmlReader : IScanReader
     {
         private XmlReader Reader;
+        
+        private ScanFileHeader Header;
+
+        private string FilePath;
 
         #region Attributes for the MZXML file
         public Dictionary<string, string> mzxmlAttributes = new Dictionary<string, string>()
@@ -61,6 +65,7 @@ namespace Monocle.File
             { "compressedLen", "PeaksCompressedLength" }
         };
         #endregion
+
         /// <summary>
         /// Open new fileStream to mzXML file.
         /// </summary>
@@ -69,8 +74,16 @@ namespace Monocle.File
             if (!System.IO.File.Exists(path)) {
                 throw new IOException("File not found: " + path);
             }
+            FilePath = path;
+            Reader = XmlReader.Create(FilePath);
+        }
 
-            Reader = XmlReader.Create(path);
+        /// <summary>
+        /// Returns header information from the mzXML file.
+        /// </summary>
+        /// <returns>An instance of the ScanFileHeader class</returns>
+        public ScanFileHeader GetHeader() {
+            return Header;
         }
 
         /// <summary>
@@ -85,7 +98,7 @@ namespace Monocle.File
         /// Open the given file and import scans into the reader.
         /// </summary>
         /// <returns></returns>
-        public System.Collections.IEnumerator GetEnumerator() {
+        public IEnumerator GetEnumerator() {
             Scan scan = null;
             while(Reader.Read()) {
                 switch (Reader.NodeType) {
@@ -172,6 +185,61 @@ namespace Monocle.File
                     {
                         piTmp.SetValue(scan, bTmp);
                     }
+                }
+            }
+        }
+
+        private void ReadHeader() {
+            var header = new ScanFileHeader();
+            header.FileName = Path.GetFileName(FilePath);
+            while(Reader.Read()) {
+                switch (Reader.NodeType) {
+                    case XmlNodeType.Element:
+                        if (Reader.Name == "msRun") {
+                            while (Reader.MoveToNextAttribute()) {
+                                switch(Reader.Name) {
+                                    case "scanCount":
+                                        header.ScanCount = int.Parse(Reader.Value);
+                                        break;
+                                    case "startTime":
+                                        header.StartTime = float.Parse(Reader.Value);
+                                        break;
+                                    case "endTime":
+                                        header.EndTime = float.Parse(Reader.Value);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                        else if (Reader.Name == "msManufacturer") {
+                            while (Reader.MoveToNextAttribute()) {
+                                if (Reader.Name == "value") {
+                                    header.InstrumentManufacturer = Reader.Value;
+                                }
+                            }
+                        }
+                        else if (Reader.Name == "msModel") {
+                            while (Reader.MoveToNextAttribute()) {
+                                if (Reader.Name == "value") {
+                                    header.InstrumentModel = Reader.Value;
+                                }
+                            }
+                        }
+                        else if (Reader.Name == "scan") {
+                            // Gone too far.
+                            Reader.Dispose();
+                            Reader = XmlReader.Create(FilePath);
+                            return;
+                        }
+                        break;
+                    case XmlNodeType.EndElement:
+                        if (Reader.Name == "msInstrument") {
+                            return;
+                        }
+                        break;
+                    default:
+                    break;
                 }
             }
         }

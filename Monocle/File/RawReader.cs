@@ -32,6 +32,19 @@ namespace Monocle.File
                 throw new IOException("Error while opening RAW file.");
             }
         }
+
+        public ScanFileHeader GetHeader()
+        {
+            var header = new ScanFileHeader();
+            rawFile.SelectInstrument(Device.MS, 1);
+            header.StartTime = (float) rawFile.RunHeaderEx.StartTime;
+            header.EndTime = (float) rawFile.RunHeaderEx.EndTime;
+            header.ScanCount = rawFile.RunHeaderEx.SpectraCount;
+            header.InstrumentModel = rawFile.GetInstrumentData().Model;
+            header.InstrumentManufacturer = "ThermoFisher";
+            return header;
+        }
+
         /// <summary>
         /// Dispose of the raw file when reading multiple files.
         /// </summary>

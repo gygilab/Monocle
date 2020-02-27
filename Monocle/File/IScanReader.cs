@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using Monocle.Data;
+using System.Collections;
 
 namespace Monocle.File
 {
@@ -9,6 +10,16 @@ namespace Monocle.File
         /// </summary>
         /// <param name="path">Path to the data file.</param>
         void Open(string path);
+
+        /// <summary>
+        /// Return some metadata about the file.
+        /// </summary>
+        /// <returns>Returns an instance of ScanFileHeader</returns>
+        ScanFileHeader GetHeader();
+
+        /// <summary>
+        /// Performs any cleanup.
+        /// </summary>
         void Close();
     }
 }
