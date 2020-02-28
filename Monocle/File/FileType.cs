@@ -12,6 +12,7 @@ namespace Monocle
     public enum OutputFileType
     {
         mzxml,
+        exmzxml,
         csv,
         mzml
     }

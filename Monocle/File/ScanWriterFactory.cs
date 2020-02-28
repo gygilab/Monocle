@@ -12,17 +12,17 @@ namespace Monocle.File
         /// <param name="file">The target file being written.</param>
         /// <param name="type">The type of the target file.</param>
         /// <returns></returns>
-        public static IScanWriter GetWriter(string file, OutputFileType type)
+        public static IScanWriter GetWriter(OutputFileType type)
         {
-            file = MakeTargetFileName(file, type);
-            switch (Path.GetExtension(file).ToUpper())
+            switch (type)
             {
-
-                case ".CSV":
+                case OutputFileType.csv:
                     return new CsvWriter();
-                case ".MZXML":
+                case OutputFileType.mzxml:
                     return new MzXmlWriter();
-                case ".MZML":
+                case OutputFileType.exmzxml:
+                    return new ExtendedMzXmlWriter();
+                case OutputFileType.mzml:
                     return new MzMlWriter();
                 default:
                     break;
@@ -37,14 +37,16 @@ namespace Monocle.File
         /// <param name="filename">the filename to change.</param>
         /// <param name="type">the new file type.</param>
         /// <returns></returns>
-        private static string MakeTargetFileName(string filename, OutputFileType type) {
+        public static string MakeTargetFileName(string filename, OutputFileType type) {
             string ext = "";
             switch (type) {
                 case OutputFileType.csv:
                     ext = "csv";
                     break;
+                case OutputFileType.exmzxml:
+                    // pass thru
                 case OutputFileType.mzxml:
-                    ext = "mzXML";
+                    ext = "mzxml";
                     break;
                 case OutputFileType.mzml:
                     ext = "mzML";

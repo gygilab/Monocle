@@ -14,20 +14,20 @@ namespace Monocle.File {
         /// <summary>
         /// The XML serializer.
         /// </summary>
-        private XmlWriter writer;
+        protected XmlWriter writer;
 
         /// <summary>
         /// The text output stream.
         /// The class holds on to this to remember the positions of the
         /// scans for creating the index at the end.
         /// </summary>
-        private StreamWriter output;
+        protected StreamWriter output;
 
         /// <summary>
         /// Stores the position of each scan for creating the index.
         /// Keys are scan numbers and values are the text position in the file.
         /// </summary>
-        private Dictionary<long, long> scanIndex;
+        protected Dictionary<long, long> scanIndex;
 
         /// <summary>
         /// Opens the file and initializes the XML stream.
@@ -60,7 +60,7 @@ namespace Monocle.File {
         /// Writes a scan tag.
         /// </summary>
         /// <param name="scan"></param>
-        public void WriteScan(Scan scan)
+        public virtual void WriteScan(Scan scan)
         {
             writer.Flush();
             long pos = output.BaseStream.Position;
@@ -69,11 +69,7 @@ namespace Monocle.File {
             writer.WriteStartElement("scan");
             writer.WriteAttributeString("num", scan.ScanNumber.ToString());
             writer.WriteAttributeString("msLevel", scan.MsOrder.ToString());
-            writer.WriteAttributeString("scanEvent", scan.ScanEvent.ToString());
-            writer.WriteAttributeString("masterIndex", scan.MasterIndex.ToString());
             writer.WriteAttributeString("peaksCount", scan.PeakCount.ToString());
-            writer.WriteAttributeString("ionInjectionTime", scan.IonInjectionTime.ToString());
-            writer.WriteAttributeString("elapsedScanTime", scan.ElapsedScanTime.ToString());
             writer.WriteAttributeString("polarity", scan.Polarity == Polarity.Positive ? "+" : "-");
             writer.WriteAttributeString("scanType", scan.ScanType.ToString());
             writer.WriteAttributeString("filterLine", scan.FilterLine);
@@ -84,8 +80,8 @@ namespace Monocle.File {
             writer.WriteAttributeString("highMz", scan.HighestMz.ToString());
             writer.WriteAttributeString("basePeakMz", scan.BasePeakMz.ToString());
             writer.WriteAttributeString("basePeakIntensity", scan.BasePeakIntensity.ToString());
-            writer.WriteAttributeString("faimsState", scan.FaimsState.ToString());
-            writer.WriteAttributeString("faimsCv", scan.FaimsCV.ToString());
+            writer.WriteAttributeString("totIonCurrent", scan.TotalIonCurrent.ToString());
+            writer.WriteAttributeString("compensationVoltage", scan.FaimsCV.ToString());
 
             //tSIM/MSX methods could be MS1s with "SPS" ions so no ms order consideration here
             if (scan.MsOrder > 1 && scan.Precursors.Count > 0)
@@ -147,6 +143,42 @@ namespace Monocle.File {
         }
 
         /// <summary>
+        /// Encodes peak data in base64, 32bit, little-endian
+        /// </summary>
+        /// <param name="scan"></param>
+        /// <returns></returns>
+        protected string EncodePeaks(Scan scan) {
+            if (scan.PeakCount == 0) {
+                return "AAAAAAAAAAA=";
+            }
+            
+            // Allocate space for m/z and int pairs, four bytes each.
+            byte[] bytes = new byte[scan.PeakCount * 2 * 4];
+
+            for (int i = 0; i < scan.PeakCount; ++i) {
+                var peak = scan.Centroids[i];
+                var mzBytes = BitConverter.GetBytes((float)peak.Mz);
+                Array.Reverse(mzBytes);
+                mzBytes.CopyTo(bytes, i * 8);
+
+                var intBytes = BitConverter.GetBytes((float)peak.Intensity);
+                Array.Reverse(intBytes);
+                intBytes.CopyTo(bytes, (i * 8) + 4);
+            }
+            return Convert.ToBase64String(bytes);
+        }
+
+        /// <summary>
+        /// Prepares the retention time for the mzXML file,
+        /// by converting it into seconds and formatting it.
+        /// </summary>
+        /// <param name="time">The retention time of the scan in minutes.</param>
+        /// <returns>The string representation of the time in seconds.</returns>
+        protected string MakeRetentionTimeString(double time) {
+            return "PT" + System.Math.Round(time * 60, 4).ToString() + "S";
+        }
+
+        /// <summary>
         /// Writes the scan index and closes the tags for the
         /// end of the file.
         /// </summary>
@@ -173,32 +205,6 @@ namespace Monocle.File {
         }
 
         /// <summary>
-        /// Encodes peak data in base64, 32bit, little-endian
-        /// </summary>
-        /// <param name="scan"></param>
-        /// <returns></returns>
-        private string EncodePeaks(Scan scan) {
-            if (scan.PeakCount == 0) {
-                return "AAAAAAAAAAA=";
-            }
-            
-            // Allocate space for m/z and int pairs, four bytes each.
-            byte[] bytes = new byte[scan.PeakCount * 2 * 4];
-
-            for (int i = 0; i < scan.PeakCount; ++i) {
-                var peak = scan.Centroids[i];
-                var mzBytes = BitConverter.GetBytes((float)peak.Mz);
-                Array.Reverse(mzBytes);
-                mzBytes.CopyTo(bytes, i * 8);
-
-                var intBytes = BitConverter.GetBytes((float)peak.Intensity);
-                Array.Reverse(intBytes);
-                intBytes.CopyTo(bytes, (i * 8) + 4);
-            }
-            return Convert.ToBase64String(bytes);
-        }
-
-        /// <summary>
         /// Prepraes the string for the parentFile fileType attribute.
         /// </summary>
         /// <param name="name"></param>
@@ -216,14 +222,5 @@ namespace Monocle.File {
             return "unknown";
         }
 
-        /// <summary>
-        /// Prepares the retention time for the mzXML file,
-        /// by converting it into seconds and formatting it.
-        /// </summary>
-        /// <param name="time">The retention time of the scan in minutes.</param>
-        /// <returns>The string representation of the time in seconds.</returns>
-        private string MakeRetentionTimeString(double time) {
-            return "PT" + System.Math.Round(time * 60, 2).ToString() + "S";
-        }
     }
 }
