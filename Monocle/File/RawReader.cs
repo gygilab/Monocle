@@ -1,6 +1,7 @@
 ﻿using Monocle.Data;
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using ThermoFisher.CommonCore.Data.Business;
 using ThermoFisher.CommonCore.Data.FilterEnums;
 using ThermoFisher.CommonCore.Data.Interfaces;
@@ -83,7 +84,7 @@ namespace Monocle.File
                     HighestMz = scanStatistics.HighMass,
                     StartMz = scanStatistics.LowMass,
                     EndMz = scanStatistics.HighMass,
-                    ScanType = scanStatistics.ScanType,
+                    ScanType = ReadScanType(scanFilter.ToString()),
                     MsOrder = (int)scanFilter.MSOrder,
                     Polarity = (scanFilter.Polarity == PolarityType.Positive) ? Data.Polarity.Positive : Data.Polarity.Negative,
                     FilterLine = scanFilter.ToString(),
@@ -238,6 +239,22 @@ namespace Monocle.File
                     break;
             }
             return output;
+        }
+
+        private static Regex scanTypeRegex = new Regex (@" (\S+) ms\d? ", RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// Gets the scan type by parsing it out of the filterline.
+        /// </summary>
+        /// <returns>The scan type.</returns>
+        /// <param name="filterLine">Filter line.</param>
+        private static string ReadScanType (string filterLine)
+        {
+            var m = scanTypeRegex.Match (filterLine);
+            if (m.Success) {
+                return m.Groups [1].ToString ();
+            }
+            return "";
         }
 
     }
