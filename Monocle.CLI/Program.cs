@@ -9,72 +9,85 @@ namespace MakeMono
 {
     internal class Program
     {
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+
         static void Main(string[] args)
         {
+            var parser = new CliOptionsParser();
+            MakeMonoOptions options = parser.Parse(args);
+            MonocleOptions monocleOptions = new MonocleOptions
+            {
+                AveragingVector = AveragingVector.Both,
+                Charge_Detection = options.ChargeDetection,
+                Charge_Range = new ChargeRange(options.ChargeRange),
+                MS_Level = options.MS_Level,
+                Number_Of_Scans_To_Average = options.NumOfScans,
+                WriteDebugString = options.WriteDebug,
+                OutputFileType = options.OutputFileType,
+                ConvertOnly = options.ConvertOnly
+            };
 
-                Console.WriteLine("MakeMono, a console application wrapper for Monocle.");
-                var parser = new CliOptionsParser();
-                MakeMonoOptions options = parser.Parse(args);
-                string file = options.InputFilePath;
-
-                MonocleOptions monocleOptions = new MonocleOptions
-                {
-                    AveragingVector = AveragingVector.Both,
-                    Charge_Detection = options.ChargeDetection,
-                    Charge_Range = new ChargeRange(options.ChargeRange),
-                    MS_Level = options.MS_Level,
-                    Number_Of_Scans_To_Average = options.NumOfScans,
-                    WriteDebugString = options.WriteDebug,
-                    OutputFileType = options.OutputFileType
-                };
+            SetupLogger(options.RunQuiet, options.WriteDebug);
 
             try
             {
-                ConditionalConsoleLine(!options.RunQuiet, "Start Processing.");
+                log.Info("Starting Processing.");
+                string file = options.InputFilePath;
                 IScanReader reader = ScanReaderFactory.GetReader(file);
                 reader.Open(file);
-                ConditionalConsoleLine(!options.RunQuiet, "Begin reading scans: " + file);
+                var header = reader.GetHeader();
+                header.FileName = Path.GetFileName(file);
+
+                log.Info("Reading scans: " + file);
                 List<Scan> Scans = new List<Scan>();
                 foreach (Scan scan in reader)
                 {
                     Scans.Add(scan);
                 }
-                ConditionalConsoleLine(!options.RunQuiet, "All scans read in.");
-                try
+
+                if (!monocleOptions.ConvertOnly)
                 {
+                    log.Info("Starting monoisotopic assignment.");
                     Monocle.Monocle.Run(ref Scans, monocleOptions);
                 }
-                catch(Exception ex)
-                {
-                    ConditionalConsoleLine(monocleOptions.WriteDebugString, "~~!!!!Monocle encountered an error while running!!!!~~");
-                    ConditionalConsoleLine(monocleOptions.WriteDebugString, ex.ToString());
-                    return;
-                }
-                ConditionalConsoleLine(!options.RunQuiet, "Finished monoisotopic assignment.");
-                IScanWriter writer = ScanWriterFactory.GetWriter(file, monocleOptions.OutputFileType);
-                string outputFilePath = Path.Join(Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file) + "_monocle." + monocleOptions.OutputFileType.ToString());
+
+                string outputFilePath = ScanWriterFactory.MakeTargetFileName(file, monocleOptions.OutputFileType);
+                log.Info("Writing output: " + outputFilePath);
+                IScanWriter writer = ScanWriterFactory.GetWriter(monocleOptions.OutputFileType);
                 writer.Open(outputFilePath);
-                writer.WriteHeader(new ScanFileHeader());
-                foreach (Scan scan in Scans) {
+                writer.WriteHeader(header);
+                foreach (Scan scan in Scans)
+                {
                     writer.WriteScan(scan);
                 }
                 writer.Close();
-                ConditionalConsoleLine(!options.RunQuiet, "File output completed: " + outputFilePath);
+                log.Info("Done.");
             }
-            catch(Exception e) {
-                Console.WriteLine("An error occurred.");
-                ConditionalConsoleLine(monocleOptions.WriteDebugString, e.GetType().ToString());
-                ConditionalConsoleLine(monocleOptions.WriteDebugString, e.Message);
-                ConditionalConsoleLine(monocleOptions.WriteDebugString, e.ToString());
+            catch (Exception e)
+            {
+                log.Error("An error occurred.");
+                log.Debug(e.GetType().ToString());
+                log.Debug(e.Message);
+                log.Debug(e.ToString());
             }
         }
 
-        public static void ConditionalConsoleLine(bool writeLine, string newLine)
+        static void SetupLogger(bool quiet, bool debug)
         {
-            if (writeLine)
+            var config = new NLog.Config.LoggingConfiguration();
+            var logconsole = new NLog.Targets.ConsoleTarget("logconsole")
             {
-                Console.WriteLine(DateTime.Now.ToString() + ": " + newLine);
+                Layout = "${message}"
+            };
+            var minLogLevel = NLog.LogLevel.Info;
+            if (quiet) {
+                minLogLevel = NLog.LogLevel.Error;
             }
+            else if (debug) {
+                minLogLevel = NLog.LogLevel.Debug;
+            }
+            config.AddRule(minLogLevel, NLog.LogLevel.Fatal, logconsole);
+            NLog.LogManager.Configuration = config;
         }
     }
 }

@@ -45,5 +45,7 @@ namespace Monocle
         public bool WriteSps { get; set; } = false;
 
         public OutputFileType OutputFileType { get; set; } = OutputFileType.mzxml;
+
+        public bool ConvertOnly = false;
     }
 }

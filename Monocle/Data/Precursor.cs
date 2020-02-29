@@ -5,11 +5,11 @@ namespace Monocle.Data {
         /// Constructor for Precursor
         /// </summary>
         /// <param name="mz"></param>
-        public Precursor(double mz)
+        public Precursor(double mz, double intensity=0, int charge=0)
         {
             Mz = mz;
-            Intensity = 1;
-            Charge = 1;
+            Intensity = intensity;
+            Charge = charge;
         }
         public Precursor()
         {
