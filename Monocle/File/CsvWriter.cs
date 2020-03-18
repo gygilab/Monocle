@@ -26,7 +26,7 @@ namespace Monocle.File {
         {
             writer = new StreamWriter(System.IO.File.Open(path, FileMode.Create, FileAccess.Write, FileShare.ReadWrite));
             writer.AutoFlush = true;
-            writer.WriteLine("scan number" + delimiter + "precursor m/z" + delimiter +
+            writer.WriteLine("scan number" + delimiter + "ms level" + delimiter + "precursor m/z" + delimiter +
                 "precursor M+H" + delimiter + "precursor charge" + delimiter +
                 "original precursor m/z" + delimiter + "original precursor charge" + delimiter +
                 "isolation m/z" + delimiter + "isolation width" + delimiter +
@@ -56,17 +56,19 @@ namespace Monocle.File {
         /// <param name="scan"></param>
         public void WriteScan(Scan scan)
         {
-            var precursor = scan.Precursors[0];
-            writer.WriteLine(scan.ScanNumber + delimiter + //scan number
-                precursor.Mz + delimiter +
-                precursor.Mh + delimiter +
-                precursor.Charge + delimiter +
-                precursor.Mz + delimiter + // Original precursor m/z
-                precursor.Charge + delimiter + // Original precursor charge
-                0 + delimiter + //isolation m/z
-                0 + delimiter + //isolation width
-                precursor.IsolationSpecificity + delimiter +
-                precursor.Intensity);
+            foreach (var precursor in scan.Precursors) {
+                writer.WriteLine(scan.ScanNumber + delimiter +
+                    scan.MsOrder + delimiter +
+                    precursor.Mz + delimiter +
+                    precursor.Mh + delimiter +
+                    precursor.Charge + delimiter +
+                    precursor.OriginalMz + delimiter +
+                    precursor.OriginalCharge + delimiter +
+                    precursor.IsolationMz + delimiter +
+                    precursor.IsolationWidth + delimiter +
+                    precursor.IsolationSpecificity + delimiter +
+                    precursor.Intensity);
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Monocle.File
     {
         private XmlReader Reader;
         
-        private ScanFileHeader Header;
+        private ScanFileHeader Header = new ScanFileHeader();
 
         private string FilePath;
 
@@ -48,10 +48,7 @@ namespace Monocle.File
         public Dictionary<string, string> mzxmlPrecursorAttributes = new Dictionary<string, string>()
         {
             // Precusor information
-            { "precursorMz","PrecursorMz" },
             { "precursorScanNum","PrecursorMasterScanNumber" },
-            { "precursorIntensity","PrecursorIntensity" },
-            { "precursorCharge","PrecursorCharge" },
             { "activationMethod","PrecursorActivationMethod" }
         };
 
@@ -76,6 +73,7 @@ namespace Monocle.File
             }
             FilePath = path;
             Reader = XmlReader.Create(FilePath);
+            ReadHeader();
         }
 
         /// <summary>
@@ -113,11 +111,29 @@ namespace Monocle.File
                             scan.Centroids = ReadPeaks(Reader.ReadElementContentAsString(), scan.PeakCount);
                         }
                         else if (Reader.Name == "precursorMz" && scan != null) {
+                            var precursor = new Precursor();
                             while (Reader.MoveToNextAttribute()) {
-                                SetAttribute(scan, Reader.Name, Reader.Value);
+                                if (Reader.Name == "precursorCharge") {
+                                    precursor.Charge = int.Parse(Reader.Value);
+                                }
+                                else if(Reader.Name == "precursorIntensity") {
+                                    precursor.Intensity = double.Parse(Reader.Value);
+                                }
+                                else if(Reader.Name == "isolationWidth") {
+                                    precursor.IsolationWidth = double.Parse(Reader.Value);
+                                }
+                                else if(Reader.Name == "isolationMz") {
+                                    precursor.IsolationMz = double.Parse(Reader.Value);
+                                }
+                                else {
+                                    SetAttribute(scan, Reader.Name, Reader.Value);
+                                }
                             }
                             Reader.MoveToContent();
-                            SetAttribute(scan, "precursorMz", Reader.ReadElementContentAsString());
+                            precursor.Mz = double.Parse(Reader.ReadElementContentAsString());
+                            precursor.OriginalMz = precursor.Mz;
+                            precursor.OriginalCharge = precursor.Charge;
+                            scan.Precursors.Add(precursor);
                         }
                         break;
                     case XmlNodeType.EndElement:
@@ -190,8 +206,7 @@ namespace Monocle.File
         }
 
         private void ReadHeader() {
-            var header = new ScanFileHeader();
-            header.FileName = Path.GetFileName(FilePath);
+            Header.FileName = Path.GetFileName(FilePath);
             while(Reader.Read()) {
                 switch (Reader.NodeType) {
                     case XmlNodeType.Element:
@@ -199,13 +214,13 @@ namespace Monocle.File
                             while (Reader.MoveToNextAttribute()) {
                                 switch(Reader.Name) {
                                     case "scanCount":
-                                        header.ScanCount = int.Parse(Reader.Value);
+                                        Header.ScanCount = int.Parse(Reader.Value);
                                         break;
                                     case "startTime":
-                                        header.StartTime = float.Parse(Reader.Value);
+                                        Header.StartTime = float.Parse(Reader.Value);
                                         break;
                                     case "endTime":
-                                        header.EndTime = float.Parse(Reader.Value);
+                                        Header.EndTime = float.Parse(Reader.Value);
                                         break;
                                     default:
                                         break;
@@ -215,14 +230,14 @@ namespace Monocle.File
                         else if (Reader.Name == "msManufacturer") {
                             while (Reader.MoveToNextAttribute()) {
                                 if (Reader.Name == "value") {
-                                    header.InstrumentManufacturer = Reader.Value;
+                                    Header.InstrumentManufacturer = Reader.Value;
                                 }
                             }
                         }
                         else if (Reader.Name == "msModel") {
                             while (Reader.MoveToNextAttribute()) {
                                 if (Reader.Name == "value") {
-                                    header.InstrumentModel = Reader.Value;
+                                    Header.InstrumentModel = Reader.Value;
                                 }
                             }
                         }

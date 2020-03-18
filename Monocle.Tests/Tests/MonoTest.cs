@@ -22,8 +22,8 @@ namespace Monocle.Tests.Tests
             Scan parentScan = new Scan();
             GetBlock(reader, 1, ref ms2Scan, ref parentScan, ref scans);
             MonocleOptions options = new MonocleOptions();
-            Monocle.Run(scans, parentScan, ms2Scan, options);
-            Assert.Equal(687.39195, ms2Scan.PrecursorMz, 3);
+            Monocle.Run(scans, parentScan, ms2Scan.Precursors[0], options);
+            Assert.Equal(687.39195, ms2Scan.Precursors[0].Mz, 3);
         }
         
         // d00810.raw scan 4734
@@ -38,8 +38,8 @@ namespace Monocle.Tests.Tests
             Scan parentScan = new Scan();
             GetBlock(reader, 2, ref ms2Scan, ref parentScan, ref scans);
             MonocleOptions options = new MonocleOptions();
-            Monocle.Run(scans, parentScan, ms2Scan, options);
-            Assert.Equal(1009.98842, ms2Scan.PrecursorMz, 2);
+            Monocle.Run(scans, parentScan, ms2Scan.Precursors[0], options);
+            Assert.Equal(1009.98842, ms2Scan.Precursors[0].Mz, 2);
         }
 
         // d00810.raw scan 5020
@@ -54,8 +54,8 @@ namespace Monocle.Tests.Tests
             Scan parentScan = new Scan();
             GetBlock(reader, 3, ref ms2Scan, ref parentScan, ref scans);
             MonocleOptions options = new MonocleOptions();
-            Monocle.Run(scans, parentScan, ms2Scan, options);
-            Assert.Equal(869.449817, ms2Scan.PrecursorMz, 3);
+            Monocle.Run(scans, parentScan, ms2Scan.Precursors[0], options);
+            Assert.Equal(869.449817, ms2Scan.Precursors[0].Mz, 3);
         }
 
         [Fact]
@@ -71,9 +71,9 @@ namespace Monocle.Tests.Tests
             options.AveragingVector = AveragingVector.Both;
             Monocle.Run(ref scans, options);
 
-            Assert.Equal(687.39195, scans[10].PrecursorMz, 3);
-            Assert.Equal(1009.98842, scans[31].PrecursorMz, 2);
-            Assert.Equal(869.449817, scans[52].PrecursorMz, 3);
+            Assert.Equal(687.39195, scans[10].Precursors[0].Mz, 3);
+            Assert.Equal(1009.98842, scans[31].Precursors[0].Mz, 2);
+            Assert.Equal(869.449817, scans[52].Precursors[0].Mz, 3);
         }
 
         // The test mzxml contains 4 ms2 scans with +/- 10 ms1 scans 

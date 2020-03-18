@@ -10,14 +10,6 @@ namespace Monocle.Data
     public class Scan : IDisposable
     {
         /// <summary>
-        /// Constructor for Scan class.
-        /// </summary>
-        public Scan() {
-            Precursors = new List<Precursor>(1);
-            Precursors.Add(new Precursor());
-        }
-
-        /// <summary>
         /// Current scan number
         /// </summary>
         public int ScanNumber { get; set; }
@@ -146,34 +138,6 @@ namespace Monocle.Data
         /// <returns></returns>
         public List<Precursor> Precursors { get; set; } = new List<Precursor>();
 
-        /// <summary>
-        /// Returns the m/z of the first precursor. 
-        /// </summary>
-        /// <value></value>
-        public double PrecursorMz {
-            get { return Precursors[0].Mz; }
-            set { Precursors[0].Mz = value; }
-        }
-
-        /// <summary>
-        /// Returns the charge of the first precursor.
-        /// </summary>
-        /// <value></value>
-        public int PrecursorCharge {
-            get { return Precursors[0].Charge; }
-            set { Precursors[0].Charge = value; }
-        }
-
-        public double PrecursorIntensity {
-            get { return Precursors[0].Intensity; }
-            set { Precursors[0].Intensity = value; }
-        }
-
-        public double IsolationMz {
-            get { return Precursors[0].IsolationMz; }
-            set { Precursors[0].IsolationMz = value; }
-        }
- 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 

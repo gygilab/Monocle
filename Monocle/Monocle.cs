@@ -69,7 +69,9 @@ namespace Monocle
                             NearbyMs1Scans.Add(scans[index]);
                         }
                     }
-                    Run(NearbyMs1Scans, precursorScan, scan, Options);
+                    foreach (var precursor in scan.Precursors) {
+                        Run(NearbyMs1Scans, precursorScan, precursor, Options);
+                    }
                 }
             }
             catch (Exception ex)
@@ -83,14 +85,14 @@ namespace Monocle
         /// </summary>
         /// <param name="Ms1ScansCentroids"></param>
         /// <param name="ParentScan"></param>
-        /// <param name="DependentScan"></param>
-        public static void Run(List<Scan> Ms1ScansCentroids, Scan ParentScan, Scan DependentScan, MonocleOptions Options)
+        /// <param name="precursor"></param>
+        public static void Run(List<Scan> Ms1ScansCentroids, Scan ParentScan, Precursor precursor, MonocleOptions Options)
         {
-            double precursorMz = DependentScan.IsolationMz;
+            double precursorMz = precursor.IsolationMz;
             if (precursorMz < 1) {
-                precursorMz = DependentScan.PrecursorMz;
+                precursorMz = precursor.Mz;
             }
-            int precursorCharge = DependentScan.PrecursorCharge;
+            int precursorCharge = precursor.Charge;
 
             // For charge detection
             int bestCharge = 0;
@@ -110,7 +112,7 @@ namespace Monocle
             for (int charge = chargeRange.Low; charge <= chargeRange.High; charge++)
             {
                 // Restrict number of isotopes to consider based on precursor mass.
-                double mass = DependentScan.PrecursorMz * charge;
+                double mass = precursor.Mz * charge;
                 var isotopeRange = new IsotopeRange(mass);
 
                 // Search for ion in parent scan, use parent ion mz for future peaks
@@ -153,18 +155,26 @@ namespace Monocle
 
             if (bestCharge > 0)
             {
-                DependentScan.PrecursorCharge = bestCharge;
+                precursor.Charge = bestCharge;
             }
 
             // Calculate m/z
             if (bestPeaks.Count > 0)
             {
-                DependentScan.PrecursorMz = Vector.WeightedAverage(bestPeaks, bestPeakIntensities);
+                precursor.Mz = Vector.WeightedAverage(bestPeaks, bestPeakIntensities);
             }
             else
             {
-                DependentScan.PrecursorMz = precursorMz;
+                precursor.Mz = precursorMz;
             }
+
+            precursor.IsolationSpecificity = IsolationSpecificityCalculator.calculate(
+                ParentScan.Centroids,
+                precursor.IsolationMz,
+                precursor.Mz,
+                precursor.Charge,
+                precursor.IsolationWidth
+            );
         }
     }
 }

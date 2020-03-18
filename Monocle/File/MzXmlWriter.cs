@@ -90,8 +90,8 @@ namespace Monocle.File {
                 {
                     writer.WriteStartElement("precursorMz");
                     writer.WriteAttributeString("precursorScanNum", scan.PrecursorMasterScanNumber.ToString());
-                    writer.WriteAttributeString("precursorIntensity", scan.PrecursorIntensity.ToString());
-                    writer.WriteAttributeString("precursorCharge", scan.PrecursorCharge.ToString());
+                    writer.WriteAttributeString("precursorIntensity", precursor.Intensity.ToString());
+                    writer.WriteAttributeString("precursorCharge", precursor.Charge.ToString());
                     writer.WriteAttributeString("activationMethod", scan.PrecursorActivationMethod.ToString());
                     writer.WriteString(precursor.Mz.ToString());
                     writer.WriteEndElement(); // precursorMz

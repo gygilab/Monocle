@@ -130,6 +130,7 @@ namespace Monocle.File
                         precursor.IsolationWidth = reaction.IsolationWidth;
                         precursor.IsolationMz = reaction.PrecursorMass;
                         precursor.Mz = reaction.PrecursorMass;
+                        precursor.OriginalMz = precursor.Mz;
                         scan.Precursors.Add(precursor);
                     }
                 }
@@ -158,7 +159,11 @@ namespace Monocle.File
                             scan.ElapsedScanTime = double.Parse(value);
                             break;
                         case "Charge State:":
-                            scan.PrecursorCharge = int.Parse(value);
+                            int charge = int.Parse(value);
+                            foreach (var precursor in scan.Precursors) {
+                                precursor.Charge = charge;
+                                precursor.OriginalCharge = precursor.Charge;
+                            }
                             break;
                         case "Master Scan Number:":
                             // Legacy implementation of master scan number
@@ -198,9 +203,6 @@ namespace Monocle.File
                 {
                     foreach(var precursor in scan.Precursors) {
                         precursor.Intensity = GetMaxIntensity(ScanParents[scan.ScanNumber], precursor.IsolationMz, precursor.IsolationWidth);
-                        if (precursor.Charge == 0) {
-                            precursor.Charge = scan.PrecursorCharge;
-                        }
                     }
                 }
 
