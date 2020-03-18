@@ -1,6 +1,6 @@
 
 using Monocle.Data;
-using System;
+using System.Collections.Generic;
 
 namespace Monocle.Peak 
 {
@@ -12,7 +12,7 @@ namespace Monocle.Peak
 
         public static int Match(Scan scan, double targetMz, double tolerance, int tolUnits)
         {
-            int i = NearestIndex(scan, targetMz);
+            int i = NearestIndex(scan.Centroids, targetMz);
 
             int count = scan.PeakCount;
             bool foundNext = false;
@@ -54,10 +54,10 @@ namespace Monocle.Peak
             return -1;
         }
 
-        private static int NearestIndex(Scan scan, double target)
+        public static int NearestIndex(List<Centroid> peaks, double target)
         {
             int low = 0;
-            int high = scan.PeakCount;
+            int high = peaks.Count;
             int mid = 0;
 
             while (true)
@@ -69,7 +69,7 @@ namespace Monocle.Peak
 
                 mid = (int)((high + low) * 0.5);
 
-                if (scan.Centroids[mid].Mz < target)
+                if (peaks[mid].Mz < target)
                 {
                     low = mid + 1;
                 }
@@ -94,7 +94,7 @@ namespace Monocle.Peak
             return false;
         }
 
-        private static double getPpm(double theoretical, double observed)
+        public static double getPpm(double theoretical, double observed)
         {
             return 1000000 * (theoretical - observed) / theoretical;
         }
