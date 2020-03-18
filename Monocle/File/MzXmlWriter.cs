@@ -84,8 +84,9 @@ namespace Monocle.File {
             writer.WriteAttributeString("compensationVoltage", scan.FaimsCV.ToString());
 
             //tSIM/MSX methods could be MS1s with "SPS" ions so no ms order consideration here
-            if (scan.MsOrder > 1 && scan.Precursors.Count > 0)
+            if (scan.MsOrder > 1)
             {
+                writer.WriteAttributeString("collisionEnergy", scan.CollisionEnergy.ToString());
                 foreach (Precursor precursor in scan.Precursors)
                 {
                     writer.WriteStartElement("precursorMz");
