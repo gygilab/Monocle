@@ -46,7 +46,7 @@ namespace Monocle.File
                 case OutputFileType.exmzxml:
                     // pass thru
                 case OutputFileType.mzxml:
-                    ext = "mzxml";
+                    ext = "mzXML";
                     break;
                 case OutputFileType.mzml:
                     ext = "mzML";
