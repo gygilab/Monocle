@@ -126,6 +126,8 @@ namespace Monocle.File
                     scan.Precursors.Clear();
                     for (int i = 0; i < scanEvent.MassCount; ++i){
                         var reaction = scanEvent.GetReaction(i);
+                        scan.CollisionEnergy = reaction.CollisionEnergy;
+
                         var precursor = new Data.Precursor();
                         precursor.IsolationWidth = reaction.IsolationWidth;
                         precursor.IsolationMz = reaction.PrecursorMass;
