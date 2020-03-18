@@ -51,7 +51,10 @@ namespace MakeMono
                     Monocle.Monocle.Run(ref Scans, monocleOptions);
                 }
 
-                string outputFilePath = ScanWriterFactory.MakeTargetFileName(file, monocleOptions.OutputFileType);
+                string outputFilePath = options.OutputFilePath.Trim();
+                if(outputFilePath.Length == 0) {
+                    outputFilePath = ScanWriterFactory.MakeTargetFileName(file, monocleOptions.OutputFileType);
+                }
                 log.Info("Writing output: " + outputFilePath);
                 IScanWriter writer = ScanWriterFactory.GetWriter(monocleOptions.OutputFileType);
                 writer.Open(outputFilePath);
