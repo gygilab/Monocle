@@ -10,6 +10,8 @@ namespace Monocle.Data {
             Mz = mz;
             Intensity = intensity;
             Charge = charge;
+            OriginalMz = mz;
+            OriginalCharge = charge;
         }
         public Precursor()
         {
@@ -38,6 +40,16 @@ namespace Monocle.Data {
                 return (Mz * Charge) - (Mass.ProtonMass * (Charge - 1));
             }
         }
+
+        /// <summary>
+        /// The m/z of the precursor peak before reassignment from Monocle.
+        /// </summary>
+        public double OriginalMz = 0;
+
+        /// <summary>
+        /// The charge of the precursor before reassignment from Monocle.
+        /// </summary>
+        public int OriginalCharge = 0;
 
         /// <summary>
         /// The m/z that the instrument targeted for isolation.
