@@ -27,6 +27,17 @@ pipeline {
                 sh '(cd Monocle.Tests/ && dotnet test)'
             }
         }
+        stage('build-rpm') {
+            steps {
+                sh 'bash build/rpm/build_rpm.sh'
+            }
+        }
     }
+    post {
+        always {
+            archiveArtifacts '~/rpmbuild/RPMS/'
+        }
+    }
+
 }
 
