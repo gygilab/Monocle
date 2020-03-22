@@ -1,6 +1,7 @@
 pipeline {
     environment {
         HOME = '/tmp'
+        VERSION = 1
     }
     agent {
         dockerfile {
@@ -32,12 +33,16 @@ pipeline {
                 sh 'bash build/rpm/build_rpm.sh'
             }
         }
+        stage('build-deb') {
+            steps {
+                sh 'bash build/rpm/build_deb.sh'
+            }
+        }
     }
     post {
         always {
-            archiveArtifacts '~/rpmbuild/RPMS/'
+            archiveArtifacts 'rpm/,deb/'
         }
     }
-
 }
 
