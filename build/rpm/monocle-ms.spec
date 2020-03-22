@@ -1,7 +1,7 @@
 %define _buildshell /bin/bash
 
 Name: monocle-ms
-Version: 1
+Version: %{_version}
 Release: %{_release}
 License: Proprietary
 Group: Science

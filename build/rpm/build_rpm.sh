@@ -6,4 +6,7 @@ pushd ~/rpmbuild/SOURCES/
 pwd
 tar czvf monocle-ms.rpm.tar.gz monocle-ms
 popd
-rpmbuild --define '_release 1' -bb build/rpm/monocle-ms.spec
+rpmbuild --define "_version $VERSION" --define "_release $BUILD_NUMBER" -bb build/rpm/monocle-ms.spec
+
+mkdir -p rpm
+cp ~/rpmbuild/RPMS/x86_64/*.rpm rpm/
