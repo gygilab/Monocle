@@ -1,0 +1,13 @@
+Source: monocle-ms
+Section: unknown
+Priority: optional
+Maintainer: Ramin Rad <Ramin_Rad@hms.harvard.edu>
+Build-Depends: debhelper (>= 10)
+Standards-Version: 4.1.2
+Homepage: https://github.com/gygilab/Monocle/
+
+Package: monocle-ms
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Monocle proteomics tool.
+ Monocle is a tool for monoisotopic peak and accurate precursor m/z detection in shotgun proteomics experiments.
