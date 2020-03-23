@@ -8,7 +8,7 @@ cp -R * /tmp/monocle-ms/ || true
 cd /tmp/monocle-ms
 
 # Automatically set Version in changelog
-sed -i "s/monocle-ms \(.*\) /monocle-ms ($VERSION-$BUILD_NUMBER) /" build/deb/debian/changelog
+sed -i -r "s/monocle-ms \(\S+\) /monocle-ms ($VERSION-$BUILD_NUMBER) /" build/deb/debian/changelog
 
 # Makefile is a stub for building with default debuild scripts
 cp build/deb/Makefile .
