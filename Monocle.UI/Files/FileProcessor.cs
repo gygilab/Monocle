@@ -119,6 +119,8 @@ namespace MonocleUI
             }
         }
 
+        public static bool ConvertOnly { get; set; } = false;
+
         /// <summary>
         /// Run Monocle on the files indicated in the Processor
         /// </summary>
@@ -153,16 +155,18 @@ namespace MonocleUI
                         TrackProcess(newFile, CurrentProgress, RunStatus.Read);
                         token.ThrowIfCancellationRequested();
 
-                        // Start Run across Scans
-                        Monocle.Monocle.Run(ref Scans, monocleOptions);
-
-                        CurrentProgress = CalculateProgress(3, filesCompleted, files.FileList.Count);
-                        TrackProcess(newFile, CurrentProgress, RunStatus.Processed);
-                        token.ThrowIfCancellationRequested();
+                        if (!ConvertOnly)
+                        {
+                            // Start Run across Scans
+                            Monocle.Monocle.Run(ref Scans, monocleOptions);
+                            CurrentProgress = CalculateProgress(3, filesCompleted, files.FileList.Count);
+                            TrackProcess(newFile, CurrentProgress, RunStatus.Processed);
+                            token.ThrowIfCancellationRequested();
+                        }
 
                         string outputFilePath = Path.Combine(Path.GetDirectoryName(newFile), Path.GetFileNameWithoutExtension(newFile) +
                             "_monocle." + monocleOptions.OutputFileType.ToString());
-                        IScanWriter writer = ScanWriterFactory.GetWriter(outputFilePath, monocleOptions.OutputFileType);
+                        IScanWriter writer = ScanWriterFactory.GetWriter(monocleOptions.OutputFileType);
                         writer.Open(outputFilePath);
                         writer.WriteHeader(new ScanFileHeader());
                         foreach (Scan scan in Scans) {

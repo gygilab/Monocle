@@ -17,6 +17,9 @@ namespace MonocleUI
             Size = new Size(783, 563);
         }
 
+        /// <summary>
+        /// Initialize the list of potential output file formats
+        /// </summary>
         private void Initiliaze_OutputFormat_CLB()
         {
             foreach(string type in Enum.GetNames(typeof(OutputFileType)))
@@ -26,6 +29,11 @@ namespace MonocleUI
             file_output_format_CLB.SetItemChecked(0, true);
         }
 
+        /// <summary>
+        /// Adds files from brows dialog to dgv
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void add_file_button_Click(object sender, EventArgs e)
         {
             if(input_file_dialog.ShowDialog() == DialogResult.OK)
@@ -46,6 +54,11 @@ namespace MonocleUI
             e.Effect = DragDropEffects.Copy;
         }
 
+        /// <summary>
+        /// Adds files from drag and drop to dgv
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Input_files_dgv_DragDrop(object sender, DragEventArgs e)
         {
             string[] fileArray;
@@ -64,6 +77,11 @@ namespace MonocleUI
             }
         }
 
+        /// <summary>
+        /// Selection for where files should be placed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void select_output_directory_button_Click(object sender, EventArgs e)
         {
             if (export_folder_dialog.ShowDialog() == DialogResult.OK)
@@ -72,6 +90,11 @@ namespace MonocleUI
             }
         }
 
+        /// <summary>
+        /// Remove row from the file DGV
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void remove_dgv_row_button_Click(object sender, EventArgs e)
         {
             if(input_files_dgv.SelectedRows.Count > 0)
@@ -87,6 +110,11 @@ namespace MonocleUI
             }
         }
 
+        /// <summary>
+        /// Toggle to show the log or not.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Log_toggle_checkbox_CheckedChanged(object sender, EventArgs e)
         {
             if (log_toggle_checkbox.Checked)
@@ -104,6 +132,10 @@ namespace MonocleUI
             Close();
         }
 
+        /// <summary>
+        /// Update the Monocle log.
+        /// </summary>
+        /// <param name="message"></param>
         public void UpdateLog(string message)
         {
             if (monocle_log.IsHandleCreated)
@@ -118,6 +150,10 @@ namespace MonocleUI
             }
         }
 
+        /// <summary>
+        /// Update the monocle progress bar
+        /// </summary>
+        /// <param name="progress"></param>
         public void UpdateProgress(int progress)
         {
             Invoke(new Action(
@@ -127,10 +163,22 @@ namespace MonocleUI
             }));
         }
 
+        private static bool FileListenerStarted { get; set; } = false;
+
+        /// <summary>
+        /// UI start of Monocle
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Start_monocle_button_Click(object sender, EventArgs e)
         {
             EnableRunUI(false);
-            Processor.FileTracker += FileListener;
+            if (!FileListenerStarted)
+            {
+                Processor.FileTracker += FileListener;
+                FileListenerStarted = true;
+            }
+
             try
             {
                 Processor.Run();
@@ -144,11 +192,11 @@ namespace MonocleUI
             }
         }
 
-        private void GCCollectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //GC.Collect();
-        }
-
+        /// <summary>
+        /// NUD for changing the number of scans to average in monocle.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void NumberOfScansToAverageNUD_ValueChanged(object sender, EventArgs e)
         {
             if(numberOfScansToAverageNUD.Value >= 1 && numberOfScansToAverageNUD.Value <= 20)
@@ -157,6 +205,10 @@ namespace MonocleUI
             }
         }
 
+        /// <summary>
+        /// Enable or disable the UI parameters used while running.
+        /// </summary>
+        /// <param name="enabled"></param>
         private void EnableRunUI(bool enabled)
         {
             Invoke(new Action(
@@ -174,15 +226,29 @@ namespace MonocleUI
             }));
         }
 
+        /// <summary>
+        /// File listener method used for updating the current pipeline progress.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FileListener(object sender, FileEventArgs e)
         {
-            if(e.FilePath != "")
+            if (e.FinishedAllFiles)
+            {
+                EnableRunUI(true);
+                return;
+            }
+
+            if (!File.Exists(e.FilePath))
             {
                 return;
             }
 
             switch (e.runStatus)
             {
+                case RunStatus.Started:
+                    UpdateLog("New File started: " + e.FilePath);
+                    break;
                 case RunStatus.Read:
                     UpdateLog("File Read into Monocle: " + e.FilePath);
                     break;
@@ -197,12 +263,13 @@ namespace MonocleUI
                     break;
             }
             UpdateProgress((int)e.CurrentProgress);
-            if (e.FinishedAllFiles)
-            {
-                EnableRunUI(true);
-            }
         }
 
+        /// <summary>
+        /// Selector for data output file type.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void File_output_format_CLB_SelectedIndexChanged(object sender, EventArgs e)
         {
             for (int itemInd = 0; itemInd < file_output_format_CLB.Items.Count; itemInd++)
@@ -242,16 +309,31 @@ namespace MonocleUI
             }
         }
 
+        /// <summary>
+        /// Lower of two charge states used for Mono
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LowChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
         {
             FileProcessor.monocleOptions.Charge_Range.Low = (int)lowChargeSelectionNUD.Value;
         }
 
+        /// <summary>
+        /// Higher of two charge states used for mono
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HighChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
         {
             FileProcessor.monocleOptions.Charge_Range.Low = (int)highChargeSelectionNUD.Value;
         }
 
+        /// <summary>
+        /// Update the polarity used for assessing the mono
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Polarity_checkBox_CheckedChanged(object sender, EventArgs e)
         {
             if (!polarity_checkBox.Checked)
@@ -266,10 +348,36 @@ namespace MonocleUI
             }
         }
 
+        /// <summary>
+        /// Invoke the cancellation token to stop the run.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cancelButton_Click(object sender, EventArgs e)
         {
             Processor.Cancel();
             EnableRunUI(true);
+        }
+
+        /// <summary>
+        /// Selector for whether to (1) convert with monocle or (2) convert only
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void convertOnlyCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (convertOnlyCheckbox.Checked)
+            {
+                FileProcessor.ConvertOnly = true;
+                convertOnlyCheckbox.ForeColor = Color.MediumVioletRed;
+                convertOnlyCheckbox.BackColor = Color.LightCoral;
+            }
+            else
+            {
+                FileProcessor.ConvertOnly = false;
+                convertOnlyCheckbox.ForeColor = Color.Black;
+                convertOnlyCheckbox.BackColor = Color.Transparent;
+            }
         }
     }
 
