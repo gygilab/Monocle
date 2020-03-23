@@ -35,7 +35,7 @@ pipeline {
         }
         stage('build-deb') {
             steps {
-                sh 'bash build/rpm/build_deb.sh'
+                sh 'bash build/deb/build_deb.sh'
             }
         }
     }
