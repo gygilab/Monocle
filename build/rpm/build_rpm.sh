@@ -1,6 +1,10 @@
 set -e
 set -x
 
+pwd
+ls -l
+ls -l ~/
+
 rm -rf ~/rpmbuild
 mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SOURCES/monocle-ms,SPECS,SRPMS}
 cp -R * ~/rpmbuild/SOURCES/monocle-ms/
