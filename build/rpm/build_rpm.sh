@@ -6,7 +6,8 @@ mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SOURCES/monocle-ms,SPECS,SRPMS
 cp -R * ~/rpmbuild/SOURCES/monocle-ms/
 
 # rpm requires known user. e.g. docker environment might use a different user.
-chown -R `whoami`.`whoami` ~/rpmbuild
+# Use user ID instead of name in case the user is not set in docker.
+chown -R `id -u`.`id -u` ~/rpmbuild
 
 pushd ~/rpmbuild/SOURCES/
 pwd
