@@ -65,6 +65,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.numberOfScansToAverageNUD = new System.Windows.Forms.NumericUpDown();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.convertOnlyCheckbox = new System.Windows.Forms.CheckBox();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
@@ -118,7 +119,6 @@
             this.gCCollectionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
             this.gCCollectionToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.gCCollectionToolStripMenuItem.Text = "GC Collection";
-            this.gCCollectionToolStripMenuItem.Click += new System.EventHandler(this.GCCollectionToolStripMenuItem_Click);
             // 
             // preferencesToolStripMenuItem
             // 
@@ -193,6 +193,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.convertOnlyCheckbox);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.file_output_format_CLB);
@@ -203,12 +204,12 @@
             this.groupBox2.Size = new System.Drawing.Size(459, 152);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Correction Export";
+            this.groupBox2.Text = "File Export";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 26);
+            this.label2.Location = new System.Drawing.Point(6, 36);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 5;
@@ -228,7 +229,7 @@
             this.file_output_format_CLB.CheckOnClick = true;
             this.file_output_format_CLB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.file_output_format_CLB.FormattingEnabled = true;
-            this.file_output_format_CLB.Location = new System.Drawing.Point(6, 43);
+            this.file_output_format_CLB.Location = new System.Drawing.Point(6, 53);
             this.file_output_format_CLB.MultiColumn = true;
             this.file_output_format_CLB.Name = "file_output_format_CLB";
             this.file_output_format_CLB.Size = new System.Drawing.Size(447, 46);
@@ -480,6 +481,19 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
+            // convertOnlyCheckbox
+            // 
+            this.convertOnlyCheckbox.Appearance = System.Windows.Forms.Appearance.Button;
+            this.convertOnlyCheckbox.AutoSize = true;
+            this.convertOnlyCheckbox.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightCoral;
+            this.convertOnlyCheckbox.Location = new System.Drawing.Point(375, 19);
+            this.convertOnlyCheckbox.Name = "convertOnlyCheckbox";
+            this.convertOnlyCheckbox.Size = new System.Drawing.Size(78, 23);
+            this.convertOnlyCheckbox.TabIndex = 6;
+            this.convertOnlyCheckbox.Text = "Convert Only";
+            this.convertOnlyCheckbox.UseVisualStyleBackColor = true;
+            this.convertOnlyCheckbox.CheckedChanged += new System.EventHandler(this.convertOnlyCheckbox_CheckedChanged);
+            // 
             // MonocleUI
             // 
             this.AllowDrop = true;
@@ -559,6 +573,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.CheckBox polarity_checkBox;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.CheckBox convertOnlyCheckbox;
     }
 }
 
