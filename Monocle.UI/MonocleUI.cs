@@ -176,7 +176,7 @@ namespace MonocleUI
 
         private void FileListener(object sender, FileEventArgs e)
         {
-            if(e.FilePath != "")
+            if(!File.Exists(e.FilePath))
             {
                 return;
             }
