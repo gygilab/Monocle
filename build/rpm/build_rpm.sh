@@ -11,7 +11,7 @@ cp -R * ~/rpmbuild/SOURCES/monocle-ms/
 
 # rpm requires known user. e.g. docker environment might use a different user.
 # Use user ID instead of name in case the user is not set in docker.
-chown -R `id -u`.`id -u` ~/rpmbuild
+chown -R `id -u`.`id -g` ~/rpmbuild
 
 pushd ~/rpmbuild/SOURCES/
 pwd
