@@ -1,7 +1,10 @@
 
+# clear artifacts dir
+rm -rf deb
+
 # put files in a folder with the same name
 # as the package name for debuild
-rm -rf /tmp/monocle-ms/
+rm -rf /tmp/monocle-ms*
 mkdir -p /tmp/monocle-ms/
 
 # The current directlry may already be tmp so ignore warning
@@ -26,5 +29,5 @@ debuild -us -uc
 popd
 
 # Copy files to artifacts dir
-mkdir -p deb
+mkdir deb
 mv /tmp/monocle-ms*.deb deb/
