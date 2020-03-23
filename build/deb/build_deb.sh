@@ -30,4 +30,4 @@ popd
 
 # Copy files to artifacts dir
 mkdir deb
-mv /tmp/monocle-ms*.deb deb/
+mv /tmp/monocle-ms_*.deb deb/
