@@ -162,7 +162,7 @@ namespace MonocleUI
 
                         string outputFilePath = Path.Combine(Path.GetDirectoryName(newFile), Path.GetFileNameWithoutExtension(newFile) +
                             "_monocle." + monocleOptions.OutputFileType.ToString());
-                        IScanWriter writer = ScanWriterFactory.GetWriter(outputFilePath, monocleOptions.OutputFileType);
+                        IScanWriter writer = ScanWriterFactory.GetWriter(monocleOptions.OutputFileType);
                         writer.Open(outputFilePath);
                         writer.WriteHeader(new ScanFileHeader());
                         foreach (Scan scan in Scans) {
