@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        HOME = '/var/lib/jenkins/'
+        HOME = '/tmp'
         VERSION = 1
     }
     agent {
