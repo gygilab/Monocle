@@ -100,7 +100,7 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -229,6 +229,7 @@
             this.file_output_format_CLB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.file_output_format_CLB.FormattingEnabled = true;
             this.file_output_format_CLB.Location = new System.Drawing.Point(6, 43);
+            this.file_output_format_CLB.MultiColumn = true;
             this.file_output_format_CLB.Name = "file_output_format_CLB";
             this.file_output_format_CLB.Size = new System.Drawing.Size(447, 46);
             this.file_output_format_CLB.TabIndex = 3;
