@@ -1,6 +1,11 @@
 
+case "$GIT_BRANCH" in
+ master) DIST="stable" ;;
+      *) DIST="development" ;;
+esac
+
 # clear artifacts dir
-rm -rf deb
+rm -rf artifacts/build/deb
 
 # put files in a folder with the same name
 # as the package name for debuild
@@ -13,7 +18,7 @@ cp -R * /tmp/monocle-ms/ || true
 pushd /tmp/monocle-ms
 
 # Automatically set Version in changelog
-sed -i -r "s/monocle-ms \(\S+\) /monocle-ms ($VERSION-$BUILD_NUMBER) /" build/deb/debian/changelog
+sed -i -r "s/monocle-ms \(\S+\) stable/monocle-ms ($VERSION-$BUILD_NUMBER) $DIST/" build/deb/debian/changelog
 
 # Makefile is a stub for building with default debuild scripts
 cp build/deb/Makefile .
@@ -29,5 +34,5 @@ debuild -us -uc
 popd
 
 # Copy files to artifacts dir
-mkdir deb
-mv /tmp/monocle-ms_*.deb deb/
+mkdir -p artifacts/build/deb
+mv /tmp/monocle-ms_*.deb artifacts/build/deb/
