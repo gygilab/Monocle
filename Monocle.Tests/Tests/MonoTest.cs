@@ -59,6 +59,21 @@ namespace Monocle.Tests.Tests
         }
 
         [Fact]
+        public void WindowTest() {
+            MzXmlReader reader = new MzXmlReader();
+            reader.Open("data/orbixl-mini.mzxml");
+            var scans = new List<Scan>();
+            foreach(Scan scan in reader) {
+                scans.Add(scan);
+            }
+            MonocleOptions options = new MonocleOptions();
+            options.AveragingVector = AveragingVector.Both;
+            options.Number_Of_Scans_To_Average = 5;
+            var nearby = Monocle.GetNearbyScans(ref scans, scans[scans[10].PrecursorMasterScanNumber - 1], options);
+            Assert.Equal(5, nearby.Count);
+        }
+
+        [Fact]
         public void MonoAll()
         {
             MzXmlReader reader = new MzXmlReader();
