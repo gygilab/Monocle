@@ -20,7 +20,6 @@ namespace Monocle
         {
             try
             {
-                int window = Options.Number_Of_Scans_To_Average / 2;
                 foreach (Scan scan in scans)
                 {
                     if (scan.MsOrder != Options.MS_Level)
@@ -34,43 +33,10 @@ namespace Monocle
                         continue;
                     }
 
-                    var NearbyMs1Scans = new List<Scan>(window * 2);
-                    int scanCount = 0;
-                    int index = scan.PrecursorMasterScanNumber - 1;
                     Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
-
-                    if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both)
-                    {
-                        // Reel backward.
-                        for (; index > 0 && scanCount < window; --index)
-                        {
-                            if (scans[index].MsOrder == 1 && (scans[index].FaimsState == Data.TriState.Off ||
-                                (scans[index].FaimsState == Data.TriState.On && scans[index].FaimsCV == precursorScan.FaimsCV)))
-                            {
-                                ++scanCount;
-                            }
-                        }
-                    }
-                    scanCount = 0;
-                    // Collect scans.
-                    for (; index < scans.Count && scanCount < window; ++index)
-                    {
-                        if (scans[index].MsOrder == 1 && (scans[index].FaimsState == Data.TriState.Off ||
-                            (scans[index].FaimsState == Data.TriState.On  && scans[index].FaimsCV == precursorScan.FaimsCV)))
-                        {
-                            if (scans[index].ScanNumber > scan.PrecursorMasterScanNumber)
-                            {
-                                if (Options.AveragingVector == AveragingVector.Before)
-                                {
-                                    break;
-                                }
-                                ++scanCount;
-                            }
-                            NearbyMs1Scans.Add(scans[index]);
-                        }
-                    }
+                    var nearbyScans = GetNearbyScans(ref scans, precursorScan, Options);
                     foreach (var precursor in scan.Precursors) {
-                        Run(NearbyMs1Scans, precursorScan, precursor, Options);
+                        Run(nearbyScans, precursorScan, precursor, Options);
                     }
                 }
             }
@@ -78,6 +44,81 @@ namespace Monocle
             {
                 throw new Exception("Monocle Run Error: " + ex);
             }
+        }
+
+        /// <summary>
+        /// Gets nearby MS1 scans around the scan given by precursorScan.
+        /// The window is provided as an opton, but it
+        ///  should at least return the precursor scan.
+        /// </summary>
+        /// <param name="scans">The List of scans to filter</param>
+        /// <param name="precursorScan">the target scan.</param>
+        /// <param name="Options">Options for selecting scans.</param>
+        /// <returns>A list of filtered scans.</returns>
+        public static List<Scan> GetNearbyScans(ref List<Scan> scans, Scan precursorScan, MonocleOptions Options)
+        {
+            int window = Options.Number_Of_Scans_To_Average / 2;
+            var output = new List<Scan>(window * 2);
+            int index = precursorScan.ScanNumber - 1;
+            int scanCount = 0;
+            if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both)
+            {
+                // Reel backward.
+                var scan = scans[index];
+                for (; index > 0 && scanCount < window; --index)
+                {
+                    if (IncludeNearbyScan(scan, precursorScan))
+                    {
+                        ++scanCount;
+                    }
+                }
+            }
+            scanCount = 0;
+            // Collect scans.
+            for (; index < scans.Count && scanCount < window; ++index)
+            {
+                var scan = scans[index];
+                if (IncludeNearbyScan(scan, precursorScan))
+                {
+                    if (scan.ScanNumber > precursorScan.ScanNumber)
+                    {
+                        if (Options.AveragingVector == AveragingVector.Before)
+                        {
+                            break;
+                        }
+                        ++scanCount;
+                    }
+                    output.Add(scan);
+                }
+            }
+            return output;
+        }
+
+        /// <summary>
+        /// Decides wheter the scan should be included in the analysis.
+        /// Generally only allows MS1 full scans and if FAIMS mode is on, then
+        /// include only scans with the same CV.
+        /// </summary>
+        /// <param name="scan">The scan in question</param>
+        /// <param name="precursorScan">The taret scan to compare against.</param>
+        /// <returns>Boolean whether to use the scan.</returns>
+        public static bool IncludeNearbyScan(Scan scan, Scan precursorScan)
+        {
+            if (scan.MsOrder != 1) {
+                return false;
+            }
+
+            // Faims scan matching.
+            if (scan.FaimsState == Data.TriState.On && scan.FaimsCV != precursorScan.FaimsCV) {
+                return false;
+            }
+
+            // SIM scan exclusion.
+            if (scan.ScanNumber == precursorScan.ScanNumber || (String.IsNullOrEmpty(scan.ScanType) && scan.ScanType.ToLower() != "full")) {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
