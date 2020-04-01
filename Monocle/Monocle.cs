@@ -114,7 +114,7 @@ namespace Monocle
             }
 
             // SIM scan exclusion.
-            if (scan.ScanNumber == precursorScan.ScanNumber || (String.IsNullOrEmpty(scan.ScanType) && scan.ScanType.ToLower() != "full")) {
+            if (scan.ScanNumber != precursorScan.ScanNumber && scan.ScanType.ToLower() != "full") {
                 return false;
             }
 
