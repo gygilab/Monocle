@@ -5,8 +5,8 @@ pwd
 ls -l
 ls -l ~/
 
-# clear artifacts dir
-rm -rf artifacts/build/rpm
+# clear previous packages
+rm -rf build/rpm/*.rpm
 
 # Initialize default rpmbuild directories
 rm -rf ~/rpmbuild
@@ -23,5 +23,4 @@ tar czvf monocle-ms.rpm.tar.gz monocle-ms
 popd
 rpmbuild --define "_version $VERSION" --define "_release $BUILD_NUMBER" -bb build/rpm/monocle-ms.spec
 
-mkdir -p artifacts/build/rpm
-cp ~/rpmbuild/RPMS/x86_64/*.rpm artifacts/build/rpm/
+cp ~/rpmbuild/RPMS/x86_64/*.rpm build/rpm/

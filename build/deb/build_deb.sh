@@ -4,8 +4,8 @@ case "$GIT_BRANCH" in
       *) DIST="development" ;;
 esac
 
-# clear artifacts dir
-rm -rf artifacts/build/deb
+# clear previous packages
+rm -rf build/deb/*.deb
 
 # put files in a folder with the same name
 # as the package name for debuild
@@ -34,5 +34,4 @@ debuild -us -uc
 popd
 
 # Copy files to artifacts dir
-mkdir -p artifacts/build/deb
-mv /tmp/monocle-ms_*.deb artifacts/build/deb/
+mv /tmp/monocle-ms_*.deb build/deb/
