@@ -23,5 +23,5 @@ tar czvf monocle-ms.rpm.tar.gz monocle-ms
 popd
 rpmbuild --define "_version $VERSION" --define "_release $BUILD_NUMBER" -bb build/rpm/monocle-ms.spec
 
-mkdir artifacts/build/rpm
+mkdir -p artifacts/build/rpm
 cp ~/rpmbuild/RPMS/x86_64/*.rpm artifacts/build/rpm/
