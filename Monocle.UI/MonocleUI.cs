@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Monocle;
+using MonocleUI.ext;
 
 namespace MonocleUI
 {
@@ -378,6 +379,29 @@ namespace MonocleUI
                 convertOnlyCheckbox.ForeColor = Color.Black;
                 convertOnlyCheckbox.BackColor = Color.Transparent;
             }
+        }
+
+        private void lowRes_checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            FileProcessor.monocleOptions.ChargeRangeUnknown = new Monocle.Data.ChargeRange("2:3");
+        }
+
+        private void forceCharge_checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (forceCharge_checkbox.Checked)
+            {
+                FileProcessor.monocleOptions.ForceCharges = true;
+            }
+            else
+            {
+                FileProcessor.monocleOptions.ForceCharges = false;
+            }
+        }
+
+        private void monocleOptionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MonocleOptionsForm newOptionsForm = new MonocleOptionsForm();
+            newOptionsForm.ShowDialog();
         }
     }
 

@@ -60,7 +60,7 @@ namespace Monocle
         public ChargeRange ChargeRangeUnknown { get; set; } = new ChargeRange(2, 3);
 
         /// <summary>
-        /// Output multiple precursors with charges set by -u even if charge is known.
+        /// Output multiple precursors with charges even if charge is known.
         /// </summary>
         public bool ForceCharges { get; set; } = false;
 

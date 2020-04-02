@@ -33,7 +33,6 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gCCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.input_files_dgv = new System.Windows.Forms.DataGridView();
@@ -55,28 +54,28 @@
             this.export_folder_dialog = new System.Windows.Forms.FolderBrowserDialog();
             this.log_toggle_checkbox = new System.Windows.Forms.CheckBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.monocleOptionsBox = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.polarity_checkBox = new System.Windows.Forms.CheckBox();
             this.toggleChargeDetectionCB = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.highChargeSelectionNUD = new System.Windows.Forms.NumericUpDown();
             this.lowChargeSelectionNUD = new System.Windows.Forms.NumericUpDown();
+            this.forceCharge_checkbox = new System.Windows.Forms.CheckBox();
+            this.monocleOptionsBox = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.polarity_checkBox = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.numberOfScansToAverageNUD = new System.Windows.Forms.NumericUpDown();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.monocleOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.monocle_log_tb.SuspendLayout();
-            this.monocleOptionsBox.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.highChargeSelectionNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lowChargeSelectionNUD)).BeginInit();
+            this.monocleOptionsBox.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfScansToAverageNUD)).BeginInit();
             this.SuspendLayout();
             // 
@@ -110,17 +109,10 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gCCollectionToolStripMenuItem});
+            this.monocleOptionsToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
-            // 
-            // gCCollectionToolStripMenuItem
-            // 
-            this.gCCollectionToolStripMenuItem.Name = "gCCollectionToolStripMenuItem";
-            this.gCCollectionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-            this.gCCollectionToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.gCCollectionToolStripMenuItem.Text = "GC Collection";
             // 
             // preferencesToolStripMenuItem
             // 
@@ -290,14 +282,14 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(20, 474);
+            this.progressBar1.Location = new System.Drawing.Point(20, 458);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(641, 23);
             this.progressBar1.TabIndex = 4;
             // 
             // start_monocle_button
             // 
-            this.start_monocle_button.Location = new System.Drawing.Point(680, 474);
+            this.start_monocle_button.Location = new System.Drawing.Point(680, 458);
             this.start_monocle_button.Name = "start_monocle_button";
             this.start_monocle_button.Size = new System.Drawing.Size(75, 23);
             this.start_monocle_button.TabIndex = 5;
@@ -314,71 +306,13 @@
             // 
             this.log_toggle_checkbox.Appearance = System.Windows.Forms.Appearance.Button;
             this.log_toggle_checkbox.AutoSize = true;
-            this.log_toggle_checkbox.Location = new System.Drawing.Point(20, 503);
+            this.log_toggle_checkbox.Location = new System.Drawing.Point(20, 487);
             this.log_toggle_checkbox.Name = "log_toggle_checkbox";
             this.log_toggle_checkbox.Size = new System.Drawing.Size(100, 23);
             this.log_toggle_checkbox.TabIndex = 6;
             this.log_toggle_checkbox.Text = "Show Output Log";
             this.log_toggle_checkbox.UseVisualStyleBackColor = true;
             this.log_toggle_checkbox.CheckedChanged += new System.EventHandler(this.Log_toggle_checkbox_CheckedChanged);
-            // 
-            // monocleOptionsBox
-            // 
-            this.monocleOptionsBox.Controls.Add(this.groupBox3);
-            this.monocleOptionsBox.Controls.Add(this.label3);
-            this.monocleOptionsBox.Controls.Add(this.numberOfScansToAverageNUD);
-            this.monocleOptionsBox.Location = new System.Drawing.Point(14, 291);
-            this.monocleOptionsBox.Name = "monocleOptionsBox";
-            this.monocleOptionsBox.Size = new System.Drawing.Size(352, 160);
-            this.monocleOptionsBox.TabIndex = 7;
-            this.monocleOptionsBox.TabStop = false;
-            this.monocleOptionsBox.Text = "Monocle Options";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.checkBox2);
-            this.groupBox3.Controls.Add(this.checkBox1);
-            this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.polarity_checkBox);
-            this.groupBox3.Controls.Add(this.toggleChargeDetectionCB);
-            this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Controls.Add(this.highChargeSelectionNUD);
-            this.groupBox3.Controls.Add(this.lowChargeSelectionNUD);
-            this.groupBox3.Location = new System.Drawing.Point(7, 51);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(339, 98);
-            this.groupBox3.TabIndex = 6;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Charge Detection";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(246, 68);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(55, 17);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Polarity";
-            // 
-            // polarity_checkBox
-            // 
-            this.polarity_checkBox.Appearance = System.Windows.Forms.Appearance.Button;
-            this.polarity_checkBox.Enabled = false;
-            this.polarity_checkBox.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.Control;
-            this.polarity_checkBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.polarity_checkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.polarity_checkBox.ForeColor = System.Drawing.Color.MediumTurquoise;
-            this.polarity_checkBox.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.polarity_checkBox.Location = new System.Drawing.Point(304, 61);
-            this.polarity_checkBox.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.polarity_checkBox.Name = "polarity_checkBox";
-            this.polarity_checkBox.Size = new System.Drawing.Size(32, 30);
-            this.polarity_checkBox.TabIndex = 6;
-            this.polarity_checkBox.Text = "+";
-            this.polarity_checkBox.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.polarity_checkBox.UseVisualStyleBackColor = false;
-            this.polarity_checkBox.CheckedChanged += new System.EventHandler(this.Polarity_checkBox_CheckedChanged);
             // 
             // toggleChargeDetectionCB
             // 
@@ -388,7 +322,7 @@
             this.toggleChargeDetectionCB.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
             this.toggleChargeDetectionCB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.toggleChargeDetectionCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toggleChargeDetectionCB.Location = new System.Drawing.Point(205, 17);
+            this.toggleChargeDetectionCB.Location = new System.Drawing.Point(6, 26);
             this.toggleChargeDetectionCB.Name = "toggleChargeDetectionCB";
             this.toggleChargeDetectionCB.Size = new System.Drawing.Size(128, 27);
             this.toggleChargeDetectionCB.TabIndex = 2;
@@ -461,6 +395,80 @@
             0});
             this.lowChargeSelectionNUD.ValueChanged += new System.EventHandler(this.LowChargeSelectionNUD_ValueChanged);
             // 
+            // forceCharge_checkbox
+            // 
+            this.forceCharge_checkbox.Appearance = System.Windows.Forms.Appearance.Button;
+            this.forceCharge_checkbox.BackColor = System.Drawing.Color.White;
+            this.forceCharge_checkbox.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
+            this.forceCharge_checkbox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.forceCharge_checkbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.forceCharge_checkbox.Location = new System.Drawing.Point(190, 26);
+            this.forceCharge_checkbox.Name = "forceCharge_checkbox";
+            this.forceCharge_checkbox.Size = new System.Drawing.Size(143, 27);
+            this.forceCharge_checkbox.TabIndex = 9;
+            this.forceCharge_checkbox.Text = "Export Multi-Charge";
+            this.forceCharge_checkbox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.mainToolTip.SetToolTip(this.forceCharge_checkbox, "Output multiple precursors with charges even if charge is known.");
+            this.forceCharge_checkbox.UseVisualStyleBackColor = false;
+            this.forceCharge_checkbox.CheckedChanged += new System.EventHandler(this.forceCharge_checkbox_CheckedChanged);
+            // 
+            // monocleOptionsBox
+            // 
+            this.monocleOptionsBox.Controls.Add(this.groupBox3);
+            this.monocleOptionsBox.Controls.Add(this.label3);
+            this.monocleOptionsBox.Controls.Add(this.numberOfScansToAverageNUD);
+            this.monocleOptionsBox.Location = new System.Drawing.Point(14, 291);
+            this.monocleOptionsBox.Name = "monocleOptionsBox";
+            this.monocleOptionsBox.Size = new System.Drawing.Size(352, 160);
+            this.monocleOptionsBox.TabIndex = 7;
+            this.monocleOptionsBox.TabStop = false;
+            this.monocleOptionsBox.Text = "Monocle Options";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.forceCharge_checkbox);
+            this.groupBox3.Controls.Add(this.label5);
+            this.groupBox3.Controls.Add(this.polarity_checkBox);
+            this.groupBox3.Controls.Add(this.toggleChargeDetectionCB);
+            this.groupBox3.Controls.Add(this.label4);
+            this.groupBox3.Controls.Add(this.highChargeSelectionNUD);
+            this.groupBox3.Controls.Add(this.lowChargeSelectionNUD);
+            this.groupBox3.Location = new System.Drawing.Point(7, 51);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(339, 98);
+            this.groupBox3.TabIndex = 6;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Charge Detection";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(246, 68);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(55, 17);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Polarity";
+            // 
+            // polarity_checkBox
+            // 
+            this.polarity_checkBox.Appearance = System.Windows.Forms.Appearance.Button;
+            this.polarity_checkBox.Enabled = false;
+            this.polarity_checkBox.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.Control;
+            this.polarity_checkBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.polarity_checkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.polarity_checkBox.ForeColor = System.Drawing.Color.MediumTurquoise;
+            this.polarity_checkBox.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.polarity_checkBox.Location = new System.Drawing.Point(304, 61);
+            this.polarity_checkBox.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.polarity_checkBox.Name = "polarity_checkBox";
+            this.polarity_checkBox.Size = new System.Drawing.Size(32, 30);
+            this.polarity_checkBox.TabIndex = 6;
+            this.polarity_checkBox.Text = "+";
+            this.polarity_checkBox.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.polarity_checkBox.UseVisualStyleBackColor = false;
+            this.polarity_checkBox.CheckedChanged += new System.EventHandler(this.Polarity_checkBox_CheckedChanged);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -485,7 +493,7 @@
             0,
             0});
             this.numberOfScansToAverageNUD.Name = "numberOfScansToAverageNUD";
-            this.numberOfScansToAverageNUD.Size = new System.Drawing.Size(120, 20);
+            this.numberOfScansToAverageNUD.Size = new System.Drawing.Size(66, 20);
             this.numberOfScansToAverageNUD.TabIndex = 0;
             this.numberOfScansToAverageNUD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numberOfScansToAverageNUD.Value = new decimal(new int[] {
@@ -497,7 +505,7 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(680, 503);
+            this.cancelButton.Location = new System.Drawing.Point(680, 487);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 8;
@@ -505,37 +513,12 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // checkBox1
+            // monocleOptionsToolStripMenuItem
             // 
-            this.checkBox1.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox1.BackColor = System.Drawing.Color.White;
-            this.checkBox1.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
-            this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(6, 17);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(82, 27);
-            this.checkBox1.TabIndex = 8;
-            this.checkBox1.Text = "Low Res MS1s";
-            this.checkBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.mainToolTip.SetToolTip(this.checkBox1, "For low-res scans, output multiple precursors with these charges.");
-            this.checkBox1.UseVisualStyleBackColor = false;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox2.BackColor = System.Drawing.Color.White;
-            this.checkBox2.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
-            this.checkBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox2.Location = new System.Drawing.Point(94, 17);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(105, 27);
-            this.checkBox2.TabIndex = 9;
-            this.checkBox2.Text = "Force Charge";
-            this.checkBox2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.mainToolTip.SetToolTip(this.checkBox2, "Output multiple precursors with charges even if charge is known.");
-            this.checkBox2.UseVisualStyleBackColor = false;
+            this.monocleOptionsToolStripMenuItem.Name = "monocleOptionsToolStripMenuItem";
+            this.monocleOptionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.monocleOptionsToolStripMenuItem.Text = "Monocle Options";
+            this.monocleOptionsToolStripMenuItem.Click += new System.EventHandler(this.monocleOptionsToolStripMenuItem_Click);
             // 
             // MonocleUI
             // 
@@ -566,12 +549,12 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.monocle_log_tb.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.highChargeSelectionNUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lowChargeSelectionNUD)).EndInit();
             this.monocleOptionsBox.ResumeLayout(false);
             this.monocleOptionsBox.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.highChargeSelectionNUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lowChargeSelectionNUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfScansToAverageNUD)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -604,7 +587,6 @@
         private System.Windows.Forms.CheckBox log_toggle_checkbox;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolTip mainToolTip;
-        private System.Windows.Forms.ToolStripMenuItem gCCollectionToolStripMenuItem;
         private System.Windows.Forms.GroupBox monocleOptionsBox;
         private System.Windows.Forms.NumericUpDown numberOfScansToAverageNUD;
         private System.Windows.Forms.Label label4;
@@ -617,8 +599,8 @@
         private System.Windows.Forms.CheckBox polarity_checkBox;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.CheckBox convertOnlyCheckbox;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox forceCharge_checkbox;
+        private System.Windows.Forms.ToolStripMenuItem monocleOptionsToolStripMenuItem;
     }
 }
 
