@@ -58,7 +58,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.highChargeSelectionNUD = new System.Windows.Forms.NumericUpDown();
             this.lowChargeSelectionNUD = new System.Windows.Forms.NumericUpDown();
-            this.forceCharge_checkbox = new System.Windows.Forms.CheckBox();
             this.monocleOptionsBox = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -189,6 +188,7 @@
             // 
             this.groupBox2.Controls.Add(this.convertOnlyCheckbox);
             this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.toggleChargeDetectionCB);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.file_output_format_CLB);
             this.groupBox2.Controls.Add(this.select_output_directory_button);
@@ -322,7 +322,7 @@
             this.toggleChargeDetectionCB.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
             this.toggleChargeDetectionCB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.toggleChargeDetectionCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toggleChargeDetectionCB.Location = new System.Drawing.Point(6, 26);
+            this.toggleChargeDetectionCB.Location = new System.Drawing.Point(119, 6);
             this.toggleChargeDetectionCB.Name = "toggleChargeDetectionCB";
             this.toggleChargeDetectionCB.Size = new System.Drawing.Size(128, 27);
             this.toggleChargeDetectionCB.TabIndex = 2;
@@ -336,17 +336,18 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(3, 68);
+            this.label4.Location = new System.Drawing.Point(3, 30);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(100, 17);
             this.label4.TabIndex = 5;
             this.label4.Text = "Charge Range";
             this.mainToolTip.SetToolTip(this.label4, "Range for Charge Detection, if enabled.");
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // highChargeSelectionNUD
             // 
             this.highChargeSelectionNUD.Enabled = false;
-            this.highChargeSelectionNUD.Location = new System.Drawing.Point(175, 66);
+            this.highChargeSelectionNUD.Location = new System.Drawing.Point(175, 28);
             this.highChargeSelectionNUD.Maximum = new decimal(new int[] {
             10,
             0,
@@ -372,7 +373,7 @@
             // lowChargeSelectionNUD
             // 
             this.lowChargeSelectionNUD.Enabled = false;
-            this.lowChargeSelectionNUD.Location = new System.Drawing.Point(109, 66);
+            this.lowChargeSelectionNUD.Location = new System.Drawing.Point(109, 28);
             this.lowChargeSelectionNUD.Maximum = new decimal(new int[] {
             10,
             0,
@@ -395,23 +396,6 @@
             0});
             this.lowChargeSelectionNUD.ValueChanged += new System.EventHandler(this.LowChargeSelectionNUD_ValueChanged);
             // 
-            // forceCharge_checkbox
-            // 
-            this.forceCharge_checkbox.Appearance = System.Windows.Forms.Appearance.Button;
-            this.forceCharge_checkbox.BackColor = System.Drawing.Color.White;
-            this.forceCharge_checkbox.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
-            this.forceCharge_checkbox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.forceCharge_checkbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.forceCharge_checkbox.Location = new System.Drawing.Point(190, 26);
-            this.forceCharge_checkbox.Name = "forceCharge_checkbox";
-            this.forceCharge_checkbox.Size = new System.Drawing.Size(143, 27);
-            this.forceCharge_checkbox.TabIndex = 9;
-            this.forceCharge_checkbox.Text = "Export Multi-Charge";
-            this.forceCharge_checkbox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.mainToolTip.SetToolTip(this.forceCharge_checkbox, "Output multiple precursors with charges even if charge is known.");
-            this.forceCharge_checkbox.UseVisualStyleBackColor = false;
-            this.forceCharge_checkbox.CheckedChanged += new System.EventHandler(this.forceCharge_checkbox_CheckedChanged);
-            // 
             // monocleOptionsBox
             // 
             this.monocleOptionsBox.Controls.Add(this.groupBox3);
@@ -426,10 +410,8 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.forceCharge_checkbox);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.polarity_checkBox);
-            this.groupBox3.Controls.Add(this.toggleChargeDetectionCB);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.highChargeSelectionNUD);
             this.groupBox3.Controls.Add(this.lowChargeSelectionNUD);
@@ -444,11 +426,12 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(246, 68);
+            this.label5.Location = new System.Drawing.Point(246, 30);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(55, 17);
             this.label5.TabIndex = 7;
             this.label5.Text = "Polarity";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // polarity_checkBox
             // 
@@ -459,7 +442,7 @@
             this.polarity_checkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.polarity_checkBox.ForeColor = System.Drawing.Color.MediumTurquoise;
             this.polarity_checkBox.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.polarity_checkBox.Location = new System.Drawing.Point(304, 61);
+            this.polarity_checkBox.Location = new System.Drawing.Point(304, 23);
             this.polarity_checkBox.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.polarity_checkBox.Name = "polarity_checkBox";
             this.polarity_checkBox.Size = new System.Drawing.Size(32, 30);
@@ -599,7 +582,6 @@
         private System.Windows.Forms.CheckBox polarity_checkBox;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.CheckBox convertOnlyCheckbox;
-        private System.Windows.Forms.CheckBox forceCharge_checkbox;
         private System.Windows.Forms.ToolStripMenuItem monocleOptionsToolStripMenuItem;
     }
 }

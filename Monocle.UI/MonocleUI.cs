@@ -386,22 +386,20 @@ namespace MonocleUI
             FileProcessor.monocleOptions.ChargeRangeUnknown = new Monocle.Data.ChargeRange("2:3");
         }
 
-        private void forceCharge_checkbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (forceCharge_checkbox.Checked)
-            {
-                FileProcessor.monocleOptions.ForceCharges = true;
-            }
-            else
-            {
-                FileProcessor.monocleOptions.ForceCharges = false;
-            }
-        }
-
         private void monocleOptionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MonocleOptionsForm newOptionsForm = new MonocleOptionsForm();
             newOptionsForm.ShowDialog();
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

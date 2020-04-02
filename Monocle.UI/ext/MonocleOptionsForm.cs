@@ -21,21 +21,19 @@ namespace MonocleUI.ext
 
         public void LoadOptions()
         {
-            PropertyInfo[] myPropertyInfo;
-            // Get the properties of 'Type' class object.
-            myPropertyInfo = FileProcessor.monocleOptions.GetType().GetProperties();
+            PropertyInfo[] propertyInfo = FileProcessor.monocleOptions.GetType().GetProperties();
             Console.WriteLine("Properties of System.Type are:");
 
-            for (int i = 0; i < myPropertyInfo.Length; i++)
+            for (int i = 0; i < propertyInfo.Length; i++)
             {
-                MonocleOptionsDGV.Rows.Add(myPropertyInfo[i].Name.ToString());
+                string[] newRow = new string[3]
+                {
+                    propertyInfo[i].Name,
+                    propertyInfo[i].GetValue(FileProcessor.monocleOptions).ToString(),
+                    propertyInfo[i].GetValue(FileProcessor.monocleOptions).ToString()
+                };
+                MonocleOptionsDGV.Rows.Add(newRow);
             }
-        }
-
-        public void InitializeOptionsTable()
-        {
-            MonocleOptionsDGV.ColumnCount = 3;
-            MonocleOptionsDGV.Columns[0].Name = "Options";
         }
     }
 }
