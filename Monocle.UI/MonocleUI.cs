@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -217,7 +218,11 @@ namespace MonocleUI
                     FileProcessor.monocleOptions[propertyInfo[i].Name].ToString(),
                     OptionDescriptions.Descriptions[propertyInfo[i].Name]
                 };
-                MonocleOptionsDGV.Rows.Add(newRow);
+                Invoke(new Action(
+                () =>
+                {
+                    MonocleOptionsDGV.Rows.Add(newRow);
+                }));
             }
         }
 
@@ -258,13 +263,13 @@ namespace MonocleUI
                     }
 
 
-                    Console.WriteLine(row.Cells[1].Value.ToString());
-                    Console.WriteLine(FileProcessor.monocleOptions[row.Cells[0].Value.ToString()].GetType() == Type.GetType("double"));
+                    Debug.WriteLine(row.Cells[1].Value.ToString());
+                    Debug.WriteLine(FileProcessor.monocleOptions[row.Cells[0].Value.ToString()].GetType() == Type.GetType("double"));
                 }
                 catch
                 {
-                    Console.WriteLine(row.Cells[0].Value.ToString());
-                    Console.WriteLine(FileProcessor.monocleOptions[row.Cells[0].Value.ToString()].GetType() == typeof(bool));
+                    Debug.WriteLine(row.Cells[0].Value.ToString());
+                    Debug.WriteLine(FileProcessor.monocleOptions[row.Cells[0].Value.ToString()].GetType() == typeof(bool));
                     continue;
                 }
             }
