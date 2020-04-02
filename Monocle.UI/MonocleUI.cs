@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Monocle;
+using Monocle.Data;
 using MonocleUI.lib;
 
 namespace MonocleUI
@@ -229,11 +230,41 @@ namespace MonocleUI
             {
                 try
                 {
-                    FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = row.Cells[1].Value.ToString();
+                    Type tempType = FileProcessor.monocleOptions[row.Cells[0].Value.ToString()].GetType();
+
+                    if(tempType == typeof(bool))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = bool.Parse(row.Cells[1].Value.ToString());
+                    }
+                    else if (tempType == typeof(ChargeRange))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = new ChargeRange(row.Cells[1].Value.ToString());
+                    }
+                    else if (tempType == typeof(OutputFileType))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = Enum.Parse(typeof(OutputFileType), row.Cells[1].Value.ToString());
+                    }
+                    else if (tempType == typeof(Polarity))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = Enum.Parse(typeof(Polarity), row.Cells[1].Value.ToString());
+                    }
+                    else if (tempType == typeof(int))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = int.Parse(row.Cells[1].Value.ToString());
+                    }
+                    else if (tempType == typeof(AveragingVector))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = Enum.Parse(typeof(AveragingVector), row.Cells[1].Value.ToString());
+                    }
+
+
                     Console.WriteLine(row.Cells[1].Value.ToString());
+                    Console.WriteLine(FileProcessor.monocleOptions[row.Cells[0].Value.ToString()].GetType() == Type.GetType("double"));
                 }
                 catch
                 {
+                    Console.WriteLine(row.Cells[0].Value.ToString());
+                    Console.WriteLine(FileProcessor.monocleOptions[row.Cells[0].Value.ToString()].GetType() == typeof(bool));
                     continue;
                 }
             }
