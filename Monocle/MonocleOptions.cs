@@ -28,21 +28,18 @@ namespace Monocle
         public AveragingVector AveragingVector { get; set; } = AveragingVector.Both;
 
         /// <summary>
-        /// Toggle the use of charge detection, reports a single charge state
-        /// </summary>
-        public bool Charge_Detection { get; set; } = false;
-
-        /// <summary>
         /// MS level at which monoisotopic m/z will be adjusted
         /// </summary>
         private int _MS_Level { get; set; } = 2;
-        public int MS_Level { get
+        public int MS_Level
+        {
+            get
             {
                 return _MS_Level;
             }
             set
             {
-                if(value > 0 && value < 20)
+                if (value > 0 && value < 20)
                 {
                     _MS_Level = value;
                 }
@@ -50,9 +47,9 @@ namespace Monocle
         }
 
         /// <summary>
-        /// Polarity of the charges to be analyzed
+        /// Toggle the use of charge detection, reports a single charge state
         /// </summary>
-        public Polarity Polarity { get; set; } = Polarity.Positive;
+        public bool Charge_Detection { get; set; } = false;
 
         /// <summary>
         /// Default to charges 2 - 6.
@@ -68,6 +65,11 @@ namespace Monocle
         /// Output multiple precursors with charges even if charge is known.
         /// </summary>
         public bool ForceCharges { get; set; } = false;
+
+        /// <summary>
+        /// Polarity of the charges to be analyzed
+        /// </summary>
+        public Polarity Polarity { get; set; } = Polarity.Positive;
 
         /// <summary>
         /// Verbose debug output.

@@ -184,6 +184,7 @@ namespace MonocleUI
 
             try
             {
+                UpdateMonocleOptions();
                 Processor.Run();
             }
             catch (Exception ex)
@@ -229,29 +230,12 @@ namespace MonocleUI
                 try
                 {
                     FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = row.Cells[1].Value.ToString();
+                    Console.WriteLine(row.Cells[1].Value.ToString());
                 }
                 catch
                 {
                     continue;
                 }
-            }
-
-            PropertyInfo[] propertyInfo = FileProcessor.monocleOptions.GetType().GetProperties();
-            for (int i = 0; i < propertyInfo.Length; i++)
-            {
-                if (propertyInfo[i].Name == "WriteSps" || propertyInfo[i].Name == "ConvertOnly" ||
-                    propertyInfo[i].Name == "WriteDebugString" || propertyInfo[i].Name == "OutputFileType")
-                {
-                    continue;
-                }
-
-                string[] newRow = new string[3]
-                {
-                    propertyInfo[i].Name,
-                    propertyInfo[i].GetValue(FileProcessor.monocleOptions).ToString(),
-                    OptionDescriptions.Descriptions[propertyInfo[i].Name]
-                };
-                MonocleOptionsDGV.Rows.Add(newRow);
             }
         }
 
