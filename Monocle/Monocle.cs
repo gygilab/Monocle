@@ -18,31 +18,24 @@ namespace Monocle
         /// <param name="Number_Of_Scans_To_Average"></param>
         public static void Run(ref List<Scan> scans, MonocleOptions Options)
         {
-            try
+            foreach (Scan scan in scans)
             {
-                foreach (Scan scan in scans)
+                if (scan.MsOrder != Options.MS_Level)
                 {
-                    if (scan.MsOrder != Options.MS_Level)
-                    {
-                        continue;
-                    }
-
-                    if (scan.PrecursorMasterScanNumber <= 0)
-                    {
-                        Console.WriteLine(String.Format("Scan {0} does not have a precursor scan number assigned.", scan.ScanNumber));
-                        continue;
-                    }
-
-                    Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
-                    var nearbyScans = GetNearbyScans(ref scans, precursorScan, Options);
-                    foreach (var precursor in scan.Precursors) {
-                        Run(nearbyScans, precursorScan, precursor, Options);
-                    }
+                    continue;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Monocle Run Error: " + ex);
+
+                if (scan.PrecursorMasterScanNumber <= 0)
+                {
+                    Console.WriteLine(String.Format("Scan {0} does not have a precursor scan number assigned.", scan.ScanNumber));
+                    continue;
+                }
+
+                Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
+                var nearbyScans = GetNearbyScans(ref scans, precursorScan, Options);
+                foreach (var precursor in scan.Precursors) {
+                    Run(nearbyScans, precursorScan, precursor, Options);
+                }
             }
         }
 
