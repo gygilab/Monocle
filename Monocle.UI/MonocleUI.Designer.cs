@@ -41,6 +41,7 @@
             this.remove_dgv_row_button = new System.Windows.Forms.Button();
             this.add_file_button = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.convertOnlyCheckbox = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.file_output_format_CLB = new System.Windows.Forms.CheckedListBox();
@@ -65,7 +66,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.numberOfScansToAverageNUD = new System.Windows.Forms.NumericUpDown();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.convertOnlyCheckbox = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
@@ -199,12 +201,25 @@
             this.groupBox2.Controls.Add(this.file_output_format_CLB);
             this.groupBox2.Controls.Add(this.select_output_directory_button);
             this.groupBox2.Controls.Add(this.export_folder_maskedTB);
-            this.groupBox2.Location = new System.Drawing.Point(296, 292);
+            this.groupBox2.Location = new System.Drawing.Point(297, 291);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(459, 152);
+            this.groupBox2.Size = new System.Drawing.Size(459, 177);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "File Export";
+            // 
+            // convertOnlyCheckbox
+            // 
+            this.convertOnlyCheckbox.Appearance = System.Windows.Forms.Appearance.Button;
+            this.convertOnlyCheckbox.AutoSize = true;
+            this.convertOnlyCheckbox.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightCoral;
+            this.convertOnlyCheckbox.Location = new System.Drawing.Point(375, 19);
+            this.convertOnlyCheckbox.Name = "convertOnlyCheckbox";
+            this.convertOnlyCheckbox.Size = new System.Drawing.Size(78, 23);
+            this.convertOnlyCheckbox.TabIndex = 6;
+            this.convertOnlyCheckbox.Text = "Convert Only";
+            this.convertOnlyCheckbox.UseVisualStyleBackColor = true;
+            this.convertOnlyCheckbox.CheckedChanged += new System.EventHandler(this.convertOnlyCheckbox_CheckedChanged);
             // 
             // label2
             // 
@@ -275,14 +290,14 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(19, 450);
+            this.progressBar1.Location = new System.Drawing.Point(20, 474);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(641, 23);
             this.progressBar1.TabIndex = 4;
             // 
             // start_monocle_button
             // 
-            this.start_monocle_button.Location = new System.Drawing.Point(679, 450);
+            this.start_monocle_button.Location = new System.Drawing.Point(680, 474);
             this.start_monocle_button.Name = "start_monocle_button";
             this.start_monocle_button.Size = new System.Drawing.Size(75, 23);
             this.start_monocle_button.TabIndex = 5;
@@ -299,7 +314,7 @@
             // 
             this.log_toggle_checkbox.Appearance = System.Windows.Forms.Appearance.Button;
             this.log_toggle_checkbox.AutoSize = true;
-            this.log_toggle_checkbox.Location = new System.Drawing.Point(19, 479);
+            this.log_toggle_checkbox.Location = new System.Drawing.Point(20, 503);
             this.log_toggle_checkbox.Name = "log_toggle_checkbox";
             this.log_toggle_checkbox.Size = new System.Drawing.Size(100, 23);
             this.log_toggle_checkbox.TabIndex = 6;
@@ -312,15 +327,17 @@
             this.monocleOptionsBox.Controls.Add(this.groupBox3);
             this.monocleOptionsBox.Controls.Add(this.label3);
             this.monocleOptionsBox.Controls.Add(this.numberOfScansToAverageNUD);
-            this.monocleOptionsBox.Location = new System.Drawing.Point(13, 292);
+            this.monocleOptionsBox.Location = new System.Drawing.Point(14, 291);
             this.monocleOptionsBox.Name = "monocleOptionsBox";
-            this.monocleOptionsBox.Size = new System.Drawing.Size(277, 149);
+            this.monocleOptionsBox.Size = new System.Drawing.Size(277, 174);
             this.monocleOptionsBox.TabIndex = 7;
             this.monocleOptionsBox.TabStop = false;
             this.monocleOptionsBox.Text = "Monocle Options";
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBox2);
+            this.groupBox3.Controls.Add(this.checkBox1);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.polarity_checkBox);
             this.groupBox3.Controls.Add(this.toggleChargeDetectionCB);
@@ -329,7 +346,7 @@
             this.groupBox3.Controls.Add(this.lowChargeSelectionNUD);
             this.groupBox3.Location = new System.Drawing.Point(7, 51);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(264, 92);
+            this.groupBox3.Size = new System.Drawing.Size(264, 117);
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Charge Detection";
@@ -338,7 +355,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(156, 30);
+            this.label5.Location = new System.Drawing.Point(154, 57);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(55, 17);
             this.label5.TabIndex = 7;
@@ -353,7 +370,7 @@
             this.polarity_checkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.polarity_checkBox.ForeColor = System.Drawing.Color.MediumTurquoise;
             this.polarity_checkBox.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.polarity_checkBox.Location = new System.Drawing.Point(217, 21);
+            this.polarity_checkBox.Location = new System.Drawing.Point(215, 48);
             this.polarity_checkBox.Name = "polarity_checkBox";
             this.polarity_checkBox.Size = new System.Drawing.Size(32, 35);
             this.polarity_checkBox.TabIndex = 6;
@@ -369,11 +386,11 @@
             this.toggleChargeDetectionCB.BackColor = System.Drawing.Color.White;
             this.toggleChargeDetectionCB.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
             this.toggleChargeDetectionCB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.toggleChargeDetectionCB.Location = new System.Drawing.Point(19, 27);
+            this.toggleChargeDetectionCB.Location = new System.Drawing.Point(6, 54);
             this.toggleChargeDetectionCB.Name = "toggleChargeDetectionCB";
-            this.toggleChargeDetectionCB.Size = new System.Drawing.Size(122, 23);
+            this.toggleChargeDetectionCB.Size = new System.Drawing.Size(100, 23);
             this.toggleChargeDetectionCB.TabIndex = 2;
-            this.toggleChargeDetectionCB.Text = "Use Charge Detection";
+            this.toggleChargeDetectionCB.Text = "Charge Detection";
             this.toggleChargeDetectionCB.UseVisualStyleBackColor = false;
             this.toggleChargeDetectionCB.CheckedChanged += new System.EventHandler(this.ToggleChargeDetectionCB_CheckedChanged);
             // 
@@ -381,7 +398,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(16, 66);
+            this.label4.Location = new System.Drawing.Point(6, 91);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(100, 17);
             this.label4.TabIndex = 5;
@@ -390,7 +407,7 @@
             // highChargeSelectionNUD
             // 
             this.highChargeSelectionNUD.Enabled = false;
-            this.highChargeSelectionNUD.Location = new System.Drawing.Point(189, 64);
+            this.highChargeSelectionNUD.Location = new System.Drawing.Point(178, 91);
             this.highChargeSelectionNUD.Maximum = new decimal(new int[] {
             10,
             0,
@@ -415,7 +432,7 @@
             // lowChargeSelectionNUD
             // 
             this.lowChargeSelectionNUD.Enabled = false;
-            this.lowChargeSelectionNUD.Location = new System.Drawing.Point(127, 64);
+            this.lowChargeSelectionNUD.Location = new System.Drawing.Point(112, 91);
             this.lowChargeSelectionNUD.Maximum = new decimal(new int[] {
             10,
             0,
@@ -473,7 +490,7 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(679, 479);
+            this.cancelButton.Location = new System.Drawing.Point(680, 503);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 8;
@@ -481,18 +498,33 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // convertOnlyCheckbox
+            // checkBox1
             // 
-            this.convertOnlyCheckbox.Appearance = System.Windows.Forms.Appearance.Button;
-            this.convertOnlyCheckbox.AutoSize = true;
-            this.convertOnlyCheckbox.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightCoral;
-            this.convertOnlyCheckbox.Location = new System.Drawing.Point(375, 19);
-            this.convertOnlyCheckbox.Name = "convertOnlyCheckbox";
-            this.convertOnlyCheckbox.Size = new System.Drawing.Size(78, 23);
-            this.convertOnlyCheckbox.TabIndex = 6;
-            this.convertOnlyCheckbox.Text = "Convert Only";
-            this.convertOnlyCheckbox.UseVisualStyleBackColor = true;
-            this.convertOnlyCheckbox.CheckedChanged += new System.EventHandler(this.convertOnlyCheckbox_CheckedChanged);
+            this.checkBox1.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.BackColor = System.Drawing.Color.White;
+            this.checkBox1.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
+            this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBox1.Location = new System.Drawing.Point(6, 19);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(89, 23);
+            this.checkBox1.TabIndex = 8;
+            this.checkBox1.Text = "Low Res MS1s";
+            this.checkBox1.UseVisualStyleBackColor = false;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.BackColor = System.Drawing.Color.White;
+            this.checkBox2.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
+            this.checkBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBox2.Location = new System.Drawing.Point(158, 19);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(81, 23);
+            this.checkBox2.TabIndex = 9;
+            this.checkBox2.Text = "Force Charge";
+            this.checkBox2.UseVisualStyleBackColor = false;
             // 
             // MonocleUI
             // 
@@ -574,6 +606,8 @@
         private System.Windows.Forms.CheckBox polarity_checkBox;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.CheckBox convertOnlyCheckbox;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 
