@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using Monocle;
+using Monocle.Data;
+using MonocleUI.lib;
 
 namespace MonocleUI
 {
@@ -14,6 +18,7 @@ namespace MonocleUI
         {
             InitializeComponent();
             Initiliaze_OutputFormat_CLB();
+            LoadOptions();
             Size = new Size(783, 563);
         }
 
@@ -181,6 +186,7 @@ namespace MonocleUI
 
             try
             {
+                UpdateMonocleOptions();
                 Processor.Run();
             }
             catch (Exception ex)
@@ -193,15 +199,79 @@ namespace MonocleUI
         }
 
         /// <summary>
-        /// NUD for changing the number of scans to average in monocle.
+        /// Load Monocle Options DGV
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void NumberOfScansToAverageNUD_ValueChanged(object sender, EventArgs e)
+        public void LoadOptions()
         {
-            if(numberOfScansToAverageNUD.Value >= 1 && numberOfScansToAverageNUD.Value <= 20)
+            PropertyInfo[] propertyInfo = FileProcessor.monocleOptions.GetType().GetProperties();
+            for (int i = 0; i < propertyInfo.Length - 1; i++)
             {
-                FileProcessor.monocleOptions.Number_Of_Scans_To_Average = (int)numberOfScansToAverageNUD.Value;
+                if(propertyInfo[i].Name == "WriteSps" || propertyInfo[i].Name == "ConvertOnly" || 
+                    propertyInfo[i].Name == "WriteDebugString" || propertyInfo[i].Name == "OutputFileType")
+                {
+                    continue;
+                }
+
+                string[] newRow = new string[3]
+                {
+                    propertyInfo[i].Name,
+                    FileProcessor.monocleOptions[propertyInfo[i].Name].ToString(),
+                    OptionDescriptions.Descriptions[propertyInfo[i].Name]
+                };
+                Invoke(new Action(
+                () =>
+                {
+                    MonocleOptionsDGV.Rows.Add(newRow);
+                }));
+            }
+        }
+
+        /// <summary>
+        /// Update Monocle Options from Options DGV
+        /// </summary>
+        public void UpdateMonocleOptions()
+        {
+            foreach(DataGridViewRow row in MonocleOptionsDGV.Rows)
+            {
+                try
+                {
+                    Type tempType = FileProcessor.monocleOptions[row.Cells[0].Value.ToString()].GetType();
+
+                    if(tempType == typeof(bool))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = bool.Parse(row.Cells[1].Value.ToString());
+                    }
+                    else if (tempType == typeof(ChargeRange))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = new ChargeRange(row.Cells[1].Value.ToString());
+                    }
+                    else if (tempType == typeof(OutputFileType))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = Enum.Parse(typeof(OutputFileType), row.Cells[1].Value.ToString());
+                    }
+                    else if (tempType == typeof(Polarity))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = Enum.Parse(typeof(Polarity), row.Cells[1].Value.ToString());
+                    }
+                    else if (tempType == typeof(int))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = int.Parse(row.Cells[1].Value.ToString());
+                    }
+                    else if (tempType == typeof(AveragingVector))
+                    {
+                        FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = Enum.Parse(typeof(AveragingVector), row.Cells[1].Value.ToString());
+                    }
+
+
+                    Debug.WriteLine(row.Cells[1].Value.ToString());
+                    Debug.WriteLine(FileProcessor.monocleOptions[row.Cells[0].Value.ToString()].GetType() == Type.GetType("double"));
+                }
+                catch
+                {
+                    Debug.WriteLine(row.Cells[0].Value.ToString());
+                    Debug.WriteLine(FileProcessor.monocleOptions[row.Cells[0].Value.ToString()].GetType() == typeof(bool));
+                    continue;
+                }
             }
         }
 
@@ -217,12 +287,8 @@ namespace MonocleUI
                 start_monocle_button.Enabled = enabled;
                 input_files_dgv.Enabled = enabled;
                 file_output_format_CLB.Enabled = enabled;
-                lowChargeSelectionNUD.Enabled = enabled;
-                highChargeSelectionNUD.Enabled = enabled;
                 add_file_button.Enabled = enabled;
                 remove_dgv_row_button.Enabled = enabled;
-                toggleChargeDetectionCB.Enabled = enabled;
-                numberOfScansToAverageNUD.Enabled = enabled;
             }));
         }
 
@@ -236,6 +302,11 @@ namespace MonocleUI
             if (e.FinishedAllFiles)
             {
                 EnableRunUI(true);
+                Invoke(new Action(
+                () =>
+                {
+                    progressBar1.Value = 0;
+                }));
                 return;
             }
 
@@ -287,68 +358,6 @@ namespace MonocleUI
         }
 
         /// <summary>
-        /// Toggle charge detection
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ToggleChargeDetectionCB_CheckedChanged(object sender, EventArgs e)
-        {
-            if (toggleChargeDetectionCB.Checked)
-            {
-                FileProcessor.monocleOptions.Charge_Detection = true;
-                polarity_checkBox.Enabled = true;
-                lowChargeSelectionNUD.Enabled = true;
-                highChargeSelectionNUD.Enabled = true;
-            }
-            else
-            {
-                FileProcessor.monocleOptions.Charge_Detection = false;
-                polarity_checkBox.Enabled = false;
-                lowChargeSelectionNUD.Enabled = false;
-                highChargeSelectionNUD.Enabled = false;
-            }
-        }
-
-        /// <summary>
-        /// Lower of two charge states used for Mono
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void LowChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
-        {
-            FileProcessor.monocleOptions.Charge_Range.Low = (int)lowChargeSelectionNUD.Value;
-        }
-
-        /// <summary>
-        /// Higher of two charge states used for mono
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void HighChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
-        {
-            FileProcessor.monocleOptions.Charge_Range.Low = (int)highChargeSelectionNUD.Value;
-        }
-
-        /// <summary>
-        /// Update the polarity used for assessing the mono
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Polarity_checkBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!polarity_checkBox.Checked)
-            {
-                polarity_checkBox.ForeColor = Color.MediumTurquoise;
-                polarity_checkBox.Text = "+";
-            }
-            else
-            {
-                polarity_checkBox.ForeColor = Color.MediumVioletRed;
-                polarity_checkBox.Text = "-";
-            }
-        }
-
-        /// <summary>
         /// Invoke the cancellation token to stop the run.
         /// </summary>
         /// <param name="sender"></param>
@@ -379,6 +388,7 @@ namespace MonocleUI
                 convertOnlyCheckbox.BackColor = Color.Transparent;
             }
         }
+
     }
 
 }
