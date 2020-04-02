@@ -201,9 +201,9 @@
             this.groupBox2.Controls.Add(this.file_output_format_CLB);
             this.groupBox2.Controls.Add(this.select_output_directory_button);
             this.groupBox2.Controls.Add(this.export_folder_maskedTB);
-            this.groupBox2.Location = new System.Drawing.Point(297, 291);
+            this.groupBox2.Location = new System.Drawing.Point(372, 291);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(459, 177);
+            this.groupBox2.Size = new System.Drawing.Size(384, 160);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "File Export";
@@ -213,7 +213,7 @@
             this.convertOnlyCheckbox.Appearance = System.Windows.Forms.Appearance.Button;
             this.convertOnlyCheckbox.AutoSize = true;
             this.convertOnlyCheckbox.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightCoral;
-            this.convertOnlyCheckbox.Location = new System.Drawing.Point(375, 19);
+            this.convertOnlyCheckbox.Location = new System.Drawing.Point(299, 15);
             this.convertOnlyCheckbox.Name = "convertOnlyCheckbox";
             this.convertOnlyCheckbox.Size = new System.Drawing.Size(78, 23);
             this.convertOnlyCheckbox.TabIndex = 6;
@@ -247,13 +247,13 @@
             this.file_output_format_CLB.Location = new System.Drawing.Point(6, 53);
             this.file_output_format_CLB.MultiColumn = true;
             this.file_output_format_CLB.Name = "file_output_format_CLB";
-            this.file_output_format_CLB.Size = new System.Drawing.Size(447, 46);
+            this.file_output_format_CLB.Size = new System.Drawing.Size(371, 46);
             this.file_output_format_CLB.TabIndex = 3;
             this.file_output_format_CLB.SelectedIndexChanged += new System.EventHandler(this.File_output_format_CLB_SelectedIndexChanged);
             // 
             // select_output_directory_button
             // 
-            this.select_output_directory_button.Location = new System.Drawing.Point(378, 104);
+            this.select_output_directory_button.Location = new System.Drawing.Point(302, 100);
             this.select_output_directory_button.Name = "select_output_directory_button";
             this.select_output_directory_button.Size = new System.Drawing.Size(75, 23);
             this.select_output_directory_button.TabIndex = 1;
@@ -266,7 +266,7 @@
             this.export_folder_maskedTB.Location = new System.Drawing.Point(6, 129);
             this.export_folder_maskedTB.Name = "export_folder_maskedTB";
             this.export_folder_maskedTB.ReadOnly = true;
-            this.export_folder_maskedTB.Size = new System.Drawing.Size(447, 20);
+            this.export_folder_maskedTB.Size = new System.Drawing.Size(371, 20);
             this.export_folder_maskedTB.TabIndex = 0;
             // 
             // monocle_log_tb
@@ -329,7 +329,7 @@
             this.monocleOptionsBox.Controls.Add(this.numberOfScansToAverageNUD);
             this.monocleOptionsBox.Location = new System.Drawing.Point(14, 291);
             this.monocleOptionsBox.Name = "monocleOptionsBox";
-            this.monocleOptionsBox.Size = new System.Drawing.Size(277, 174);
+            this.monocleOptionsBox.Size = new System.Drawing.Size(352, 160);
             this.monocleOptionsBox.TabIndex = 7;
             this.monocleOptionsBox.TabStop = false;
             this.monocleOptionsBox.Text = "Monocle Options";
@@ -346,7 +346,7 @@
             this.groupBox3.Controls.Add(this.lowChargeSelectionNUD);
             this.groupBox3.Location = new System.Drawing.Point(7, 51);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(264, 117);
+            this.groupBox3.Size = new System.Drawing.Size(339, 98);
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Charge Detection";
@@ -355,7 +355,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(154, 57);
+            this.label5.Location = new System.Drawing.Point(246, 68);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(55, 17);
             this.label5.TabIndex = 7;
@@ -370,12 +370,13 @@
             this.polarity_checkBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.polarity_checkBox.ForeColor = System.Drawing.Color.MediumTurquoise;
             this.polarity_checkBox.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.polarity_checkBox.Location = new System.Drawing.Point(215, 48);
+            this.polarity_checkBox.Location = new System.Drawing.Point(304, 61);
+            this.polarity_checkBox.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.polarity_checkBox.Name = "polarity_checkBox";
-            this.polarity_checkBox.Size = new System.Drawing.Size(32, 35);
+            this.polarity_checkBox.Size = new System.Drawing.Size(32, 30);
             this.polarity_checkBox.TabIndex = 6;
             this.polarity_checkBox.Text = "+";
-            this.polarity_checkBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.polarity_checkBox.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.polarity_checkBox.UseVisualStyleBackColor = false;
             this.polarity_checkBox.CheckedChanged += new System.EventHandler(this.Polarity_checkBox_CheckedChanged);
             // 
@@ -386,11 +387,14 @@
             this.toggleChargeDetectionCB.BackColor = System.Drawing.Color.White;
             this.toggleChargeDetectionCB.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
             this.toggleChargeDetectionCB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.toggleChargeDetectionCB.Location = new System.Drawing.Point(6, 54);
+            this.toggleChargeDetectionCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toggleChargeDetectionCB.Location = new System.Drawing.Point(205, 17);
             this.toggleChargeDetectionCB.Name = "toggleChargeDetectionCB";
-            this.toggleChargeDetectionCB.Size = new System.Drawing.Size(100, 23);
+            this.toggleChargeDetectionCB.Size = new System.Drawing.Size(128, 27);
             this.toggleChargeDetectionCB.TabIndex = 2;
             this.toggleChargeDetectionCB.Text = "Charge Detection";
+            this.toggleChargeDetectionCB.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.mainToolTip.SetToolTip(this.toggleChargeDetectionCB, "Toggle charge detection.");
             this.toggleChargeDetectionCB.UseVisualStyleBackColor = false;
             this.toggleChargeDetectionCB.CheckedChanged += new System.EventHandler(this.ToggleChargeDetectionCB_CheckedChanged);
             // 
@@ -398,16 +402,17 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(6, 91);
+            this.label4.Location = new System.Drawing.Point(3, 68);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(100, 17);
             this.label4.TabIndex = 5;
             this.label4.Text = "Charge Range";
+            this.mainToolTip.SetToolTip(this.label4, "Range for Charge Detection, if enabled.");
             // 
             // highChargeSelectionNUD
             // 
             this.highChargeSelectionNUD.Enabled = false;
-            this.highChargeSelectionNUD.Location = new System.Drawing.Point(178, 91);
+            this.highChargeSelectionNUD.Location = new System.Drawing.Point(175, 66);
             this.highChargeSelectionNUD.Maximum = new decimal(new int[] {
             10,
             0,
@@ -422,6 +427,7 @@
             this.highChargeSelectionNUD.Size = new System.Drawing.Size(60, 20);
             this.highChargeSelectionNUD.TabIndex = 4;
             this.highChargeSelectionNUD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.mainToolTip.SetToolTip(this.highChargeSelectionNUD, "Range for Charge Detection, if enabled.");
             this.highChargeSelectionNUD.Value = new decimal(new int[] {
             6,
             0,
@@ -432,7 +438,7 @@
             // lowChargeSelectionNUD
             // 
             this.lowChargeSelectionNUD.Enabled = false;
-            this.lowChargeSelectionNUD.Location = new System.Drawing.Point(112, 91);
+            this.lowChargeSelectionNUD.Location = new System.Drawing.Point(109, 66);
             this.lowChargeSelectionNUD.Maximum = new decimal(new int[] {
             10,
             0,
@@ -447,6 +453,7 @@
             this.lowChargeSelectionNUD.Size = new System.Drawing.Size(60, 20);
             this.lowChargeSelectionNUD.TabIndex = 3;
             this.lowChargeSelectionNUD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.mainToolTip.SetToolTip(this.lowChargeSelectionNUD, "Range for Charge Detection, if enabled.");
             this.lowChargeSelectionNUD.Value = new decimal(new int[] {
             2,
             0,
@@ -458,7 +465,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(20, 25);
+            this.label3.Location = new System.Drawing.Point(10, 25);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(118, 17);
             this.label3.TabIndex = 1;
@@ -501,29 +508,33 @@
             // checkBox1
             // 
             this.checkBox1.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox1.AutoSize = true;
             this.checkBox1.BackColor = System.Drawing.Color.White;
             this.checkBox1.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
             this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBox1.Location = new System.Drawing.Point(6, 19);
+            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox1.Location = new System.Drawing.Point(6, 17);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(89, 23);
+            this.checkBox1.Size = new System.Drawing.Size(82, 27);
             this.checkBox1.TabIndex = 8;
             this.checkBox1.Text = "Low Res MS1s";
+            this.checkBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.mainToolTip.SetToolTip(this.checkBox1, "For low-res scans, output multiple precursors with these charges.");
             this.checkBox1.UseVisualStyleBackColor = false;
             // 
             // checkBox2
             // 
             this.checkBox2.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox2.AutoSize = true;
             this.checkBox2.BackColor = System.Drawing.Color.White;
             this.checkBox2.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
             this.checkBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBox2.Location = new System.Drawing.Point(158, 19);
+            this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox2.Location = new System.Drawing.Point(94, 17);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(81, 23);
+            this.checkBox2.Size = new System.Drawing.Size(105, 27);
             this.checkBox2.TabIndex = 9;
             this.checkBox2.Text = "Force Charge";
+            this.checkBox2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.mainToolTip.SetToolTip(this.checkBox2, "Output multiple precursors with charges even if charge is known.");
             this.checkBox2.UseVisualStyleBackColor = false;
             // 
             // MonocleUI
