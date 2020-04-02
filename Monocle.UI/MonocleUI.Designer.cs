@@ -362,11 +362,10 @@
             this.Options,
             this.Value,
             this.Description});
-            this.MonocleOptionsDGV.Dock = System.Windows.Forms.DockStyle.Top;
-            this.MonocleOptionsDGV.Location = new System.Drawing.Point(3, 16);
+            this.MonocleOptionsDGV.Location = new System.Drawing.Point(6, 19);
             this.MonocleOptionsDGV.Name = "MonocleOptionsDGV";
             this.MonocleOptionsDGV.RowHeadersVisible = false;
-            this.MonocleOptionsDGV.Size = new System.Drawing.Size(346, 400);
+            this.MonocleOptionsDGV.Size = new System.Drawing.Size(340, 135);
             this.MonocleOptionsDGV.TabIndex = 1;
             // 
             // Options

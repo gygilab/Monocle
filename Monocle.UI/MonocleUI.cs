@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using Monocle;
 using MonocleUI.ext;
@@ -15,6 +16,7 @@ namespace MonocleUI
         {
             InitializeComponent();
             Initiliaze_OutputFormat_CLB();
+            LoadOptions();
             Size = new Size(783, 563);
         }
 
@@ -190,6 +192,26 @@ namespace MonocleUI
 #if DEBUG
                 UpdateLog(ex.ToString());
 #endif
+            }
+        }
+
+        /// <summary>
+        /// Load Monocle Options DGV
+        /// </summary>
+        public void LoadOptions()
+        {
+            PropertyInfo[] propertyInfo = FileProcessor.monocleOptions.GetType().GetProperties();
+            Console.WriteLine("Properties of System.Type are:");
+
+            for (int i = 0; i < propertyInfo.Length; i++)
+            {
+                string[] newRow = new string[3]
+                {
+                    propertyInfo[i].Name,
+                    propertyInfo[i].GetValue(FileProcessor.monocleOptions).ToString(),
+                    propertyInfo[i].GetValue(FileProcessor.monocleOptions).ToString()
+                };
+                MonocleOptionsDGV.Rows.Add(newRow);
             }
         }
 
