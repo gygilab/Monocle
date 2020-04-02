@@ -52,6 +52,11 @@ namespace Monocle
         /// <summary>
         /// Default to charges 2 - 6.
         /// </summary>
+        public Polarity Polarity { get; set; } = Polarity.Positive;
+
+        /// <summary>
+        /// Default to charges 2 - 6.
+        /// </summary>
         public ChargeRange Charge_Range { get; set; } = new ChargeRange(2, 6);
 
         /// <summary>

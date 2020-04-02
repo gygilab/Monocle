@@ -200,10 +200,10 @@ namespace MonocleUI
         /// <param name="e"></param>
         private void NumberOfScansToAverageNUD_ValueChanged(object sender, EventArgs e)
         {
-            if(numberOfScansToAverageNUD.Value >= 1 && numberOfScansToAverageNUD.Value <= 20)
-            {
-                FileProcessor.monocleOptions.Number_Of_Scans_To_Average = (int)numberOfScansToAverageNUD.Value;
-            }
+            //if(numberOfScansToAverageNUD.Value >= 1 && numberOfScansToAverageNUD.Value <= 20)
+            //{
+            //    FileProcessor.monocleOptions.Number_Of_Scans_To_Average = (int)numberOfScansToAverageNUD.Value;
+            //}
         }
 
         /// <summary>
@@ -218,12 +218,12 @@ namespace MonocleUI
                 start_monocle_button.Enabled = enabled;
                 input_files_dgv.Enabled = enabled;
                 file_output_format_CLB.Enabled = enabled;
-                lowChargeSelectionNUD.Enabled = enabled;
-                highChargeSelectionNUD.Enabled = enabled;
+                //lowChargeSelectionNUD.Enabled = enabled;
+                //highChargeSelectionNUD.Enabled = enabled;
                 add_file_button.Enabled = enabled;
                 remove_dgv_row_button.Enabled = enabled;
-                toggleChargeDetectionCB.Enabled = enabled;
-                numberOfScansToAverageNUD.Enabled = enabled;
+                //toggleChargeDetectionCB.Enabled = enabled;
+                //numberOfScansToAverageNUD.Enabled = enabled;
             }));
         }
 
@@ -294,20 +294,20 @@ namespace MonocleUI
         /// <param name="e"></param>
         private void ToggleChargeDetectionCB_CheckedChanged(object sender, EventArgs e)
         {
-            if (toggleChargeDetectionCB.Checked)
-            {
-                FileProcessor.monocleOptions.Charge_Detection = true;
-                polarity_checkBox.Enabled = true;
-                lowChargeSelectionNUD.Enabled = true;
-                highChargeSelectionNUD.Enabled = true;
-            }
-            else
-            {
-                FileProcessor.monocleOptions.Charge_Detection = false;
-                polarity_checkBox.Enabled = false;
-                lowChargeSelectionNUD.Enabled = false;
-                highChargeSelectionNUD.Enabled = false;
-            }
+            //if (toggleChargeDetectionCB.Checked)
+            //{
+            //    FileProcessor.monocleOptions.Charge_Detection = true;
+            //    polarity_checkBox.Enabled = true;
+            //    lowChargeSelectionNUD.Enabled = true;
+            //    highChargeSelectionNUD.Enabled = true;
+            //}
+            //else
+            //{
+            //    FileProcessor.monocleOptions.Charge_Detection = false;
+            //    polarity_checkBox.Enabled = false;
+            //    lowChargeSelectionNUD.Enabled = false;
+            //    highChargeSelectionNUD.Enabled = false;
+            //}
         }
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace MonocleUI
         /// <param name="e"></param>
         private void LowChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
         {
-            FileProcessor.monocleOptions.Charge_Range.Low = (int)lowChargeSelectionNUD.Value;
+            //FileProcessor.monocleOptions.Charge_Range.Low = (int)lowChargeSelectionNUD.Value;
         }
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace MonocleUI
         /// <param name="e"></param>
         private void HighChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
         {
-            FileProcessor.monocleOptions.Charge_Range.Low = (int)highChargeSelectionNUD.Value;
+            //FileProcessor.monocleOptions.Charge_Range.Low = (int)highChargeSelectionNUD.Value;
         }
 
         /// <summary>
@@ -337,16 +337,16 @@ namespace MonocleUI
         /// <param name="e"></param>
         private void Polarity_checkBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (!polarity_checkBox.Checked)
-            {
-                polarity_checkBox.ForeColor = Color.MediumTurquoise;
-                polarity_checkBox.Text = "+";
-            }
-            else
-            {
-                polarity_checkBox.ForeColor = Color.MediumVioletRed;
-                polarity_checkBox.Text = "-";
-            }
+            //if (!polarity_checkBox.Checked)
+            //{
+            //    polarity_checkBox.ForeColor = Color.MediumTurquoise;
+            //    polarity_checkBox.Text = "+";
+            //}
+            //else
+            //{
+            //    polarity_checkBox.ForeColor = Color.MediumVioletRed;
+            //    polarity_checkBox.Text = "-";
+            //}
         }
 
         /// <summary>
@@ -390,16 +390,6 @@ namespace MonocleUI
         {
             MonocleOptionsForm newOptionsForm = new MonocleOptionsForm();
             newOptionsForm.ShowDialog();
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
         }
     }
 

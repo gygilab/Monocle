@@ -16,24 +16,6 @@ namespace MonocleUI.ext
         public MonocleOptionsForm()
         {
             InitializeComponent();
-            LoadOptions();
-        }
-
-        public void LoadOptions()
-        {
-            PropertyInfo[] propertyInfo = FileProcessor.monocleOptions.GetType().GetProperties();
-            Console.WriteLine("Properties of System.Type are:");
-
-            for (int i = 0; i < propertyInfo.Length; i++)
-            {
-                string[] newRow = new string[3]
-                {
-                    propertyInfo[i].Name,
-                    propertyInfo[i].GetValue(FileProcessor.monocleOptions).ToString(),
-                    propertyInfo[i].GetValue(FileProcessor.monocleOptions).ToString()
-                };
-                MonocleOptionsDGV.Rows.Add(newRow);
-            }
         }
     }
 }
