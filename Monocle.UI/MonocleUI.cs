@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Monocle;
+using MonocleUI.lib;
 
 namespace MonocleUI
 {
@@ -200,31 +201,22 @@ namespace MonocleUI
         public void LoadOptions()
         {
             PropertyInfo[] propertyInfo = FileProcessor.monocleOptions.GetType().GetProperties();
-            Console.WriteLine("Properties of System.Type are:");
-
             for (int i = 0; i < propertyInfo.Length; i++)
             {
+                if(propertyInfo[i].Name == "WriteSps" || propertyInfo[i].Name == "ConvertOnly" || 
+                    propertyInfo[i].Name == "WriteDebugString" || propertyInfo[i].Name == "OutputFileType")
+                {
+                    continue;
+                }
+
                 string[] newRow = new string[3]
                 {
                     propertyInfo[i].Name,
                     propertyInfo[i].GetValue(FileProcessor.monocleOptions).ToString(),
-                    propertyInfo[i].GetValue(FileProcessor.monocleOptions).ToString()
+                    OptionDescriptions.Descriptions[propertyInfo[i].Name]
                 };
                 MonocleOptionsDGV.Rows.Add(newRow);
             }
-        }
-
-        /// <summary>
-        /// NUD for changing the number of scans to average in monocle.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void NumberOfScansToAverageNUD_ValueChanged(object sender, EventArgs e)
-        {
-            //if(numberOfScansToAverageNUD.Value >= 1 && numberOfScansToAverageNUD.Value <= 20)
-            //{
-            //    FileProcessor.monocleOptions.Number_Of_Scans_To_Average = (int)numberOfScansToAverageNUD.Value;
-            //}
         }
 
         /// <summary>
@@ -309,68 +301,6 @@ namespace MonocleUI
         }
 
         /// <summary>
-        /// Toggle charge detection
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ToggleChargeDetectionCB_CheckedChanged(object sender, EventArgs e)
-        {
-            //if (toggleChargeDetectionCB.Checked)
-            //{
-            //    FileProcessor.monocleOptions.Charge_Detection = true;
-            //    polarity_checkBox.Enabled = true;
-            //    lowChargeSelectionNUD.Enabled = true;
-            //    highChargeSelectionNUD.Enabled = true;
-            //}
-            //else
-            //{
-            //    FileProcessor.monocleOptions.Charge_Detection = false;
-            //    polarity_checkBox.Enabled = false;
-            //    lowChargeSelectionNUD.Enabled = false;
-            //    highChargeSelectionNUD.Enabled = false;
-            //}
-        }
-
-        /// <summary>
-        /// Lower of two charge states used for Mono
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void LowChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
-        {
-            //FileProcessor.monocleOptions.Charge_Range.Low = (int)lowChargeSelectionNUD.Value;
-        }
-
-        /// <summary>
-        /// Higher of two charge states used for mono
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void HighChargeSelectionNUD_ValueChanged(object sender, EventArgs e)
-        {
-            //FileProcessor.monocleOptions.Charge_Range.Low = (int)highChargeSelectionNUD.Value;
-        }
-
-        /// <summary>
-        /// Update the polarity used for assessing the mono
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Polarity_checkBox_CheckedChanged(object sender, EventArgs e)
-        {
-            //if (!polarity_checkBox.Checked)
-            //{
-            //    polarity_checkBox.ForeColor = Color.MediumTurquoise;
-            //    polarity_checkBox.Text = "+";
-            //}
-            //else
-            //{
-            //    polarity_checkBox.ForeColor = Color.MediumVioletRed;
-            //    polarity_checkBox.Text = "-";
-            //}
-        }
-
-        /// <summary>
         /// Invoke the cancellation token to stop the run.
         /// </summary>
         /// <param name="sender"></param>
@@ -402,10 +332,6 @@ namespace MonocleUI
             }
         }
 
-        private void lowRes_checkbox_CheckedChanged(object sender, EventArgs e)
-        {
-            FileProcessor.monocleOptions.ChargeRangeUnknown = new Monocle.Data.ChargeRange("2:3");
-        }
     }
 
 }

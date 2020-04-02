@@ -50,7 +50,7 @@ namespace Monocle
         }
 
         /// <summary>
-        /// Default to charges 2 - 6.
+        /// Polarity of the charges to be analyzed
         /// </summary>
         public Polarity Polarity { get; set; } = Polarity.Positive;
 
