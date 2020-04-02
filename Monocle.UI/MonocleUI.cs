@@ -201,7 +201,7 @@ namespace MonocleUI
         public void LoadOptions()
         {
             PropertyInfo[] propertyInfo = FileProcessor.monocleOptions.GetType().GetProperties();
-            for (int i = 0; i < propertyInfo.Length; i++)
+            for (int i = 0; i < propertyInfo.Length - 1; i++)
             {
                 if(propertyInfo[i].Name == "WriteSps" || propertyInfo[i].Name == "ConvertOnly" || 
                     propertyInfo[i].Name == "WriteDebugString" || propertyInfo[i].Name == "OutputFileType")
