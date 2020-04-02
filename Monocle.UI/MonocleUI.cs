@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Monocle;
-using MonocleUI.ext;
 
 namespace MonocleUI
 {
@@ -406,12 +405,6 @@ namespace MonocleUI
         private void lowRes_checkbox_CheckedChanged(object sender, EventArgs e)
         {
             FileProcessor.monocleOptions.ChargeRangeUnknown = new Monocle.Data.ChargeRange("2:3");
-        }
-
-        private void monocleOptionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MonocleOptionsForm newOptionsForm = new MonocleOptionsForm();
-            newOptionsForm.ShowDialog();
         }
     }
 

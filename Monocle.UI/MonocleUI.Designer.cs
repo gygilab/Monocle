@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,12 +57,11 @@
             this.log_toggle_checkbox = new System.Windows.Forms.CheckBox();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.monocleOptionsBox = new System.Windows.Forms.GroupBox();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.MonocleOptionsDGV = new System.Windows.Forms.DataGridView();
             this.Options = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cancelButton = new System.Windows.Forms.Button();
             this.mainMenuStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.input_files_dgv)).BeginInit();
@@ -112,7 +111,6 @@
             this.monocleOptionsToolStripMenuItem.Name = "monocleOptionsToolStripMenuItem";
             this.monocleOptionsToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.monocleOptionsToolStripMenuItem.Text = "Monocle Options";
-            this.monocleOptionsToolStripMenuItem.Click += new System.EventHandler(this.monocleOptionsToolStripMenuItem_Click);
             // 
             // preferencesToolStripMenuItem
             // 
@@ -122,12 +120,12 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.input_files_dgv);
             this.groupBox1.Controls.Add(this.remove_dgv_row_button);
             this.groupBox1.Controls.Add(this.add_file_button);
-            this.groupBox1.Location = new System.Drawing.Point(13, 28);
+            this.groupBox1.Controls.Add(this.input_files_dgv);
+            this.groupBox1.Location = new System.Drawing.Point(12, 28);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(742, 257);
+            this.groupBox1.Size = new System.Drawing.Size(365, 424);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Inputs";
@@ -152,7 +150,7 @@
             this.input_files_dgv.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.input_files_dgv.RowTemplate.ReadOnly = true;
             this.input_files_dgv.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.input_files_dgv.Size = new System.Drawing.Size(692, 231);
+            this.input_files_dgv.Size = new System.Drawing.Size(320, 402);
             this.input_files_dgv.TabIndex = 5;
             this.mainToolTip.SetToolTip(this.input_files_dgv, "Drag and drop files or brows with the \"+\" button.");
             this.input_files_dgv.DragDrop += new System.Windows.Forms.DragEventHandler(this.Input_files_dgv_DragDrop);
@@ -165,7 +163,7 @@
             // 
             // remove_dgv_row_button
             // 
-            this.remove_dgv_row_button.Location = new System.Drawing.Point(704, 54);
+            this.remove_dgv_row_button.Location = new System.Drawing.Point(327, 54);
             this.remove_dgv_row_button.Name = "remove_dgv_row_button";
             this.remove_dgv_row_button.Size = new System.Drawing.Size(32, 32);
             this.remove_dgv_row_button.TabIndex = 4;
@@ -176,7 +174,7 @@
             // 
             // add_file_button
             // 
-            this.add_file_button.Location = new System.Drawing.Point(704, 16);
+            this.add_file_button.Location = new System.Drawing.Point(327, 16);
             this.add_file_button.Name = "add_file_button";
             this.add_file_button.Size = new System.Drawing.Size(32, 32);
             this.add_file_button.TabIndex = 3;
@@ -187,16 +185,15 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.button1);
             this.groupBox2.Controls.Add(this.convertOnlyCheckbox);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.file_output_format_CLB);
             this.groupBox2.Controls.Add(this.select_output_directory_button);
             this.groupBox2.Controls.Add(this.export_folder_maskedTB);
-            this.groupBox2.Location = new System.Drawing.Point(372, 291);
+            this.groupBox2.Location = new System.Drawing.Point(383, 273);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(384, 160);
+            this.groupBox2.Size = new System.Drawing.Size(373, 179);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "File Export";
@@ -206,7 +203,7 @@
             this.convertOnlyCheckbox.Appearance = System.Windows.Forms.Appearance.Button;
             this.convertOnlyCheckbox.AutoSize = true;
             this.convertOnlyCheckbox.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightCoral;
-            this.convertOnlyCheckbox.Location = new System.Drawing.Point(299, 15);
+            this.convertOnlyCheckbox.Location = new System.Drawing.Point(292, 19);
             this.convertOnlyCheckbox.Name = "convertOnlyCheckbox";
             this.convertOnlyCheckbox.Size = new System.Drawing.Size(78, 23);
             this.convertOnlyCheckbox.TabIndex = 6;
@@ -217,7 +214,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 36);
+            this.label2.Location = new System.Drawing.Point(9, 36);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 5;
@@ -226,7 +223,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 109);
+            this.label1.Location = new System.Drawing.Point(6, 126);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(82, 13);
             this.label1.TabIndex = 2;
@@ -237,16 +234,16 @@
             this.file_output_format_CLB.CheckOnClick = true;
             this.file_output_format_CLB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.file_output_format_CLB.FormattingEnabled = true;
-            this.file_output_format_CLB.Location = new System.Drawing.Point(6, 53);
+            this.file_output_format_CLB.Location = new System.Drawing.Point(9, 53);
             this.file_output_format_CLB.MultiColumn = true;
             this.file_output_format_CLB.Name = "file_output_format_CLB";
-            this.file_output_format_CLB.Size = new System.Drawing.Size(371, 46);
+            this.file_output_format_CLB.Size = new System.Drawing.Size(360, 46);
             this.file_output_format_CLB.TabIndex = 3;
             this.file_output_format_CLB.SelectedIndexChanged += new System.EventHandler(this.File_output_format_CLB_SelectedIndexChanged);
             // 
             // select_output_directory_button
             // 
-            this.select_output_directory_button.Location = new System.Drawing.Point(302, 100);
+            this.select_output_directory_button.Location = new System.Drawing.Point(292, 121);
             this.select_output_directory_button.Name = "select_output_directory_button";
             this.select_output_directory_button.Size = new System.Drawing.Size(75, 23);
             this.select_output_directory_button.TabIndex = 1;
@@ -256,10 +253,10 @@
             // 
             // export_folder_maskedTB
             // 
-            this.export_folder_maskedTB.Location = new System.Drawing.Point(6, 129);
+            this.export_folder_maskedTB.Location = new System.Drawing.Point(9, 150);
             this.export_folder_maskedTB.Name = "export_folder_maskedTB";
             this.export_folder_maskedTB.ReadOnly = true;
-            this.export_folder_maskedTB.Size = new System.Drawing.Size(371, 20);
+            this.export_folder_maskedTB.Size = new System.Drawing.Size(357, 20);
             this.export_folder_maskedTB.TabIndex = 0;
             // 
             // monocle_log_tb
@@ -318,54 +315,36 @@
             // monocleOptionsBox
             // 
             this.monocleOptionsBox.Controls.Add(this.MonocleOptionsDGV);
-            this.monocleOptionsBox.Location = new System.Drawing.Point(14, 291);
+            this.monocleOptionsBox.Location = new System.Drawing.Point(383, 28);
             this.monocleOptionsBox.Name = "monocleOptionsBox";
-            this.monocleOptionsBox.Size = new System.Drawing.Size(352, 160);
+            this.monocleOptionsBox.Size = new System.Drawing.Size(373, 239);
             this.monocleOptionsBox.TabIndex = 7;
             this.monocleOptionsBox.TabStop = false;
             this.monocleOptionsBox.Text = "Monocle Options";
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Location = new System.Drawing.Point(680, 487);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 8;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(128, 10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Update Options";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // MonocleOptionsDGV
             // 
             this.MonocleOptionsDGV.AllowUserToAddRows = false;
             this.MonocleOptionsDGV.AllowUserToDeleteRows = false;
             this.MonocleOptionsDGV.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.MonocleOptionsDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.MonocleOptionsDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.MonocleOptionsDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.MonocleOptionsDGV.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Options,
             this.Value,
             this.Description});
-            this.MonocleOptionsDGV.Location = new System.Drawing.Point(6, 19);
+            this.MonocleOptionsDGV.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MonocleOptionsDGV.Location = new System.Drawing.Point(3, 16);
             this.MonocleOptionsDGV.Name = "MonocleOptionsDGV";
             this.MonocleOptionsDGV.RowHeadersVisible = false;
-            this.MonocleOptionsDGV.Size = new System.Drawing.Size(340, 135);
+            this.MonocleOptionsDGV.Size = new System.Drawing.Size(367, 220);
             this.MonocleOptionsDGV.TabIndex = 1;
             // 
             // Options
@@ -385,14 +364,24 @@
             this.Description.Name = "Description";
             this.Description.ReadOnly = true;
             // 
+            // cancelButton
+            // 
+            this.cancelButton.Location = new System.Drawing.Point(680, 487);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 8;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
             // MonocleUI
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(767, 724);
-            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.monocleOptionsBox);
+            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.log_toggle_checkbox);
             this.Controls.Add(this.start_monocle_button);
             this.Controls.Add(this.progressBar1);
@@ -451,7 +440,6 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.CheckBox convertOnlyCheckbox;
         private System.Windows.Forms.ToolStripMenuItem monocleOptionsToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView MonocleOptionsDGV;
         private System.Windows.Forms.DataGridViewTextBoxColumn Options;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;

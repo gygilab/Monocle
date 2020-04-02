@@ -96,12 +96,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ext\MonocleOptionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ext\MonocleOptionsForm.Designer.cs">
-      <DependentUpon>MonocleOptionsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Files\FileProcessor.cs" />
     <Compile Include="Files\Files.cs" />
     <Compile Include="lib\runStatus.cs" />
@@ -113,9 +107,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ext\MonocleOptionsForm.resx">
-      <DependentUpon>MonocleOptionsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MonocleUI.resx">
       <DependentUpon>MonocleUI.cs</DependentUpon>
     </EmbeddedResource>
