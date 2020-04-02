@@ -88,5 +88,16 @@ namespace Monocle
         /// Write output file without modifying precursors.
         /// </summary>
         public bool ConvertOnly { get; set; } = false;
+
+        /// <summary>
+        /// Allow get/set of property based on property name
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        public object this[string propertyName]
+        {
+            get { return GetType().GetProperty(propertyName).GetValue(this, null); }
+            set { GetType().GetProperty(propertyName).SetValue(this, value, null); }
+        }
     }
 }

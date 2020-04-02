@@ -143,14 +143,15 @@
             this.input_files_dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.input_files_dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.file_column});
+            this.input_files_dgv.Dock = System.Windows.Forms.DockStyle.Left;
             this.input_files_dgv.GridColor = System.Drawing.SystemColors.Control;
-            this.input_files_dgv.Location = new System.Drawing.Point(6, 16);
+            this.input_files_dgv.Location = new System.Drawing.Point(3, 16);
             this.input_files_dgv.Name = "input_files_dgv";
             this.input_files_dgv.RowHeadersVisible = false;
             this.input_files_dgv.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.input_files_dgv.RowTemplate.ReadOnly = true;
             this.input_files_dgv.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.input_files_dgv.Size = new System.Drawing.Size(320, 402);
+            this.input_files_dgv.Size = new System.Drawing.Size(318, 405);
             this.input_files_dgv.TabIndex = 5;
             this.mainToolTip.SetToolTip(this.input_files_dgv, "Drag and drop files or brows with the \"+\" button.");
             this.input_files_dgv.DragDrop += new System.Windows.Forms.DragEventHandler(this.Input_files_dgv_DragDrop);
@@ -321,6 +322,7 @@
             this.monocleOptionsBox.TabIndex = 7;
             this.monocleOptionsBox.TabStop = false;
             this.monocleOptionsBox.Text = "Monocle Options";
+            this.mainToolTip.SetToolTip(this.monocleOptionsBox, "Enter Monocle Options, improperly formatted options will be ignored.");
             // 
             // MonocleOptionsDGV
             // 

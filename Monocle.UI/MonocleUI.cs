@@ -220,6 +220,42 @@ namespace MonocleUI
         }
 
         /// <summary>
+        /// Update Monocle Options from Options DGV
+        /// </summary>
+        public void UpdateMonocleOptions()
+        {
+            foreach(DataGridViewRow row in MonocleOptionsDGV.Rows)
+            {
+                try
+                {
+                    FileProcessor.monocleOptions[row.Cells[0].Value]
+                }
+                catch
+                {
+                    continue;
+                }
+            }
+
+            PropertyInfo[] propertyInfo = FileProcessor.monocleOptions.GetType().GetProperties();
+            for (int i = 0; i < propertyInfo.Length; i++)
+            {
+                if (propertyInfo[i].Name == "WriteSps" || propertyInfo[i].Name == "ConvertOnly" ||
+                    propertyInfo[i].Name == "WriteDebugString" || propertyInfo[i].Name == "OutputFileType")
+                {
+                    continue;
+                }
+
+                string[] newRow = new string[3]
+                {
+                    propertyInfo[i].Name,
+                    propertyInfo[i].GetValue(FileProcessor.monocleOptions).ToString(),
+                    OptionDescriptions.Descriptions[propertyInfo[i].Name]
+                };
+                MonocleOptionsDGV.Rows.Add(newRow);
+            }
+        }
+
+        /// <summary>
         /// Enable or disable the UI parameters used while running.
         /// </summary>
         /// <param name="enabled"></param>
