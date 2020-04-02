@@ -282,12 +282,8 @@ namespace MonocleUI
                 start_monocle_button.Enabled = enabled;
                 input_files_dgv.Enabled = enabled;
                 file_output_format_CLB.Enabled = enabled;
-                //lowChargeSelectionNUD.Enabled = enabled;
-                //highChargeSelectionNUD.Enabled = enabled;
                 add_file_button.Enabled = enabled;
                 remove_dgv_row_button.Enabled = enabled;
-                //toggleChargeDetectionCB.Enabled = enabled;
-                //numberOfScansToAverageNUD.Enabled = enabled;
             }));
         }
 
@@ -301,6 +297,11 @@ namespace MonocleUI
             if (e.FinishedAllFiles)
             {
                 EnableRunUI(true);
+                Invoke(new Action(
+                () =>
+                {
+                    progressBar1.Value = 0;
+                }));
                 return;
             }
 
