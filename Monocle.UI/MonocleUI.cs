@@ -212,7 +212,7 @@ namespace MonocleUI
                 string[] newRow = new string[3]
                 {
                     propertyInfo[i].Name,
-                    propertyInfo[i].GetValue(FileProcessor.monocleOptions).ToString(),
+                    FileProcessor.monocleOptions[propertyInfo[i].Name].ToString(),
                     OptionDescriptions.Descriptions[propertyInfo[i].Name]
                 };
                 MonocleOptionsDGV.Rows.Add(newRow);
@@ -228,7 +228,7 @@ namespace MonocleUI
             {
                 try
                 {
-                    FileProcessor.monocleOptions[row.Cells[0].Value]
+                    FileProcessor.monocleOptions[row.Cells[0].Value.ToString()] = row.Cells[1].Value.ToString();
                 }
                 catch
                 {

@@ -96,8 +96,8 @@ namespace Monocle
         /// <returns></returns>
         public object this[string propertyName]
         {
-            get { return GetType().GetProperty(propertyName).GetValue(this, null); }
-            set { GetType().GetProperty(propertyName).SetValue(this, value, null); }
+            get { return GetType().GetProperty(propertyName).GetValue(this); }
+            set { GetType().GetProperty(propertyName).SetValue(this, value); }
         }
     }
 }
