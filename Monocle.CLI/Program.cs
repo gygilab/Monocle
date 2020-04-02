@@ -24,7 +24,9 @@ namespace MakeMono
                 Number_Of_Scans_To_Average = options.NumOfScans,
                 WriteDebugString = options.WriteDebug,
                 OutputFileType = options.OutputFileType,
-                ConvertOnly = options.ConvertOnly
+                ConvertOnly = options.ConvertOnly,
+                ChargeRangeUnknown = options.ChargeRangeUnknown,
+                ForceCharges = options.ForceCharges
             };
 
             SetupLogger(options.RunQuiet, options.WriteDebug);

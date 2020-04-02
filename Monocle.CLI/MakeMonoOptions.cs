@@ -17,8 +17,14 @@ namespace MakeMono
         [Option('c', "ChargeDetection", Required = false, HelpText = "Toggle charge detection, default: false | F")]
         public bool ChargeDetection { get; set; } = false;
 
-        [Option('z', "CustomChargeRange", Required = false, HelpText = "Set charge range, default: 2:6, max: -100/100")]
+        [Option('z', "ChargeRange", Required = false, HelpText = "Range for Charge Detection, if enabled. default: 2:6")]
         public string ChargeRange { get; set; } = "2:6";
+
+        [Option('u', "ChargesForUnknown", Required = false, HelpText = "For low-res scans, output multiple precursors with these charges. default: 2:3")]
+        public string ChargeRangeUnknown { get; set; } = "2:3";
+
+        [Option('w', "ForceCharges", Required = false, HelpText = "Output multiple precursors with charges set by -u even if charge is known. default: false")]
+        public bool ForceCharges { get; set; } = false;
 
         [Option('m', "MsLevel", Required = false, HelpText = "Select the MS level at which monoisotopic m/z will be adjusted.")]
         public int MS_Level { get; set; } = 2;

@@ -40,6 +40,10 @@ namespace Monocle
         /// </summary>
         public ChargeRange Charge_Range { get; set; } = new ChargeRange(2, 6);
 
+        public ChargeRange ChargeRangeUnknown { get; set; } = new ChargeRange(2, 3);
+
+        public bool ForceCharges { get; set; } = false;
+
         public bool WriteDebugString { get; set; } = false;
 
         public bool WriteSps { get; set; } = false;

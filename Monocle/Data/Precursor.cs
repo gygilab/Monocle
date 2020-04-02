@@ -13,6 +13,19 @@ namespace Monocle.Data {
             OriginalMz = mz;
             OriginalCharge = charge;
         }
+
+        public Precursor(Precursor precursor)
+        {
+            Mz = precursor.Mz;
+            Intensity = precursor.Intensity;
+            Charge = precursor.Charge;
+            OriginalMz = precursor.OriginalMz;
+            OriginalCharge = precursor.OriginalCharge;
+            IsolationMz = precursor.IsolationMz;
+            IsolationWidth = precursor.IsolationWidth;
+            IsolationSpecificity = precursor.IsolationSpecificity;
+        }
+
         public Precursor()
         {
         }
@@ -30,7 +43,7 @@ namespace Monocle.Data {
         /// <summary>
         /// Charge state of the precursor.
         /// </summary>
-        public int Charge { get; set; }
+        public int Charge { get; set; } = 0;
 
         /// <summary>
         /// Precursor M+H

@@ -33,7 +33,31 @@ namespace Monocle
 
                 Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
                 var nearbyScans = GetNearbyScans(ref scans, precursorScan, Options);
-                foreach (var precursor in scan.Precursors) {
+
+                // For low-res scans, or if ForceCharges is true, generate precursors with
+                // a range of charges given by the ChargeRangeUnknown option.
+                if (precursorScan.ScanType == "ITMS" || Options.ForceCharges)
+                {
+                    int range = 1 + Options.ChargeRangeUnknown.High - Options.ChargeRangeUnknown.Low;
+                    var precursors = new List<Precursor>(range);
+                    foreach (var precursor in scan.Precursors)
+                    {
+                        for (int z = Options.ChargeRangeUnknown.Low; z <= Options.ChargeRangeUnknown.High; ++z)
+                        {
+                            var p = new Precursor(precursor);
+                            p.Charge = z;
+                            precursors.Add(p);
+                        }
+                    }
+                    scan.Precursors = precursors;
+                }
+
+                foreach (var precursor in scan.Precursors)
+                {
+                    if (!Options.Charge_Detection && precursor.Charge == 0)
+                    {
+                        Console.WriteLine(String.Format("Scan {0} does not have a charge state assigned.  Charge detection enabled.", scan.ScanNumber));
+                    }
                     Run(nearbyScans, precursorScan, precursor, Options);
                 }
             }
@@ -137,7 +161,7 @@ namespace Monocle
 
             //Create new class to maintain ref class options
             ChargeRange chargeRange = new ChargeRange(precursorCharge, precursorCharge);
-            if (Options.Charge_Detection)
+            if (Options.Charge_Detection || precursorCharge == 0)
             {
                 chargeRange.Low = Options.Charge_Range.Low;
                 chargeRange.High = Options.Charge_Range.High;
