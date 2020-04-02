@@ -25,7 +25,7 @@ namespace MakeMono
                 WriteDebugString = options.WriteDebug,
                 OutputFileType = options.OutputFileType,
                 ConvertOnly = options.ConvertOnly,
-                ChargeRangeUnknown = options.ChargeRangeUnknown,
+                ChargeRangeUnknown = new ChargeRange(options.ChargeRangeUnknown),
                 ForceCharges = options.ForceCharges
             };
 
