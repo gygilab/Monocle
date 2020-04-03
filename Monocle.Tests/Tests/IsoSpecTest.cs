@@ -28,5 +28,21 @@ namespace Monocle.Tests.Tests
             double output = IsolationSpecificityCalculator.calculate(peaks, isolationMz, precursorMz, charge, isolationWindow);
             Assert.Equal(0.5, output, 3);
         }
+
+        [Fact]
+        public void TestNoPeaks()
+        {
+            double isolationMz = 1000.0;
+            double precursorMz = 999.5;
+            int charge = 2;
+            double isolationWindow = 1.0;
+
+            var peaks = new List<Centroid> {
+                new Centroid { Mz = 800.0, Intensity = 100 }
+            };
+
+            double output = IsolationSpecificityCalculator.calculate(peaks, isolationMz, precursorMz, charge, isolationWindow);
+            Assert.Equal(0, output, 3);
+        }
     }
 }
