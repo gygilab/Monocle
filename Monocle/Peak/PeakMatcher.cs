@@ -57,7 +57,7 @@ namespace Monocle.Peak
         public static int NearestIndex(List<Centroid> peaks, double target)
         {
             int low = 0;
-            int high = peaks.Count;
+            int high = peaks.Count - 1;
             int mid = 0;
 
             while (true)
