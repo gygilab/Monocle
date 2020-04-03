@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 RUN apt update && apt install -y rpm devscripts build-essential lintian
 
 # text names needed for rpm build
