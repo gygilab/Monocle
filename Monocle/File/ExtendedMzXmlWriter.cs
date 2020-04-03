@@ -20,6 +20,9 @@ namespace Monocle.File {
             writer.WriteAttributeString("polarity", scan.Polarity == Polarity.Positive ? "+" : "-");
             writer.WriteAttributeString("scanType", scan.ScanType.ToString());
             writer.WriteAttributeString("filterLine", scan.FilterLine);
+            if (scan.Description.Length > 0) {
+                writer.WriteAttributeString("description", scan.Description);
+            }
             writer.WriteAttributeString("retentionTime", MakeRetentionTimeString(scan.RetentionTime));
             writer.WriteAttributeString("startMz", scan.StartMz.ToString());
             writer.WriteAttributeString("endMz", scan.EndMz.ToString());

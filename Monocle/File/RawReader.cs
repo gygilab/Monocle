@@ -154,6 +154,9 @@ namespace Monocle.File
                                 scan.PrecursorMasterScanNumber = access_id;
                             }
                             break;
+                        case "Scan Description:":
+                            scan.Description = value.Trim();
+                            break;
                         case "Ion Injection Time (ms):":
                             scan.IonInjectionTime = double.Parse(value);
                             break;

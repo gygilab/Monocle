@@ -29,6 +29,7 @@ namespace Monocle.File
             { "polarity" , "Polarity" },
             { "scanType" , "ScanType" },
             { "filterLine" , "FilterLine" },
+            { "description" , "Description" },
             { "startMz","StartMz" },
             { "endMz","EndMz" },
             { "lowMz","LowestMz" },

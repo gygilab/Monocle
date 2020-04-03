@@ -65,6 +65,11 @@ namespace Monocle.Data
         public string FilterLine { get; set; }
 
         /// <summary>
+        /// "Scan Description" field from the scan header.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Scan retention time (minutes)
         /// </summary>
         public double RetentionTime { get; set; } = 0;
