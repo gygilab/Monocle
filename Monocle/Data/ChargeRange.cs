@@ -34,5 +34,10 @@ namespace Monocle.Data
             High = (polarity == Polarity.Positive) ? high : high * -1;
             Polarity = polarity;
         }
+
+        public override string ToString()
+        {
+            return Low + ":" + High;
+        }
     }
 }
