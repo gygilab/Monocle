@@ -128,11 +128,13 @@ namespace Monocle.File
                         var reaction = scanEvent.GetReaction(i);
                         scan.CollisionEnergy = reaction.CollisionEnergy;
 
-                        var precursor = new Data.Precursor();
-                        precursor.IsolationWidth = reaction.IsolationWidth;
-                        precursor.IsolationMz = reaction.PrecursorMass;
-                        precursor.Mz = reaction.PrecursorMass;
-                        precursor.OriginalMz = precursor.Mz;
+                        var precursor = new Data.Precursor
+                        {
+                            IsolationWidth = reaction.IsolationWidth,
+                            IsolationMz = reaction.PrecursorMass,
+                            Mz = reaction.PrecursorMass,
+                            OriginalMz = reaction.PrecursorMass
+                        };
                         scan.Precursors.Add(precursor);
                     }
                 }
