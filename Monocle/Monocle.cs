@@ -81,10 +81,9 @@ namespace Monocle
             if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both)
             {
                 // Reel backward.
-                var scan = scans[index];
                 for (; index > 0 && scanCount < window; --index)
                 {
-                    if (IncludeNearbyScan(scan, precursorScan))
+                    if (IncludeNearbyScan(scans[index], precursorScan))
                     {
                         ++scanCount;
                     }
