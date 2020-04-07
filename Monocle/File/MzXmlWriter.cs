@@ -153,18 +153,18 @@ namespace Monocle.File {
                 return "AAAAAAAAAAA=";
             }
             
-            // Allocate space for m/z and int pairs, eight bytes each.
-            byte[] bytes = new byte[scan.PeakCount * 2 * 8];
+            // Allocate space for m/z and int pairs, four bytes each.
+            byte[] bytes = new byte[scan.PeakCount * 2 * 4];
 
             for (int i = 0; i < scan.PeakCount; ++i) {
                 Centroid peak = scan.Centroids[i];
-                byte[] mzBytes = BitConverter.GetBytes(peak.Mz);
+                byte[] mzBytes = BitConverter.GetBytes((float)peak.Mz);
                 Array.Reverse(mzBytes);
-                mzBytes.CopyTo(bytes, i * 16);
+                mzBytes.CopyTo(bytes, i * 8);
 
-                byte[] intBytes = BitConverter.GetBytes(peak.Intensity);
+                byte[] intBytes = BitConverter.GetBytes((float)peak.Intensity);
                 Array.Reverse(intBytes);
-                intBytes.CopyTo(bytes, (i * 16) + 8);
+                intBytes.CopyTo(bytes, (i * 8) + 4);
             }
             return Convert.ToBase64String(bytes);
         }

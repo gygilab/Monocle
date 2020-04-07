@@ -275,10 +275,10 @@ namespace Monocle.File
             }
             byte[] byteEncoded = Convert.FromBase64String(str);
             Array.Reverse(byteEncoded);
-            double[] values = new double[size];
+            float[] values = new float[size];
             for(int i = 0; i < size; i++)
             {
-                values[i] = BitConverter.ToDouble(byteEncoded, i * 4);
+                values[i] = BitConverter.ToSingle(byteEncoded, i * 4);
             }
             Array.Reverse(values);
             for (int i = 0; i < peakCount; ++i)
