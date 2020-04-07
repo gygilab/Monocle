@@ -46,7 +46,7 @@ namespace Monocle.Peak
         /// <param name="charge">charge</param>
         private static int EstimateCarbons(double mz, int charge)
         {
-            return (int)System.Math.Floor((((mz * charge) - (1.00728 * charge)) / 111) * 5.1);
+            return (int)System.Math.Floor((((mz * charge) - (Data.Mass.ProtonMass * charge)) / 111) * 5.1);
         }
     }
 }
