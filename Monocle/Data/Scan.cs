@@ -67,7 +67,7 @@ namespace Monocle.Data
         /// <summary>
         /// "Scan Description" field from the scan header.
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
 
         /// <summary>
         /// Scan retention time (minutes)
