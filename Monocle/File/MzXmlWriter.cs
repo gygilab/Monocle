@@ -157,12 +157,12 @@ namespace Monocle.File {
             byte[] bytes = new byte[scan.PeakCount * 2 * 4];
 
             for (int i = 0; i < scan.PeakCount; ++i) {
-                var peak = scan.Centroids[i];
-                var mzBytes = BitConverter.GetBytes((float)peak.Mz);
+                Centroid peak = scan.Centroids[i];
+                byte[] mzBytes = BitConverter.GetBytes(peak.Mz);
                 Array.Reverse(mzBytes);
                 mzBytes.CopyTo(bytes, i * 8);
 
-                var intBytes = BitConverter.GetBytes((float)peak.Intensity);
+                byte[] intBytes = BitConverter.GetBytes(peak.Intensity);
                 Array.Reverse(intBytes);
                 intBytes.CopyTo(bytes, (i * 8) + 4);
             }
