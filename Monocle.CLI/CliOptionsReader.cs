@@ -4,8 +4,16 @@ using System.Collections.Generic;
 
 namespace MakeMono
 {
-    class CliOptionsParser
+    /// <summary>
+    /// Class for processing CLI input arguments
+    /// </summary>
+    public class CliOptionsParser
     {
+        /// <summary>
+        /// Parse user input arguments
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public MakeMonoOptions Parse(string[] args)
         {
             MakeMonoOptions output = new MakeMonoOptions();
@@ -15,6 +23,10 @@ namespace MakeMono
             return output;
         }
 
+        /// <summary>
+        /// Handle and report errors in arguments
+        /// </summary>
+        /// <param name="Errors"></param>
         private void HandleParseError(IEnumerable<Error> Errors)
         {
             List<string> errors = new List<string>();

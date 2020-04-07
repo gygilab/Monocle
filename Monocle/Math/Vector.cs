@@ -8,7 +8,7 @@ namespace Monocle.Math {
         /// </summary>
         public static double Dot(List<double> a, List<double> b) {
             double result = 0;
-            for(int i = 0; i < a.Count && i < b.Count; ++i) {
+            for(int i = 0; i < a.Count && i < b.Count; i++) {
                 result += a[i] * b[i];
             }
             return result;
@@ -38,13 +38,13 @@ namespace Monocle.Math {
         /// <param name="weights">the weights of each value in x</param>
         /// <returns>The weighted average</returns>
         public static double WeightedAverage(List<double> x, List<double> weights) {
-            if (x.Count == 0) {
+            if (x.Count == 0 || x.Count != weights.Count) {
                 return 0;
             }
             double sumWeightedX = 0;
             double sumX = 0;
             double sumWeights = 0;
-            for (int i = 0; i < x.Count && i < weights.Count; ++i)
+            for (int i = 0; i < x.Count; i++)
             {
                 sumWeightedX += x[i] * weights[i];
                 sumX += x[i];
@@ -65,7 +65,7 @@ namespace Monocle.Math {
         public static void Scale(List<double> x)
         {
             double max = 0;
-            for (int j = 0; j < x.Count; ++j)
+            for (int j = 0; j < x.Count; j++)
             {
                 if (x[j] > max)
                 {
@@ -74,7 +74,7 @@ namespace Monocle.Math {
             }
             if (max > 0)
             {
-                for (int j = 0; j < x.Count; ++j)
+                for (int j = 0; j < x.Count; j++)
                 {
                     x[j] = x[j] / max;
                 }

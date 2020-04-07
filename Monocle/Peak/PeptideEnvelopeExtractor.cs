@@ -48,6 +48,12 @@ namespace Monocle.Peak
             return output;
         }
 
+        /// <summary>
+        /// Scale based on how many peaks were observed at a given m/z
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="envelope"></param>
+        /// <param name="i"></param>
         public static void ScaleByPeakCount(List<double> x, PeptideEnvelope envelope, int i)
         {
             if(envelope.MaxPeakCount > 0)

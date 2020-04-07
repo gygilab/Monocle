@@ -218,11 +218,11 @@ namespace MonocleUI
                     FileProcessor.monocleOptions[propertyInfo[i].Name].ToString(),
                     OptionDescriptions.Descriptions[propertyInfo[i].Name]
                 };
-                Invoke(new Action(
-                () =>
-                {
+                //Invoke(new Action(
+                //() =>
+                //{
                     MonocleOptionsDGV.Rows.Add(newRow);
-                }));
+                //}));
             }
         }
 
