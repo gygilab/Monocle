@@ -83,26 +83,25 @@ namespace Monocle.File
             int LastScan = rawFile.RunHeaderEx.LastSpectrum;
             for (int iScanNumber = FirstScan; iScanNumber <= LastScan; iScanNumber++)
             {
-                ScanStatistics scanStatistics = rawFile.GetScanStatsForScanNumber(iScanNumber);
-                // Get the scan filter for this scan number
+                ThermoFisher.CommonCore.Data.Business.Scan thermoScan = ThermoFisher.CommonCore.Data.Business.Scan.FromFile(rawFile, iScanNumber);
                 IScanFilter scanFilter = rawFile.GetFilterForScanNumber(iScanNumber);
-                IScanEvents scanEvents = rawFile.ScanEvents;
+                IScanEvent scanEvent = rawFile.GetScanEventForScanNumber(iScanNumber);
 
                 if ((int)scanFilter.MSOrder == 1) {
                     LastMS1 = iScanNumber;
                 }
-
+                
                 Data.Scan scan = new Data.Scan()
                 {
                     ScanNumber = iScanNumber,
                     ScanEvent = (iScanNumber - LastMS1) + 1,
-                    BasePeakIntensity = scanStatistics.BasePeakIntensity,
-                    BasePeakMz = scanStatistics.BasePeakMass,
-                    TotalIonCurrent = scanStatistics.TIC,
-                    LowestMz = scanStatistics.LowMass,
-                    HighestMz = scanStatistics.HighMass,
-                    StartMz = scanStatistics.LowMass,
-                    EndMz = scanStatistics.HighMass,
+                    BasePeakIntensity = thermoScan.ScanStatistics.BasePeakIntensity,
+                    BasePeakMz = thermoScan.ScanStatistics.BasePeakMass,
+                    TotalIonCurrent = thermoScan.ScanStatistics.TIC,
+                    LowestMz = thermoScan.ScanStatistics.LowMass,
+                    HighestMz = thermoScan.ScanStatistics.HighMass,
+                    StartMz = thermoScan.ScanStatistics.LowMass,
+                    EndMz = thermoScan.ScanStatistics.HighMass,
                     ScanType = ReadScanType(scanFilter.ToString()),
                     MsOrder = (int)scanFilter.MSOrder,
                     Polarity = (scanFilter.Polarity == PolarityType.Positive) ? Data.Polarity.Positive : Data.Polarity.Negative,
@@ -117,8 +116,6 @@ namespace Monocle.File
                         scan.PrecursorMasterScanNumber = ScanParents[scan.ScanNumber];
                     }
                 }
-
-                IScanEvent scanEvent = rawFile.GetScanEventForScanNumber(iScanNumber);
 
                 // handle dependent scans and not SPS (processed below)
                 if (scan.MsOrder > 1)
@@ -214,17 +211,17 @@ namespace Monocle.File
                 }
 
                 // Centroid or profile?:
-                if (scanStatistics.IsCentroidScan && (scanStatistics.SpectrumPacketType == SpectrumPacketType.FtCentroid))
+                if (thermoScan.ScanStatistics.IsCentroidScan && (thermoScan.ScanStatistics.SpectrumPacketType == SpectrumPacketType.FtCentroid))
                 {
                     // High res data
-                    var centroidStream = rawFile.GetCentroidStream(iScanNumber, true);
-                    CentroidsFromArrays(scan, centroidStream.Masses, centroidStream.Intensities, centroidStream.Baselines, centroidStream.Noises);
+                    CentroidsFromArrays(scan, thermoScan.CentroidScan.Masses, thermoScan.CentroidScan.Intensities, thermoScan.CentroidScan.Baselines, thermoScan.CentroidScan.Noises);
                 }
                 else
                 {
                     // Low res data
-                    var segmentedScan = rawFile.GetSegmentedScanFromScanNumber(iScanNumber, scanStatistics);
-                    CentroidsFromArrays(scan, segmentedScan.Positions, segmentedScan.Intensities);
+                    ThermoFisher.CommonCore.Data.Business.Scan centroidedThermoScan = ThermoFisher.CommonCore.Data.Business.Scan.ToCentroid(thermoScan);
+                    CentroidsFromArrays(scan, centroidedThermoScan.CentroidScan.Masses, centroidedThermoScan.CentroidScan.Intensities,
+                        centroidedThermoScan.CentroidScan.Baselines, centroidedThermoScan.CentroidScan.Noises);
                 }
 
                 if (scan.PeakCount > 0) {
