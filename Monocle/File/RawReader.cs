@@ -108,15 +108,13 @@ namespace Monocle.File
                     FilterLine = scanFilter.ToString(),
                     RetentionTime = rawFile.RetentionTimeFromScanNumber(iScanNumber)
                 };
-                // Get the current scan's activation method while ignoring upstream activation
+                
                 if(scan.MsOrder > 1)
                 {
+                    // Get the current scan's activation method while ignoring upstream activation
                     scan.PrecursorActivationMethod = ConvertActivationType(scanFilter.GetActivation(scan.MsOrder - 2));
-                }
 
-                // handle dependent scans and not SPS (processed below)
-                if (scan.MsOrder > 1)
-                {
+                    // handle dependent scans and not SPS (processed below)
                     scan.Precursors.Clear();
                     for (int i = 0; i < scanEvent.MassCount; ++i){
                         var reaction = scanEvent.GetReaction(i);
