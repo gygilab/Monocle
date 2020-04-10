@@ -108,7 +108,7 @@ namespace Monocle.File
                     FilterLine = scanFilter.ToString(),
                     RetentionTime = rawFile.RetentionTimeFromScanNumber(iScanNumber)
                 };
-                
+
                 if(scan.MsOrder > 1)
                 {
                     // Get the current scan's activation method while ignoring upstream activation
@@ -204,16 +204,18 @@ namespace Monocle.File
                     }
                 }
 
-                // Centroid or profile?:
-                if (thermoScan.ScanStatistics.IsCentroidScan && (thermoScan.ScanStatistics.SpectrumPacketType == ThermoBiz.SpectrumPacketType.FtCentroid))
-                {
+                if (!thermoScan.ScanStatistics.IsCentroidScan) {
+                    // Convert profile to centroid
+                    thermoScan = ThermoBiz.Scan.ToCentroid(thermoScan);
+                }
+
+                if (thermoScan.HasCentroidStream) {
                     // High res data
                     CentroidsFromArrays(scan, thermoScan.CentroidScan.Masses, thermoScan.CentroidScan.Intensities, thermoScan.CentroidScan.Baselines, thermoScan.CentroidScan.Noises);
                 }
-                else
-                {
+                else {
                     // Low res data
-                    CentroidsFromArrays(scan, thermoScan.PreferredMasses, thermoScan.PreferredIntensities, noise: thermoScan.PreferredNoises);
+                    CentroidsFromArrays(scan, thermoScan.PreferredMasses, thermoScan.PreferredIntensities);
                 }
 
                 if (scan.PeakCount > 0) {
