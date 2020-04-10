@@ -213,9 +213,7 @@ namespace Monocle.File
                 else
                 {
                     // Low res data
-                    ThermoFisher.CommonCore.Data.Business.Scan centroidedThermoScan = ThermoFisher.CommonCore.Data.Business.Scan.ToCentroid(thermoScan);
-                    CentroidsFromArrays(scan, centroidedThermoScan.CentroidScan.Masses, centroidedThermoScan.CentroidScan.Intensities,
-                        centroidedThermoScan.CentroidScan.Baselines, centroidedThermoScan.CentroidScan.Noises);
+                    CentroidsFromArrays(scan, thermoScan.PreferredMasses, thermoScan.PreferredIntensities, noise: thermoScan.PreferredNoises);
                 }
 
                 if (scan.PeakCount > 0) {
