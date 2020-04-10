@@ -194,18 +194,13 @@ namespace Monocle.File
                             break;
                     }
                 }
-                ThermoBiz.Scan parentScan = null;
-                if (scan.PrecursorMasterScanNumber > rawFile.RunHeader.FirstSpectrum && scan.PrecursorMasterScanNumber < rawFile.RunHeader.LastSpectrum)
+                
+                if (scan.MsOrder > 1 && scan.PrecursorMasterScanNumber > rawFile.RunHeader.FirstSpectrum && scan.PrecursorMasterScanNumber < rawFile.RunHeader.LastSpectrum)
                 {
-                    parentScan = ThermoBiz.Scan.FromFile(rawFile, scan.PrecursorMasterScanNumber);
-                }
-                // Fill precursor information
-                // after getting the parent scan and header information.
-                if (scan.MsOrder > 1)
-                {
-                    foreach(var precursor in scan.Precursors) {
-                        if (parentScan != null)
-                        {
+                    // Fill precursor information
+                    var parentScan = ThermoBiz.Scan.FromFile(rawFile, scan.PrecursorMasterScanNumber);
+                    if (parentScan != null) {
+                        foreach(var precursor in scan.Precursors) {
                             precursor.Intensity = GetMaxIntensity(parentScan, precursor.IsolationMz, precursor.IsolationWidth);
                         }
                     }
