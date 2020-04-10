@@ -192,7 +192,7 @@ namespace Monocle.File
                     }
                 }
                 
-                if (scan.PrecursorMasterScanNumber <= 0) {
+                if (scan.PrecursorMasterScanNumber <= 0 && scan.MsOrder > 1) {
                     // Try again to set the precursor scan.
                     SetPrecursorScanNumber(scan);
                 }
