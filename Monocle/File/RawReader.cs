@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using ThermoFisher.CommonCore.Data.Business;
+using ThemoBiz = ThermoFisher.CommonCore.Data.Business;
 using ThermoFisher.CommonCore.Data.FilterEnums;
 using ThermoFisher.CommonCore.Data.Interfaces;
 using ThermoFisher.CommonCore.RawFileReader;
@@ -47,7 +47,7 @@ namespace Monocle.File
                 throw new IOException("Error while opening RAW file.");
             }
 
-            rawFile.SelectInstrument(Device.MS, 1);
+            rawFile.SelectInstrument(ThemoBiz.Device.MS, 1);
             //ReadScanParents();
         }
 
@@ -76,14 +76,14 @@ namespace Monocle.File
         /// <returns></returns>
         public System.Collections.IEnumerator GetEnumerator()
         {
-            rawFile.SelectInstrument(Device.MS, 1);
+            rawFile.SelectInstrument(ThemoBiz.Device.MS, 1);
 
             // Get the first and last scan from the RAW file
             int FirstScan = rawFile.RunHeaderEx.FirstSpectrum;
             int LastScan = rawFile.RunHeaderEx.LastSpectrum;
             for (int iScanNumber = FirstScan; iScanNumber <= LastScan; iScanNumber++)
             {
-                ThermoFisher.CommonCore.Data.Business.Scan thermoScan = ThermoFisher.CommonCore.Data.Business.Scan.FromFile(rawFile, iScanNumber);
+                ThemoBiz.Scan thermoScan = ThemoBiz.Scan.FromFile(rawFile, iScanNumber);
                 IScanFilter scanFilter = rawFile.GetFilterForScanNumber(iScanNumber);
                 IScanEvent scanEvent = rawFile.GetScanEventForScanNumber(iScanNumber);
 
@@ -133,8 +133,8 @@ namespace Monocle.File
                     }
                 }
 
-                RunHeader runHeader = rawFile.RunHeader;
-                LogEntry trailer = rawFile.GetTrailerExtraInformation(iScanNumber);
+                ThemoBiz.RunHeader runHeader = rawFile.RunHeader;
+                ThemoBiz.LogEntry trailer = rawFile.GetTrailerExtraInformation(iScanNumber);
                 for (int i = 0; i < trailer.Length; i++)
                 {
                     var value = trailer.Values[i];
@@ -194,18 +194,25 @@ namespace Monocle.File
                             break;
                     }
                 }
-
+                ThemoBiz.Scan parentScan = null;
+                if (scan.PrecursorMasterScanNumber > rawFile.RunHeader.FirstSpectrum && scan.PrecursorMasterScanNumber < rawFile.RunHeader.LastSpectrum)
+                {
+                    parentScan = ThemoBiz.Scan.FromFile(rawFile, scan.PrecursorMasterScanNumber);
+                }
                 // Fill precursor information
                 // after getting the parent scan and header information.
                 if (scan.MsOrder > 1)
                 {
                     foreach(var precursor in scan.Precursors) {
-                        precursor.Intensity = GetMaxIntensity(ScanParents[scan.ScanNumber], precursor.IsolationMz, precursor.IsolationWidth);
+                        if (parentScan != null)
+                        {
+                            precursor.Intensity = GetMaxIntensity(parentScan, precursor.IsolationMz, precursor.IsolationWidth);
+                        }
                     }
                 }
 
                 // Centroid or profile?:
-                if (thermoScan.ScanStatistics.IsCentroidScan && (thermoScan.ScanStatistics.SpectrumPacketType == SpectrumPacketType.FtCentroid))
+                if (thermoScan.ScanStatistics.IsCentroidScan && (thermoScan.ScanStatistics.SpectrumPacketType == ThemoBiz.SpectrumPacketType.FtCentroid))
                 {
                     // High res data
                     CentroidsFromArrays(scan, thermoScan.CentroidScan.Masses, thermoScan.CentroidScan.Intensities, thermoScan.CentroidScan.Baselines, thermoScan.CentroidScan.Noises);
@@ -329,11 +336,9 @@ namespace Monocle.File
         /// <returns>The max intensity.</returns>
         /// <param name="number">the scan number.</param>
         /// <param name="targetMz">Target mz.</param>
-        private double GetMaxIntensity (int number, double targetMz, double isolationWidth)
+        private double GetMaxIntensity (ThemoBiz.Scan scan, double targetMz, double isolationWidth)
         {
-            ScanStatistics scanStatistics = rawFile.GetScanStatsForScanNumber(number);
-
-            bool hasCentroidStream = scanStatistics.IsCentroidScan && (scanStatistics.SpectrumPacketType == SpectrumPacketType.FtCentroid);
+            bool hasCentroidStream = scan.ScanStatistics.IsCentroidScan && (scan.ScanStatistics.SpectrumPacketType == ThemoBiz.SpectrumPacketType.FtCentroid);
             double tolerance = 0.5;
             if (isolationWidth > 0.01)
             {   
@@ -347,11 +352,11 @@ namespace Monocle.File
             double[] mzs = null;
             double[] intensities = null;
             if (hasCentroidStream) {
-                var centroidStream = rawFile.GetCentroidStream(number, true);
+                var centroidStream = scan.CentroidScan;
                 mzs = centroidStream.Masses;
                 intensities = centroidStream.Intensities;
             } else {
-                var segmentedScan = rawFile.GetSegmentedScanFromScanNumber(number, scanStatistics);
+                var segmentedScan = scan.SegmentedScan;
                 mzs = segmentedScan.Positions;
                 intensities = segmentedScan.Intensities;
             }
