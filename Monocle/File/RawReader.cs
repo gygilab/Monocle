@@ -48,7 +48,6 @@ namespace Monocle.File
             }
 
             rawFile.SelectInstrument(ThermoBiz.Device.MS, 1);
-            //ReadScanParents();
         }
 
         public ScanFileHeader GetHeader()
@@ -193,6 +192,11 @@ namespace Monocle.File
                     }
                 }
                 
+                if (scan.PrecursorMasterScanNumber <= 0) {
+                    // Try again to set the precursor scan.
+                    SetPrecursorScanNumber(scan);
+                }
+
                 if (scan.MsOrder > 1 && scan.PrecursorMasterScanNumber > rawFile.RunHeader.FirstSpectrum && scan.PrecursorMasterScanNumber < rawFile.RunHeader.LastSpectrum)
                 {
                     // Fill precursor information
@@ -305,6 +309,23 @@ namespace Monocle.File
                 return m.Groups [1].ToString ();
             }
             return "";
+        }
+
+        /// <summary>
+        /// Read the precursor scan number for a given scan.
+        /// This is a fallback method since it's preferred to get the value
+        /// from the "Master Scan Number" field in the scan header.
+        /// </summary>
+        /// <param name="scan">The scan that needs the assignment of the parent scan number</param>
+        private void SetPrecursorScanNumber(Data.Scan scan)
+        {
+            if (ScanParents.Count == 0) {
+                // Populate the index - this can be slow.
+                ReadScanParents();
+            }
+            if (ScanParents.ContainsKey (scan.ScanNumber)) {
+                scan.PrecursorMasterScanNumber = ScanParents[scan.ScanNumber];
+            }
         }
 
         /// <summary>
