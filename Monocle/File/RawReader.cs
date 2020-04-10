@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using ThemoBiz = ThermoFisher.CommonCore.Data.Business;
+using ThermoBiz = ThermoFisher.CommonCore.Data.Business;
 using ThermoFisher.CommonCore.Data.FilterEnums;
 using ThermoFisher.CommonCore.Data.Interfaces;
 using ThermoFisher.CommonCore.RawFileReader;
@@ -47,7 +47,7 @@ namespace Monocle.File
                 throw new IOException("Error while opening RAW file.");
             }
 
-            rawFile.SelectInstrument(ThemoBiz.Device.MS, 1);
+            rawFile.SelectInstrument(ThermoBiz.Device.MS, 1);
             //ReadScanParents();
         }
 
@@ -76,14 +76,14 @@ namespace Monocle.File
         /// <returns></returns>
         public System.Collections.IEnumerator GetEnumerator()
         {
-            rawFile.SelectInstrument(ThemoBiz.Device.MS, 1);
+            rawFile.SelectInstrument(ThermoBiz.Device.MS, 1);
 
             // Get the first and last scan from the RAW file
             int FirstScan = rawFile.RunHeaderEx.FirstSpectrum;
             int LastScan = rawFile.RunHeaderEx.LastSpectrum;
             for (int iScanNumber = FirstScan; iScanNumber <= LastScan; iScanNumber++)
             {
-                ThemoBiz.Scan thermoScan = ThemoBiz.Scan.FromFile(rawFile, iScanNumber);
+                ThermoBiz.Scan thermoScan = ThermoBiz.Scan.FromFile(rawFile, iScanNumber);
                 IScanFilter scanFilter = rawFile.GetFilterForScanNumber(iScanNumber);
                 IScanEvent scanEvent = rawFile.GetScanEventForScanNumber(iScanNumber);
 
@@ -133,8 +133,8 @@ namespace Monocle.File
                     }
                 }
 
-                ThemoBiz.RunHeader runHeader = rawFile.RunHeader;
-                ThemoBiz.LogEntry trailer = rawFile.GetTrailerExtraInformation(iScanNumber);
+                ThermoBiz.RunHeader runHeader = rawFile.RunHeader;
+                ThermoBiz.LogEntry trailer = rawFile.GetTrailerExtraInformation(iScanNumber);
                 for (int i = 0; i < trailer.Length; i++)
                 {
                     var value = trailer.Values[i];
@@ -194,10 +194,10 @@ namespace Monocle.File
                             break;
                     }
                 }
-                ThemoBiz.Scan parentScan = null;
+                ThermoBiz.Scan parentScan = null;
                 if (scan.PrecursorMasterScanNumber > rawFile.RunHeader.FirstSpectrum && scan.PrecursorMasterScanNumber < rawFile.RunHeader.LastSpectrum)
                 {
-                    parentScan = ThemoBiz.Scan.FromFile(rawFile, scan.PrecursorMasterScanNumber);
+                    parentScan = ThermoBiz.Scan.FromFile(rawFile, scan.PrecursorMasterScanNumber);
                 }
                 // Fill precursor information
                 // after getting the parent scan and header information.
@@ -212,7 +212,7 @@ namespace Monocle.File
                 }
 
                 // Centroid or profile?:
-                if (thermoScan.ScanStatistics.IsCentroidScan && (thermoScan.ScanStatistics.SpectrumPacketType == ThemoBiz.SpectrumPacketType.FtCentroid))
+                if (thermoScan.ScanStatistics.IsCentroidScan && (thermoScan.ScanStatistics.SpectrumPacketType == ThermoBiz.SpectrumPacketType.FtCentroid))
                 {
                     // High res data
                     CentroidsFromArrays(scan, thermoScan.CentroidScan.Masses, thermoScan.CentroidScan.Intensities, thermoScan.CentroidScan.Baselines, thermoScan.CentroidScan.Noises);
@@ -336,9 +336,9 @@ namespace Monocle.File
         /// <returns>The max intensity.</returns>
         /// <param name="number">the scan number.</param>
         /// <param name="targetMz">Target mz.</param>
-        private double GetMaxIntensity (ThemoBiz.Scan scan, double targetMz, double isolationWidth)
+        private double GetMaxIntensity (ThermoBiz.Scan scan, double targetMz, double isolationWidth)
         {
-            bool hasCentroidStream = scan.ScanStatistics.IsCentroidScan && (scan.ScanStatistics.SpectrumPacketType == ThemoBiz.SpectrumPacketType.FtCentroid);
+            bool hasCentroidStream = scan.ScanStatistics.IsCentroidScan && (scan.ScanStatistics.SpectrumPacketType == ThermoBiz.SpectrumPacketType.FtCentroid);
             double tolerance = 0.5;
             if (isolationWidth > 0.01)
             {   
