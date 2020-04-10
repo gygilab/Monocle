@@ -48,7 +48,7 @@ namespace Monocle.File
             }
 
             rawFile.SelectInstrument(Device.MS, 1);
-            ReadScanParents();
+            //ReadScanParents();
         }
 
         public ScanFileHeader GetHeader()
@@ -112,9 +112,6 @@ namespace Monocle.File
                 if(scan.MsOrder > 1)
                 {
                     scan.PrecursorActivationMethod = ConvertActivationType(scanFilter.GetActivation(scan.MsOrder - 2));
-                    if (ScanParents.ContainsKey (scan.ScanNumber)) {
-                        scan.PrecursorMasterScanNumber = ScanParents[scan.ScanNumber];
-                    }
                 }
 
                 // handle dependent scans and not SPS (processed below)
@@ -170,10 +167,7 @@ namespace Monocle.File
                             }
                             break;
                         case "Master Scan Number:":
-                            // Legacy implementation of master scan number
-                            if(scan.PrecursorMasterScanNumber == 0) {
-                                scan.PrecursorMasterScanNumber = int.Parse(value);
-                            }
+                            scan.PrecursorMasterScanNumber = int.Parse(value);
                             break;
                         case "Master Index:":
                             scan.MasterIndex = int.Parse(value);
