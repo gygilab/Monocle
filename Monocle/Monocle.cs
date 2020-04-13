@@ -130,7 +130,8 @@ namespace Monocle
             }
 
             // SIM scan exclusion.
-            if (scan.ScanNumber != precursorScan.ScanNumber && scan.ScanType.ToLower() != "full") {
+            // Using the filterline here since the scan type might not be read.
+            if (scan.ScanNumber != precursorScan.ScanNumber && !scan.FilterLine.ToLower().Contains("full")) {
                 return false;
             }
 
