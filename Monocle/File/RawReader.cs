@@ -48,6 +48,7 @@ namespace Monocle.File
             }
 
             rawFile.SelectInstrument(ThermoBiz.Device.MS, 1);
+            rawFile.IncludeReferenceAndExceptionData = true;
         }
 
         public ScanFileHeader GetHeader()
