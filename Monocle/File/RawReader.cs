@@ -209,11 +209,6 @@ namespace Monocle.File
                     }
                 }
 
-                if (!thermoScan.ScanStatistics.IsCentroidScan) {
-                    // Convert profile to centroid
-                    thermoScan = ThermoBiz.Scan.ToCentroid(thermoScan);
-                }
-
                 if (thermoScan.HasCentroidStream) {
                     // High res data
                     CentroidsFromArrays(scan, thermoScan.CentroidScan.Masses, thermoScan.CentroidScan.Intensities, thermoScan.CentroidScan.Baselines, thermoScan.CentroidScan.Noises);
