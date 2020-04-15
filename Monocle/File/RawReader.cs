@@ -48,7 +48,7 @@ namespace Monocle.File
             }
 
             rawFile.SelectInstrument(ThermoBiz.Device.MS, 1);
-            ReadScanParents();
+            rawFile.IncludeReferenceAndExceptionData = true;
         }
 
         public ScanFileHeader GetHeader()
@@ -108,15 +108,13 @@ namespace Monocle.File
                     FilterLine = scanFilter.ToString(),
                     RetentionTime = rawFile.RetentionTimeFromScanNumber(iScanNumber)
                 };
-                // Get the current scan's activation method while ignoring upstream activation
+
                 if(scan.MsOrder > 1)
                 {
+                    // Get the current scan's activation method while ignoring upstream activation
                     scan.PrecursorActivationMethod = ConvertActivationType(scanFilter.GetActivation(scan.MsOrder - 2));
-                }
 
-                // handle dependent scans and not SPS (processed below)
-                if (scan.MsOrder > 1)
-                {
+                    // handle dependent scans and not SPS (processed below)
                     scan.Precursors.Clear();
                     for (int i = 0; i < scanEvent.MassCount; ++i){
                         var reaction = scanEvent.GetReaction(i);
@@ -194,33 +192,30 @@ namespace Monocle.File
                             break;
                     }
                 }
-                ThermoBiz.Scan parentScan = null;
-                if (scan.PrecursorMasterScanNumber > rawFile.RunHeader.FirstSpectrum && scan.PrecursorMasterScanNumber < rawFile.RunHeader.LastSpectrum)
-                {
-                    parentScan = ThermoBiz.Scan.FromFile(rawFile, scan.PrecursorMasterScanNumber);
+                
+                if (scan.PrecursorMasterScanNumber <= 0 && scan.MsOrder > 1) {
+                    // Try again to set the precursor scan.
+                    SetPrecursorScanNumber(scan);
                 }
-                // Fill precursor information
-                // after getting the parent scan and header information.
-                if (scan.MsOrder > 1)
+
+                if (scan.MsOrder > 1 && scan.PrecursorMasterScanNumber > rawFile.RunHeader.FirstSpectrum && scan.PrecursorMasterScanNumber < rawFile.RunHeader.LastSpectrum)
                 {
-                    foreach(var precursor in scan.Precursors) {
-                        if (parentScan != null)
-                        {
+                    // Fill precursor information
+                    var parentScan = ThermoBiz.Scan.FromFile(rawFile, scan.PrecursorMasterScanNumber);
+                    if (parentScan != null) {
+                        foreach(var precursor in scan.Precursors) {
                             precursor.Intensity = GetMaxIntensity(parentScan, precursor.IsolationMz, precursor.IsolationWidth);
                         }
                     }
                 }
 
-                // Centroid or profile?:
-                if (thermoScan.ScanStatistics.IsCentroidScan && (thermoScan.ScanStatistics.SpectrumPacketType == ThermoBiz.SpectrumPacketType.FtCentroid))
-                {
+                if (thermoScan.HasCentroidStream) {
                     // High res data
                     CentroidsFromArrays(scan, thermoScan.CentroidScan.Masses, thermoScan.CentroidScan.Intensities, thermoScan.CentroidScan.Baselines, thermoScan.CentroidScan.Noises);
                 }
-                else
-                {
+                else {
                     // Low res data
-                    CentroidsFromArrays(scan, thermoScan.PreferredMasses, thermoScan.PreferredIntensities, noise: thermoScan.PreferredNoises);
+                    CentroidsFromArrays(scan, thermoScan.PreferredMasses, thermoScan.PreferredIntensities);
                 }
 
                 if (scan.PeakCount > 0) {
@@ -310,6 +305,23 @@ namespace Monocle.File
                 return m.Groups [1].ToString ();
             }
             return "";
+        }
+
+        /// <summary>
+        /// Read the precursor scan number for a given scan.
+        /// This is a fallback method since it's preferred to get the value
+        /// from the "Master Scan Number" field in the scan header.
+        /// </summary>
+        /// <param name="scan">The scan that needs the assignment of the parent scan number</param>
+        private void SetPrecursorScanNumber(Data.Scan scan)
+        {
+            if (ScanParents.Count == 0) {
+                // Populate the index - this can be slow.
+                ReadScanParents();
+            }
+            if (ScanParents.ContainsKey (scan.ScanNumber)) {
+                scan.PrecursorMasterScanNumber = ScanParents[scan.ScanNumber];
+            }
         }
 
         /// <summary>
