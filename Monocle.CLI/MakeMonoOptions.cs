@@ -12,7 +12,10 @@ namespace MakeMono
         public string InputFilePath { get; set; } = "";
 
         [Option('n', "NumOfScans", Required = false, HelpText = "The number of scans to average, default: +/- 6")]
-        public int NumOfScans { get; set; } = 12;
+        public int NumOfScans { get; set; } = 6;
+
+        [Option('a', "AveragingVector", Required = false, HelpText = "Choose to average scans \"Before\" the parent scan, \"After\" or \"Both\" (default).")]
+        public AveragingVector AveragingVector { get; set; } = AveragingVector.Both;
 
         [Option('c', "ChargeDetection", Required = false, HelpText = "Toggle charge detection, default: false | F")]
         public bool ChargeDetection { get; set; } = false;

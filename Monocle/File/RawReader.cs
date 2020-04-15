@@ -48,7 +48,7 @@ namespace Monocle.File
             }
 
             rawFile.SelectInstrument(ThermoBiz.Device.MS, 1);
-            //ReadScanParents();
+            ReadScanParents();
         }
 
         public ScanFileHeader GetHeader()

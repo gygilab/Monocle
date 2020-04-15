@@ -17,7 +17,7 @@ namespace MakeMono
             MakeMonoOptions options = parser.Parse(args);
             MonocleOptions monocleOptions = new MonocleOptions
             {
-                AveragingVector = AveragingVector.Both,
+                AveragingVector = options.AveragingVector,
                 Charge_Detection = options.ChargeDetection,
                 Charge_Range = new ChargeRange(options.ChargeRange),
                 MS_Level = options.MS_Level,

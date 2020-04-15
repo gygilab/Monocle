@@ -74,7 +74,7 @@ namespace Monocle
         /// <returns>A list of filtered scans.</returns>
         public static List<Scan> GetNearbyScans(ref List<Scan> scans, Scan precursorScan, MonocleOptions Options)
         {
-            int window = Options.Number_Of_Scans_To_Average / 2;
+            int window = Options.Number_Of_Scans_To_Average;
             var output = new List<Scan>(window * 2);
             int index = precursorScan.ScanNumber - 1;
             int scanCount = 0;
