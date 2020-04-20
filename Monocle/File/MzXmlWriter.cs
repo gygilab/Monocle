@@ -2,6 +2,7 @@
 using Monocle.Data;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 
@@ -75,10 +76,10 @@ namespace Monocle.File {
             writer.WriteAttributeString("filterLine", scan.FilterLine);
             writer.WriteAttributeString("retentionTime", MakeRetentionTimeString(scan.RetentionTime));
             writer.WriteAttributeString("startMz", scan.StartMz.ToString());
-            writer.WriteAttributeString("endMz", scan.EndMz.ToString());
-            writer.WriteAttributeString("lowMz", scan.LowestMz.ToString());
-            writer.WriteAttributeString("highMz", scan.HighestMz.ToString());
-            writer.WriteAttributeString("basePeakMz", scan.BasePeakMz.ToString());
+            writer.WriteAttributeString("endMz", scan.EndMz.ToString("G17", CultureInfo.InvariantCulture));
+            writer.WriteAttributeString("lowMz", scan.LowestMz.ToString("G17",CultureInfo.InvariantCulture));
+            writer.WriteAttributeString("highMz", scan.HighestMz.ToString("G17", CultureInfo.InvariantCulture));
+            writer.WriteAttributeString("basePeakMz", scan.BasePeakMz.ToString("G17", CultureInfo.InvariantCulture));
             writer.WriteAttributeString("basePeakIntensity", scan.BasePeakIntensity.ToString());
             writer.WriteAttributeString("totIonCurrent", scan.TotalIonCurrent.ToString());
             writer.WriteAttributeString("compensationVoltage", scan.FaimsCV.ToString());
@@ -94,7 +95,7 @@ namespace Monocle.File {
                     writer.WriteAttributeString("precursorIntensity", precursor.Intensity.ToString());
                     writer.WriteAttributeString("precursorCharge", precursor.Charge.ToString());
                     writer.WriteAttributeString("activationMethod", scan.PrecursorActivationMethod.ToString());
-                    writer.WriteString(precursor.Mz.ToString());
+                    writer.WriteString(precursor.Mz.ToString("G17", CultureInfo.InvariantCulture));
                     writer.WriteEndElement(); // precursorMz
                 }
             }
