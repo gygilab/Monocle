@@ -142,6 +142,8 @@ namespace MonocleUI
 
                         IScanReader reader = ScanReaderFactory.GetReader(newFile);
                         reader.Open(newFile);
+                        ScanFileHeader header = reader.GetHeader();
+                        header.FileName = Path.GetFileName(newFile);
 
                         var Scans = new List<Monocle.Data.Scan>();
                         foreach (Scan scan in reader)
@@ -165,10 +167,12 @@ namespace MonocleUI
                         }
 
                         string outputFilePath = Path.Combine(Path.GetDirectoryName(newFile), Path.GetFileNameWithoutExtension(newFile) +
-                            "_monocle." + monocleOptions.OutputFileType.ToString());
+                            "_monocle." +
+                            monocleOptions.OutputFileType.ToString());
+                        ScanWriterFactory.MakeTargetFileName(newFile,monocleOptions.OutputFileType);
                         IScanWriter writer = ScanWriterFactory.GetWriter(monocleOptions.OutputFileType);
                         writer.Open(outputFilePath);
-                        writer.WriteHeader(new ScanFileHeader());
+                        writer.WriteHeader(header);
                         foreach (Scan scan in Scans) {
                             token.ThrowIfCancellationRequested();
                             writer.WriteScan(scan);
