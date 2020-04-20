@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;
 using System.Xml;
@@ -255,11 +256,11 @@ namespace Monocle.File
             }
 
             WriteCVParam("MS:1000127", ""); // centroid spectrum
-            WriteCVParam("MS:1000504", scan.BasePeakMz.ToString(), "MS:1000040");
+            WriteCVParam("MS:1000504", scan.BasePeakMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
             WriteCVParam("MS:1000505", scan.BasePeakIntensity.ToString(), "MS:1000131");
             WriteCVParam("MS:1000285", scan.TotalIonCurrent.ToString());
-            WriteCVParam("MS:1000528", scan.LowestMz.ToString(), "MS:1000040");
-            WriteCVParam("MS:1000527", scan.HighestMz.ToString(), "MS:1000040");
+            WriteCVParam("MS:1000528", scan.LowestMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
+            WriteCVParam("MS:1000527", scan.HighestMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
 
             // No support for combined scans yet.
             writer.WriteStartElement("scanList");
@@ -278,8 +279,8 @@ namespace Monocle.File
             writer.WriteAttributeString("count", "1");
 
             writer.WriteStartElement("scanWindow");
-            WriteCVParam("MS:1000501", scan.StartMz.ToString(), "MS:1000040");
-            WriteCVParam("MS:1000500", scan.EndMz.ToString(), "MS:1000040");
+            WriteCVParam("MS:1000501", scan.StartMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
+            WriteCVParam("MS:1000500", scan.EndMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
             writer.WriteEndElement(); // scanWindow
 
             writer.WriteEndElement(); // scanWindowList
@@ -294,7 +295,7 @@ namespace Monocle.File
                 writer.WriteAttributeString("spectrumRef", scan.PrecursorMasterScanNumber.ToString());
                 
                 writer.WriteStartElement("isolationWindow");
-                WriteCVParam("MS:1000827", precursor.IsolationMz.ToString(), "MS:1000040");
+                WriteCVParam("MS:1000827", precursor.IsolationMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
                 WriteCVParam("MS:1000828", precursor.IsolationWidth.ToString(), "MS:1000040");
                 WriteCVParam("MS:1000829", precursor.IsolationWidth.ToString(), "MS:1000040");
                 writer.WriteEndElement(); // isolationWindow
@@ -302,7 +303,7 @@ namespace Monocle.File
                 writer.WriteStartElement("selectedIonList");
                 writer.WriteAttributeString("count", "1");
                 writer.WriteStartElement("selectedIon");
-                WriteCVParam("MS:1000827", precursor.IsolationMz.ToString(), "MS:1000040");
+                WriteCVParam("MS:1000827", precursor.IsolationMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
                 writer.WriteEndElement(); // selectedIon
                 writer.WriteEndElement(); // selectedIonList
 

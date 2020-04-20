@@ -1,5 +1,6 @@
 
 using Monocle.Data;
+using System.Globalization;
 using System.IO;
 
 namespace Monocle.File {
@@ -59,12 +60,12 @@ namespace Monocle.File {
             foreach (var precursor in scan.Precursors) {
                 writer.WriteLine(scan.ScanNumber + delimiter +
                     scan.MsOrder + delimiter +
-                    precursor.Mz + delimiter +
-                    precursor.Mh + delimiter +
+                    precursor.Mz.ToString("G17", CultureInfo.InvariantCulture) + delimiter +
+                    precursor.Mh.ToString("G17", CultureInfo.InvariantCulture) + delimiter +
                     precursor.Charge + delimiter +
-                    precursor.OriginalMz + delimiter +
+                    precursor.OriginalMz.ToString("G17", CultureInfo.InvariantCulture) + delimiter +
                     precursor.OriginalCharge + delimiter +
-                    precursor.IsolationMz + delimiter +
+                    precursor.IsolationMz.ToString("G17", CultureInfo.InvariantCulture) + delimiter +
                     precursor.IsolationWidth + delimiter +
                     precursor.IsolationSpecificity + delimiter +
                     precursor.Intensity);
