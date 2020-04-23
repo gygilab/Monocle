@@ -31,6 +31,9 @@ namespace MakeMono
 
         [Option('m', "MsLevel", Required = false, HelpText = "Select the MS level at which monoisotopic m/z will be adjusted.")]
         public int MS_Level { get; set; } = 2;
+        
+        [Option('i', "UseMostIntense", Required = false, HelpText = "Re-assign precursor m/z to the most intense peak in the isolation window.")]
+        public bool UseMostIntense { get; set; } = false;
 
         [Option('q', "QuietRun", Required = false, HelpText = "Do not display file progress in console.")]
         public bool RunQuiet { get; set; } = false;

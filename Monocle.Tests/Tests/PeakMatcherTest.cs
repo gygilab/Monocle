@@ -55,12 +55,32 @@ namespace Monocle.Tests
             Assert.Equal(-1, i);
         }
 
+        [Fact]
+        public void MostIntenseTest() {
+            double targetMz = 980;
+            double tolerance = 30;
+            var units = PeakMatcher.DALTON;
+            var scan = GetTestScan();
+            int i = PeakMatcher.MostIntenseIndex(scan, targetMz, tolerance, units);
+            Assert.Equal(3, i);
+
+            targetMz = 400;
+            tolerance = 10;
+            i = PeakMatcher.MostIntenseIndex(scan, targetMz, tolerance, units);
+            Assert.Equal(-1, i);
+
+            targetMz = 1000;
+            tolerance = 300;
+            i = PeakMatcher.MostIntenseIndex(scan, targetMz, tolerance, units);
+            Assert.Equal(0, i);
+        }
+
         private List<Centroid> GetTestPeaks() {
             var peaks = new List<Centroid> {
-                new Centroid { Mz = 800.0, Intensity = 100 },
+                new Centroid { Mz = 800.0, Intensity = 200 },
                 new Centroid { Mz = 999.5, Intensity = 100 },
                 new Centroid { Mz = 999.9, Intensity = 100 },
-                new Centroid { Mz = 1000.0, Intensity = 100 },
+                new Centroid { Mz = 1000.0, Intensity = 150 },
                 new Centroid { Mz = 1000.1, Intensity = 100 },
                 new Centroid { Mz = 1200.0, Intensity = 100 }
             };

@@ -54,6 +54,40 @@ namespace Monocle.Peak
             return -1;
         }
 
+        /// <summary>
+        /// Returns the index of the most intense peak in the window.
+        /// Returns -1 if none is found.
+        /// </summary>
+        /// <param name="scan">The scan that will be searched</param>
+        /// <param name="targetMz">The center of the window where peaks will be considered</param>
+        /// <param name="tolerance">window will be +/- this value</param>
+        /// <param name="tolUnits">Units can be DALTON or PPM</param>
+        /// <returns></returns>
+        public static int MostIntenseIndex(Scan scan, double targetMz, double tolerance, int tolUnits)
+        {
+            double lowMz = targetMz - tolerance;
+            double highMz = targetMz + tolerance;
+            if (tolUnits == PPM) {
+                double delta = tolerance * targetMz / 1000000;
+                lowMz = targetMz - delta;
+                highMz = targetMz + delta;
+            }
+            var peaks = scan.Centroids;
+            int i = PeakMatcher.NearestIndex(peaks, lowMz);
+            if (peaks[i].Mz < lowMz) {
+                ++i;
+            }
+            double maxIntensity = 0;
+            int bestIndex = -1;
+            for ( ; i < peaks.Count && peaks[i].Mz < highMz; ++i) {
+                if (peaks[i].Intensity > maxIntensity) {
+                    maxIntensity = peaks[i].Intensity;
+                    bestIndex = i;
+                }
+            }
+            return bestIndex;
+        }
+
         public static int NearestIndex(List<Centroid> peaks, double target)
         {
             int low = 0;

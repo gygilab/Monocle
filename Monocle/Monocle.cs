@@ -147,10 +147,28 @@ namespace Monocle
         public static void Run(List<Scan> Ms1ScansCentroids, Scan ParentScan, Precursor precursor, MonocleOptions Options)
         {
             double precursorMz = precursor.IsolationMz;
-            if (precursorMz < 1) {
+            if (precursorMz < 1)
+            {
                 precursorMz = precursor.Mz;
             }
             int precursorCharge = precursor.Charge;
+
+            if (Options.UseMostIntense && precursor.IsolationWidth > 0)
+            {
+                // Re-assign the precursor m/z to that of the most intense peak in the isolation window.
+                int peakIndex = PeakMatcher.MostIntenseIndex(ParentScan, precursor.IsolationMz, precursor.IsolationWidth / 2, PeakMatcher.DALTON);
+                if (peakIndex >= 0)
+                {
+                    precursorMz = ParentScan.Centroids[peakIndex].Mz;
+                }    
+            }
+
+            // Search for ion in parent scan, use parent ion mz for future peaks
+            int index = PeakMatcher.Match(ParentScan, precursorMz, 50, PeakMatcher.PPM);
+            if (index >= 0)
+            {
+                precursorMz = ParentScan.Centroids[index].Mz;
+            }
 
             // For charge detection
             int bestCharge = 0;
@@ -172,13 +190,6 @@ namespace Monocle
                 // Restrict number of isotopes to consider based on precursor mass.
                 double mass = precursor.Mz * charge;
                 var isotopeRange = new IsotopeRange(mass);
-
-                // Search for ion in parent scan, use parent ion mz for future peaks
-                int index = PeakMatcher.Match(ParentScan, precursorMz, 50, PeakMatcher.PPM);
-                if (index >= 0)
-                {
-                    precursorMz = ParentScan.Centroids[index].Mz;
-                }
 
                 // Generate expected relative intensities.
                 List<double> expected = PeptideEnvelopeCalculator.GetTheoreticalEnvelope(precursorMz, charge, isotopeRange.CompareSize);

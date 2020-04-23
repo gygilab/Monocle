@@ -26,7 +26,8 @@ namespace MakeMono
                 OutputFileType = options.OutputFileType,
                 ConvertOnly = options.ConvertOnly,
                 ChargeRangeUnknown = new ChargeRange(options.ChargeRangeUnknown),
-                ForceCharges = options.ForceCharges
+                ForceCharges = options.ForceCharges,
+                UseMostIntense = options.UseMostIntense
             };
 
             SetupLogger(options.RunQuiet, options.WriteDebug);

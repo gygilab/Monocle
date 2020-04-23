@@ -92,6 +92,14 @@ namespace Monocle
         public bool ConvertOnly { get; set; } = false;
 
         /// <summary>
+        /// If set to true, Monocle will look through the entire
+        /// isolation window and re-assign the precursor m/z to the
+        /// peak with the highest intensity before running monoisotopic
+        /// peak detection
+        /// </summary>
+        public bool UseMostIntense { get; set; } = false;
+
+        /// <summary>
         /// Allow get/set of property based on property name
         /// </summary>
         /// <param name="propertyName"></param>
