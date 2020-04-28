@@ -12,12 +12,12 @@ namespace Monocle.Data {
         /// <summary>
         /// Time of the first scan in minutes.
         /// </summary>
-        public float StartTime = 0;
+        public double StartTime = 0;
 
         /// <summary>
         /// Time of the last scan in minutes.
         /// </summary>
-        public float EndTime = 0;
+        public double EndTime = 0;
 
         /// <summary>
         /// Name of the source file.

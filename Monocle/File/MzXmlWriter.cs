@@ -124,8 +124,8 @@ namespace Monocle.File {
 
             writer.WriteStartElement("msRun");
             writer.WriteAttributeString("scanCount", header.ScanCount.ToString());
-            writer.WriteAttributeString("startTime", header.StartTime.ToString());
-            writer.WriteAttributeString("endTime", header.EndTime.ToString());
+            writer.WriteAttributeString("startTime", MakeRetentionTimeString(header.StartTime));
+            writer.WriteAttributeString("endTime", MakeRetentionTimeString(header.EndTime));
 
             writer.WriteStartElement("parentFile");
             writer.WriteAttributeString("fileName", header.FileName);

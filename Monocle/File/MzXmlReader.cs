@@ -157,7 +157,7 @@ namespace Monocle.File
         {
             if (attribute == "retentionTime") {
                 // Parse time and change to minutes.
-                scan.RetentionTime = double.Parse(value.Trim("PTS ".ToCharArray())) / 60d;
+                scan.RetentionTime = ParseRetentionTime(value);
             }
 
             string tempAttr = "";
@@ -218,10 +218,10 @@ namespace Monocle.File
                                         Header.ScanCount = int.Parse(Reader.Value);
                                         break;
                                     case "startTime":
-                                        Header.StartTime = float.Parse(Reader.Value);
+                                        Header.StartTime = ParseRetentionTime(Reader.Value);
                                         break;
                                     case "endTime":
-                                        Header.EndTime = float.Parse(Reader.Value);
+                                        Header.EndTime = ParseRetentionTime(Reader.Value);
                                         break;
                                     default:
                                         break;
@@ -292,6 +292,26 @@ namespace Monocle.File
         private void Cleanup() {
             if (Reader != null) {
                 ((IDisposable)Reader).Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Converts retention time text into the number of minutes.
+        /// 
+        /// Input text is of the type xsd:duration
+        /// </summary>
+        /// <param name="text">Input, e.g. "PT2530.331S"</param>
+        /// <returns>Number of Minutes</returns>
+        private double ParseRetentionTime(string text) {
+            try {
+                if (text.StartsWith("PT")) {
+                    var span = XmlConvert.ToTimeSpan(text);
+                    return span.TotalMinutes;
+                }
+
+                return float.Parse(text);
+            } catch (FormatException) {
+                return 0;
             }
         }
    }
