@@ -36,7 +36,7 @@ namespace Monocle
 
                 // For low-res scans, or if ForceCharges is true, generate precursors with
                 // a range of charges given by the ChargeRangeUnknown option.
-                if (precursorScan.ScanType == "ITMS" || Options.ForceCharges)
+                if (precursorScan.FilterLine.Contains("ITMS") || Options.ForceCharges)
                 {
                     int range = 1 + Options.ChargeRangeUnknown.High - Options.ChargeRangeUnknown.Low;
                     var precursors = new List<Precursor>(range);
