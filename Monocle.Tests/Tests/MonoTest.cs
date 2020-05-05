@@ -68,9 +68,9 @@ namespace Monocle.Tests.Tests
             }
             MonocleOptions options = new MonocleOptions();
             options.AveragingVector = AveragingVector.Both;
-            options.Number_Of_Scans_To_Average = 5;
+            options.Number_Of_Scans_To_Average = 6;
             var nearby = Monocle.GetNearbyScans(ref scans, scans[scans[10].PrecursorMasterScanNumber - 1], options);
-            Assert.Equal(5, nearby.Count);
+            Assert.Equal(13, nearby.Count);
         }
 
         [Fact]
