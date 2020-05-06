@@ -198,7 +198,8 @@ namespace Monocle
                 PeptideEnvelope envelope = PeptideEnvelopeExtractor.Extract(Ms1ScansCentroids, precursorMz, charge, isotopeRange.Left, isotopeRange.Isotopes);
 
                 // Get best match using dot product.
-                for (int i = 0; i < (isotopeRange.Isotopes - (expected.Count - 1)); ++i)
+                // Limit the number of isotopeRange peaks to test
+                for (int i = 0; i < (isotopeRange.Isotopes - (isotopeRange.CompareSize - 1)); ++i)
                 {
                     List<double> observed = envelope.averageIntensity.GetRange(i, expected.Count);
                     Vector.Scale(observed);
