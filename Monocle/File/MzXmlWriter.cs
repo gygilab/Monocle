@@ -129,7 +129,7 @@ namespace Monocle.File {
 
             writer.WriteStartElement("parentFile");
             writer.WriteAttributeString("fileName", header.FileName);
-            writer.WriteAttributeString("fileType", "rawData");
+            writer.WriteAttributeString("fileType", "RAWData");
             writer.WriteEndElement(); // parentFile
             
             writer.WriteStartElement("msInstrument");
