@@ -212,11 +212,13 @@ namespace MonocleUI
                     continue;
                 }
 
+                string description = (OptionDescriptions.Descriptions.ContainsKey(propertyInfo[i].Name)) ? "" : OptionDescriptions.Descriptions[propertyInfo[i].Name];
+
                 string[] newRow = new string[3]
                 {
                     propertyInfo[i].Name,
                     FileProcessor.monocleOptions[propertyInfo[i].Name].ToString(),
-                    OptionDescriptions.Descriptions[propertyInfo[i].Name]
+                    description
                 };
                 //Invoke(new Action(
                 //() =>

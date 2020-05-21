@@ -22,7 +22,8 @@ namespace MonocleUI.lib
             { "ChargeRangeUnknown", "Set the charge range for peaks with unknown charge state."},
             { "ForceCharges", "Output multiple precursors with charges even if charge is known."},
             { "ConvertOnly", "Write output file without modifying precursors."},
-            { "OutputFileType", "Choose to output an mzXML 'mzxml' or CSV file 'csv'."}
+            { "OutputFileType", "Choose to output an mzXML 'mzxml' or CSV file 'csv'."},
+            { "UseMostIntense", "True - re-assign precursor m/z to peak with the highest intensity before running monoisotopic peak detection."}
         };
     }
 }
