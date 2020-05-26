@@ -1,0 +1,3 @@
+#!/bin/bash
+# Runs the Monocle CLI app.
+/usr/lib/monocle-ms/Monocle.CLI "$@"

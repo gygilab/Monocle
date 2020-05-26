@@ -1,1 +1,2 @@
-Monocle.CLI/Monocle /usr/share/gfy/cli/
+Monocle.CLI/monocle-ms /usr/lib/
+build/monocle /usr/bin/
