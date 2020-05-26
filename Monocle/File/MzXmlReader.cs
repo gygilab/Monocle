@@ -98,6 +98,8 @@ namespace Monocle.File
         /// </summary>
         /// <returns></returns>
         public IEnumerator GetEnumerator() {
+            // Reset to beginning of document.
+            Reader = XmlReader.Create(FilePath);
             Scan scan = null;
             while(Reader.Read()) {
                 switch (Reader.NodeType) {
