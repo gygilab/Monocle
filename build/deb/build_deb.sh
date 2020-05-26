@@ -12,7 +12,7 @@ rm -rf build/deb/*.deb
 rm -rf /tmp/monocle-ms*
 mkdir -p /tmp/monocle-ms/
 
-# The current directlry may already be tmp so ignore warning
+# The current directory may already be tmp so ignore warning
 cp -R * /tmp/monocle-ms/ || true
 
 pushd /tmp/monocle-ms
@@ -24,7 +24,7 @@ sed -i -r "s/monocle-ms \(\S+\) stable/monocle-ms ($VERSION-$BUILD_NUMBER) $DIST
 cp build/deb/Makefile .
 
 cd Monocle.CLI
-dotnet publish -c Release -r linux-x64 -o Monocle
+dotnet publish -c Release -r linux-x64 -o Monocle -p:PublishTrimmed=true
 cd ../../
 tar czvf monocle-ms_$VERSION.orig.tar.gz monocle-ms
 cd monocle-ms

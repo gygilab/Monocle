@@ -17,7 +17,7 @@ Monoisotopic peak and accurate precursor m/z detection in shotgun proteomics exp
 %setup -q -n %{name}
 
 %build
-cd Monocle.CLI/ && dotnet publish -c Release -r linux-x64 -o Release
+cd Monocle.CLI/ && dotnet publish -c Release -r linux-x64 -o Release -p:PublishTrimmed=true
 
 %files
 /usr/share/gfy/cli/Monocle/
