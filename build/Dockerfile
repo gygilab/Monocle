@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-bionic
 RUN apt update && apt install -y rpm devscripts build-essential lintian liblttng-ust0
 
 # text names needed for rpm build
