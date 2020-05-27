@@ -1,4 +1,7 @@
 pipeline {
+    triggers {
+        pollSCM('H/12 * * * 1-5')
+    }
     environment {
         HOME = '/tmp'
         VERSION = 1
