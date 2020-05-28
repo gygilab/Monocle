@@ -104,6 +104,12 @@ namespace Monocle.File
             while(Reader.Read()) {
                 switch (Reader.NodeType) {
                     case XmlNodeType.Element:
+
+                        if (scan != null && (Reader.Name == "scan" || Reader.Name == "index")) {
+                            // mzXML can have nested scans, so returning scans here.
+                            yield return scan;
+                        }
+
                         if (Reader.Name == "scan") {
                             scan = new Scan();
                             while (Reader.MoveToNextAttribute()) {
@@ -137,11 +143,6 @@ namespace Monocle.File
                             precursor.OriginalMz = precursor.Mz;
                             precursor.OriginalCharge = precursor.Charge;
                             scan.Precursors.Add(precursor);
-                        }
-                        break;
-                    case XmlNodeType.EndElement:
-                        if (Reader.Name == "scan") {
-                            yield return scan;
                         }
                         break;
                     default:
