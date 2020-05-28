@@ -92,6 +92,18 @@ namespace Monocle
         public bool ConvertOnly { get; set; } = false;
 
         /// <summary>
+        /// avoid the monoisotopic peak detection.
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// If this is true, precursors can still be modified
+        /// if ForceCharges is true or if there are low-res MS1 scans.
+        /// 
+        /// ConvertOnly will also skip monoisotopic peak detection.
+        /// </remarks>
+        public bool SkipMono { get; set; } = false;
+
+        /// <summary>
         /// If set to true, Monocle will look through the entire
         /// isolation window and re-assign the precursor m/z to the
         /// peak with the highest intensity before running monoisotopic

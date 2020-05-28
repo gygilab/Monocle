@@ -36,7 +36,8 @@ namespace Monocle
 
                 // For low-res scans, or if ForceCharges is true, generate precursors with
                 // a range of charges given by the ChargeRangeUnknown option.
-                if (precursorScan.FilterLine.Contains("ITMS") || Options.ForceCharges)
+                bool lowResPrecursor = precursorScan.FilterLine.Contains("ITMS");
+                if (lowResPrecursor || Options.ForceCharges)
                 {
                     int range = 1 + Options.ChargeRangeUnknown.High - Options.ChargeRangeUnknown.Low;
                     var precursors = new List<Precursor>(range);
@@ -52,13 +53,16 @@ namespace Monocle
                     scan.Precursors = precursors;
                 }
 
-                foreach (var precursor in scan.Precursors)
+                if (!Options.SkipMono && !lowResPrecursor)
                 {
-                    if (!Options.Charge_Detection && precursor.Charge == 0)
+                    foreach (var precursor in scan.Precursors)
                     {
-                        Console.WriteLine(String.Format("Scan {0} does not have a charge state assigned.  Charge detection enabled.", scan.ScanNumber));
+                        if (!Options.Charge_Detection && precursor.Charge == 0)
+                        {
+                            Console.WriteLine(String.Format("Scan {0} does not have a charge state assigned.  Charge detection enabled.", scan.ScanNumber));
+                        }
+                        Run(nearbyScans, precursorScan, precursor, Options);
                     }
-                    Run(nearbyScans, precursorScan, precursor, Options);
                 }
             }
         }

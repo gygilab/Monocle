@@ -25,6 +25,7 @@ namespace MakeMono
                 WriteDebugString = options.WriteDebug,
                 OutputFileType = options.OutputFileType,
                 ConvertOnly = options.ConvertOnly,
+                SkipMono = options.SkipMono,
                 ChargeRangeUnknown = new ChargeRange(options.ChargeRangeUnknown),
                 ForceCharges = options.ForceCharges,
                 UseMostIntense = options.UseMostIntense
