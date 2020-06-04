@@ -29,7 +29,9 @@ cd ../../
 tar czvf monocle-ms_$VERSION.orig.tar.gz monocle-ms
 cd monocle-ms
 cp -R build/deb/debian . 
-debuild -us -uc
+
+# skip dbgsym packages
+DEB_BUILD_OPTIONS=noddebs debuild -us -uc
 
 popd
 
