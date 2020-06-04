@@ -44,7 +44,7 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts 'build/deb/*.deb,build/rpm/*.rpm'
+            archiveArtifacts 'build/deb/*.deb,build/deb/*.changes,build/rpm/*.rpm'
         }
     }
 }

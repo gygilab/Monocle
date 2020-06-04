@@ -35,3 +35,4 @@ popd
 
 # Copy files to artifacts dir
 mv /tmp/monocle-ms_*.deb build/deb/
+mv /tmp/monocle-ms_*.changes build/deb/
