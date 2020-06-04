@@ -5,7 +5,7 @@ case "$GIT_BRANCH" in
 esac
 
 # clear previous packages
-rm -rf build/deb/*.deb
+rm -rf build/deb/*.{changes,deb,dsc,debian.tar.xz,orig.tar.gz} 
 
 # put files in a folder with the same name
 # as the package name for debuild
