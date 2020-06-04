@@ -34,5 +34,4 @@ debuild -us -uc
 popd
 
 # Copy files to artifacts dir
-mv /tmp/monocle-ms_*.deb build/deb/
-mv /tmp/monocle-ms_*.changes build/deb/
+mv /tmp/monocle-ms_*.{changes,deb,debian.tar.xz,orig.tar.gz} build/deb/
