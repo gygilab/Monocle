@@ -5,7 +5,7 @@ case "$GIT_BRANCH" in
 esac
 
 # clear previous packages
-rm -rf build/deb/*.{changes,deb,dsc,debian.tar.xz,orig.tar.gz} 
+rm -rf build/deb/*.{buildinfo,changes,deb,dsc,debian.tar.xz,orig.tar.gz} 
 
 # put files in a folder with the same name
 # as the package name for debuild
@@ -36,4 +36,4 @@ DEB_BUILD_OPTIONS=noddebs debuild -us -uc
 popd
 
 # Copy files to artifacts dir
-mv /tmp/monocle-ms_*.{changes,deb,dsc,debian.tar.xz,orig.tar.gz} build/deb/
+mv /tmp/monocle-ms_*.{buildinfo,changes,deb,dsc,debian.tar.xz,orig.tar.gz} build/deb/
