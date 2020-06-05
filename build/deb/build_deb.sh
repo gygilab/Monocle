@@ -1,8 +1,12 @@
+set -x
+set -e
 
 case "$GIT_BRANCH" in
  master) DIST="stable" ;;
       *) DIST="development" ;;
 esac
+
+printenv
 
 # clear previous packages
 rm -rf build/deb/*.{buildinfo,changes,deb,dsc,debian.tar.xz,orig.tar.gz} 
