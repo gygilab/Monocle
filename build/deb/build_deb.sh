@@ -1,7 +1,7 @@
 set -x
 set -e
 
-case "$GIT_BRANCH" in
+case "$BRANCH_NAME" in
  master) DIST="stable" ;;
       *) DIST="development" ;;
 esac
