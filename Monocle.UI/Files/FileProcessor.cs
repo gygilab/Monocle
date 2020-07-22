@@ -80,7 +80,7 @@ namespace MonocleUI
         {
             Charge_Detection = false,
             Charge_Range = new ChargeRange(2, 6),
-            Number_Of_Scans_To_Average = 12,
+            Number_Of_Scans_To_Average = 6,
         };
 
         /// <summary>
