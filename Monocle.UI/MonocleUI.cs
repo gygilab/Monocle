@@ -212,7 +212,7 @@ namespace MonocleUI
                     continue;
                 }
 
-                string description = (OptionDescriptions.Descriptions.ContainsKey(propertyInfo[i].Name)) ? "" : OptionDescriptions.Descriptions[propertyInfo[i].Name];
+                string description = (OptionDescriptions.Descriptions.ContainsKey(propertyInfo[i].Name)) ? OptionDescriptions.Descriptions[propertyInfo[i].Name] : "";
 
                 string[] newRow = new string[3]
                 {
