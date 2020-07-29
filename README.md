@@ -10,7 +10,8 @@ Monocle.Tests - The unit testing project.
 
 The Monocle respository - including Monocle, Monocle.CLI, Monocle.UI, and Monocle.Tests - is licensed under the GPL-3.0 license (https://opensource.org/licenses/GPL-3.0).
 
-RawFileReader reading tool. Copyright © 2016 by Thermo Fisher Scientific, Inc. All rights reserved.
+If you use this software to read in ThermoFisher RAW files:
+The RawFileReader reading tool. Copyright © 2016 by Thermo Fisher Scientific, Inc. All rights reserved.
 
 ### How to Build
 Builds for the monocle library and the monocle cli app use the dotnet core command line.
