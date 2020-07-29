@@ -8,7 +8,12 @@ Monocle.CLI - The console application project.
 Monocle.UI - The windows application project.  
 Monocle.Tests - The unit testing project.  
 
-The Monocle respository - including Monocle, Monocle.CLI, Monocle.UI, and Monocle.Tests - is licensed under the GPL-3.0 license (https://opensource.org/licenses/GPL-3.0).
+*Authors*: Ramin Rad, Devin Schweppe  
+Copyright © 2019-2020 Gygi Lab and the above authors.  
+For licensing (commercial and non-commercial) of **Monocle (including Monocle, Monocle.CLI, Monocle.UI, and Monocle.Tests)**, please contact the authors.
+
+For the purposes of reading RAW data files:
+The **RawFileReader** reading tool. Copyright © 2016 by Thermo Fisher Scientific, Inc. All rights reserved.
 
 ### How to Build
 Builds for the monocle library and the monocle cli app use the dotnet core command line.
