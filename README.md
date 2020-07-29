@@ -8,6 +8,8 @@ Monocle.CLI - The console application project.
 Monocle.UI - The windows application project.  
 Monocle.Tests - The unit testing project.  
 
+The Monocle respository - including Monocle, Monocle.CLI, Monocle.UI, and Monocle.Tests - is licensed under the GPL-3.0 license (https://opensource.org/licenses/GPL-3.0).
+
 ### How to Build
 Builds for the monocle library and the monocle cli app use the dotnet core command line.
 
