@@ -262,34 +262,36 @@ namespace Monocle.File
             writer.WriteEndElement(); // scan
             writer.WriteEndElement(); // scanList
 
-            writer.WriteStartElement("precursorList");
-            writer.WriteAttributeString("count", scan.Precursors.Count.ToString());
+            if (scan.Precursors.Count > 0) {
+                writer.WriteStartElement("precursorList");
+                writer.WriteAttributeString("count", scan.Precursors.Count.ToString());
 
-            foreach (var precursor in scan.Precursors) {
-                writer.WriteStartElement("precursor");
-                writer.WriteAttributeString("spectrumRef", scan.PrecursorMasterScanNumber.ToString());
-                
-                writer.WriteStartElement("isolationWindow");
-                WriteCVParam("MS:1000827", precursor.IsolationMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
-                WriteCVParam("MS:1000828", precursor.IsolationWidth.ToString(), "MS:1000040");
-                WriteCVParam("MS:1000829", precursor.IsolationWidth.ToString(), "MS:1000040");
-                writer.WriteEndElement(); // isolationWindow
+                foreach (var precursor in scan.Precursors) {
+                    writer.WriteStartElement("precursor");
+                    writer.WriteAttributeString("spectrumRef", scan.PrecursorMasterScanNumber.ToString());
+                    
+                    writer.WriteStartElement("isolationWindow");
+                    WriteCVParam("MS:1000827", precursor.IsolationMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
+                    WriteCVParam("MS:1000828", precursor.IsolationWidth.ToString(), "MS:1000040");
+                    WriteCVParam("MS:1000829", precursor.IsolationWidth.ToString(), "MS:1000040");
+                    writer.WriteEndElement(); // isolationWindow
 
-                writer.WriteStartElement("selectedIonList");
-                writer.WriteAttributeString("count", "1");
-                writer.WriteStartElement("selectedIon");
-                WriteCVParam("MS:1000827", precursor.IsolationMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
-                writer.WriteEndElement(); // selectedIon
-                writer.WriteEndElement(); // selectedIonList
+                    writer.WriteStartElement("selectedIonList");
+                    writer.WriteAttributeString("count", "1");
+                    writer.WriteStartElement("selectedIon");
+                    WriteCVParam("MS:1000827", precursor.IsolationMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
+                    writer.WriteEndElement(); // selectedIon
+                    writer.WriteEndElement(); // selectedIonList
 
-                writer.WriteStartElement("activation");
-                WriteCVParam("MS:1000133", ""); // CID
-                WriteCVParam("MS:1000045", scan.CollisionEnergy.ToString(), "UO:0000266");
-                writer.WriteEndElement(); // activation
+                    writer.WriteStartElement("activation");
+                    WriteCVParam("MS:1000133", ""); // CID
+                    WriteCVParam("MS:1000045", scan.CollisionEnergy.ToString(), "UO:0000266");
+                    writer.WriteEndElement(); // activation
 
-                writer.WriteEndElement(); // precursor
+                    writer.WriteEndElement(); // precursor
+                }
+                writer.WriteEndElement(); // precursorList
             }
-            writer.WriteEndElement(); // precursorList
 
             writer.WriteStartElement("binaryDataArrayList");
             writer.WriteAttributeString("count", "2");
