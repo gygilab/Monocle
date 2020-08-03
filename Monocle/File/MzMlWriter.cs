@@ -330,11 +330,11 @@ namespace Monocle.File
         }
 
         private void WriteIndex() {
-            writer.WriteEndElement(); // run                
-            writer.WriteEndElement(); // mzML     
+            writer.WriteEndElement(); // run
+            writer.WriteEndElement(); // mzML
 
             writer.Flush();
-            long indexOffset = output.BaseStream.Position;  
+            long indexOffset = output.BaseStream.Position;
 
             writer.WriteStartElement("indexList");
             writer.WriteAttributeString("count", "1");
@@ -346,17 +346,17 @@ namespace Monocle.File
                 writer.WriteStartElement("offset");
                 writer.WriteAttributeString("idRef", "scan=" + entry.Key.ToString());
                 writer.WriteString(entry.Value.ToString());
-                writer.WriteEndElement(); // offset        
+                writer.WriteEndElement(); // offset
             }
 
             writer.WriteEndElement(); // index
 
-            writer.WriteEndElement(); // indexList                    
+            writer.WriteEndElement(); // indexList
 
 
             writer.WriteStartElement("indexListOffset");
             writer.WriteString(indexOffset.ToString());
-            writer.WriteEndElement(); // indexListOffset                                                
+            writer.WriteEndElement(); // indexListOffset
 
             writer.WriteStartElement("fileChecksum");
             writer.WriteString("");
@@ -370,7 +370,7 @@ namespace Monocle.File
             writer.WriteValue(BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant());
             writer.WriteEndElement(); // fileChecksum
 
-            writer.WriteEndElement(); // indexedmzML                                           
+            writer.WriteEndElement(); // indexedmzML
 
             writer.WriteEndDocument();
         }
