@@ -190,7 +190,7 @@ namespace Monocle.File
             writer.WriteStartElement("spectrumList");
             writer.WriteAttributeString("count", header.ScanCount.ToString());
 
-            writer.WriteAttributeString("defaultDataProcessingRef", "MonocleConversion");
+            writer.WriteAttributeString("defaultDataProcessingRef", "ThermoRawFileParserProcessing");
         }
 
         public void WriteScan(Scan scan) {
