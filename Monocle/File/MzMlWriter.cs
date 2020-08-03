@@ -178,7 +178,7 @@ namespace Monocle.File
 
             writer.WriteStartElement("processingMethod");
             writer.WriteAttributeString("order", "0");
-            writer.WriteAttributeString("softwareRef", "ThermoRawFileParser");
+            writer.WriteAttributeString("softwareRef", "Monocle");
 
             WriteCVParam("MS:1000544", "");
 
@@ -268,7 +268,7 @@ namespace Monocle.File
 
                 foreach (var precursor in scan.Precursors) {
                     writer.WriteStartElement("precursor");
-                    writer.WriteAttributeString("spectrumRef", scan.PrecursorMasterScanNumber.ToString());
+                    writer.WriteAttributeString("spectrumRef", "scan=" + scan.PrecursorMasterScanNumber.ToString());
                     
                     writer.WriteStartElement("isolationWindow");
                     WriteCVParam("MS:1000827", precursor.IsolationMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
