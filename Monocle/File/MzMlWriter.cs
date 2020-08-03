@@ -163,37 +163,6 @@ namespace Monocle.File
             writer.WriteAttributeString("ref", "CommonInstrumentParams");
             writer.WriteEndElement(); // referenceableParamGroupRef       
 
-            writer.WriteStartElement("componentList");
-            writer.WriteAttributeString("count", "4");
-
-            writer.WriteStartElement("source");
-            writer.WriteAttributeString("order", "1");
-            WriteCVParam("MS:1000073", ""); // esi
-            WriteCVParam("MS:1000057", ""); // es inlet
-            writer.WriteEndElement(); // source
-            
-            writer.WriteStartElement("analyzer");
-            writer.WriteAttributeString("order", "2");
-            WriteCVParam("MS:1000079", ""); // ft
-            writer.WriteEndElement(); // analyzer                
-
-            writer.WriteStartElement("detector");
-            writer.WriteAttributeString("order", "3");
-            WriteCVParam("MS:1000624", ""); // inductive detector
-            writer.WriteEndElement(); // detector    
-
-            writer.WriteStartElement("analyzer");
-            writer.WriteAttributeString("order", "4");
-            WriteCVParam("MS:1000083", ""); // ion trap
-            writer.WriteEndElement(); // analyzer                
-
-            writer.WriteStartElement("detector");
-            writer.WriteAttributeString("order", "5");
-            WriteCVParam("MS:1000253", ""); // electron multiplier
-            writer.WriteEndElement(); // detector    
-
-            writer.WriteEndElement(); // componentList   
-
             writer.WriteStartElement("softwareRef");
             writer.WriteAttributeString("ref", "Xcalibur");
             writer.WriteEndElement(); // softwareRef       
