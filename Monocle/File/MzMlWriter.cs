@@ -330,6 +330,7 @@ namespace Monocle.File
         }
 
         private void WriteIndex() {
+            writer.WriteEndElement(); // spectrumList
             writer.WriteEndElement(); // run
             writer.WriteEndElement(); // mzML
 
