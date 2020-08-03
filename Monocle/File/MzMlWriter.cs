@@ -159,10 +159,6 @@ namespace Monocle.File
             writer.WriteStartElement("instrumentConfiguration");
             writer.WriteAttributeString("id", "IC1");
 
-            writer.WriteStartElement("referenceableParamGroupRef");
-            writer.WriteAttributeString("ref", "CommonInstrumentParams");
-            writer.WriteEndElement(); // referenceableParamGroupRef       
-
             writer.WriteStartElement("softwareRef");
             writer.WriteAttributeString("ref", "Xcalibur");
             writer.WriteEndElement(); // softwareRef       
