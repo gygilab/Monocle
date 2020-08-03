@@ -189,7 +189,7 @@ namespace Monocle.File
             writer.WriteStartElement("run");
             writer.WriteAttributeString("id", Path.GetFileNameWithoutExtension(header.FileName));
             writer.WriteAttributeString("defaultInstrumentConfigurationRef", "IC1");
-            writer.WriteAttributeString("defaultSourceFileRef", "1");
+            writer.WriteAttributeString("defaultSourceFileRef", "sourcefile_1");
 
             writer.WriteStartElement("spectrumList");
             writer.WriteAttributeString("count", header.ScanCount.ToString());
