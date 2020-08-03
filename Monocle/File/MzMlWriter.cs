@@ -209,7 +209,7 @@ namespace Monocle.File
             scanIndex.Add(scan.ScanNumber, pos);
 
             writer.WriteAttributeString("index", (scan.ScanNumber - 1).ToString());
-            writer.WriteAttributeString("id", scan.ScanNumber.ToString());
+            writer.WriteAttributeString("id", "scan=" + scan.ScanNumber.ToString());
             writer.WriteAttributeString("defaultArrayLength", scan.PeakCount.ToString());
 
             WriteCVParam("MS:1000511", scan.MsOrder.ToString());
@@ -342,7 +342,7 @@ namespace Monocle.File
 
             foreach(var entry in scanIndex) {
                 writer.WriteStartElement("offset");
-                writer.WriteAttributeString("idRef", entry.Key.ToString());
+                writer.WriteAttributeString("idRef", "scan=" + entry.Key.ToString());
                 writer.WriteString(entry.Value.ToString());
                 writer.WriteEndElement(); // offset        
             }
