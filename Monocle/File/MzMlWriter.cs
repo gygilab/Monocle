@@ -229,11 +229,16 @@ namespace Monocle.File
         }
 
         public void WriteScan(Scan scan) {
-            writer.Flush();
-            long pos = output.BaseStream.Position;
-            scanIndex.Add(scan.ScanNumber, pos);
 
             writer.WriteStartElement("spectrum");
+
+            // Get position of spectrum tag for index.
+            // Flush after writing since the previous tag isnt closed
+            // until the spectrum tag is written.
+            writer.Flush();
+            long pos = output.BaseStream.Position - 9; // pos - length of "<spectrum"
+            scanIndex.Add(scan.ScanNumber, pos);
+
             writer.WriteAttributeString("index", (scan.ScanNumber - 1).ToString());
             writer.WriteAttributeString("id", scan.ScanNumber.ToString());
             writer.WriteAttributeString("defaultArrayLength", scan.PeakCount.ToString());
