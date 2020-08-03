@@ -130,6 +130,7 @@ namespace Monocle.File
             writer.WriteAttributeString("version", "04:03:2009");
             writer.WriteAttributeString("URI", "http://obo.cvs.sourceforge.net/*checkout*/obo/obo/ontology/phenotype/unit.obo");
             writer.WriteEndElement();
+            writer.WriteEndElement();// cvlist 
 
             writer.WriteStartElement("fileDescription");
             writer.WriteStartElement("fileContent");
