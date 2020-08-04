@@ -417,7 +417,6 @@ namespace Monocle.File
                     data = peak.Mz;
                 }
                 var mzBytes = BitConverter.GetBytes((float)data);
-                Array.Reverse(mzBytes);
                 mzBytes.CopyTo(bytes, i * 4);
             }
 
