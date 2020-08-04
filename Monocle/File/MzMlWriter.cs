@@ -76,6 +76,7 @@ namespace Monocle.File
             { "MS:1000521", "32-bit float" },
             { "MS:1000515", "intensity array" },
             { "MS:1000127", "centroid spectrum" },
+            { "MS:1000633", "possible charge state" },
             { "MS:1000827", "isolation window target m/z" },
             { "MS:1000828", "isolation window lower offset" },
             { "MS:1000829", "isolation window upper offset" },
@@ -275,7 +276,10 @@ namespace Monocle.File
                     writer.WriteStartElement("selectedIonList");
                     writer.WriteAttributeString("count", "1");
                     writer.WriteStartElement("selectedIon");
-                    WriteCVParam("MS:1000827", precursor.IsolationMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
+
+                    WriteCVParam("MS:1000633", precursor.Charge.ToString());
+                    WriteCVParam("MS:1000827", precursor.Mz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
+
                     writer.WriteEndElement(); // selectedIon
                     writer.WriteEndElement(); // selectedIonList
 
