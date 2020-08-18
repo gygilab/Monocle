@@ -63,11 +63,15 @@ namespace Monocle.File {
         /// <param name="scan"></param>
         public virtual void WriteScan(Scan scan)
         {
+            writer.WriteStartElement("scan");
+
+            // Get position of scan tag for index.
+            // Flush after writing since the previous tag isnt closed
+            // until the scan tag is written.
             writer.Flush();
-            long pos = output.BaseStream.Position;
+            long pos = output.BaseStream.Position - 5; // pos - length of "<scan"
             scanIndex.Add(scan.ScanNumber, pos);
 
-            writer.WriteStartElement("scan");
             writer.WriteAttributeString("num", scan.ScanNumber.ToString());
             writer.WriteAttributeString("msLevel", scan.MsOrder.ToString());
             writer.WriteAttributeString("peaksCount", scan.PeakCount.ToString());
@@ -188,9 +192,13 @@ namespace Monocle.File {
         {
             writer.WriteEndElement(); // msRun
 
-            writer.Flush();
-            long indexOffset = output.BaseStream.Position;
             writer.WriteStartElement("index");
+
+            writer.Flush();
+            long indexOffset = output.BaseStream.Position - 6; // length of <index
+
+            writer.WriteAttributeString("name", "scan");
+
             foreach(var entry in scanIndex) {
                 writer.WriteStartElement("offset");
                 writer.WriteAttributeString("id", entry.Key.ToString());
