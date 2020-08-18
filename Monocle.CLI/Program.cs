@@ -41,6 +41,7 @@ namespace MakeMono
                 reader.Open(file);
                 var header = reader.GetHeader();
                 header.FileName = Path.GetFileName(file);
+                header.FilePath = file;
 
                 log.Info("Reading scans: " + file);
                 List<Scan> Scans = new List<Scan>();

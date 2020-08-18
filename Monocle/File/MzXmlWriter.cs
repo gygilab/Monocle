@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Xml;
 
 namespace Monocle.File {
@@ -86,7 +88,6 @@ namespace Monocle.File {
             writer.WriteAttributeString("basePeakMz", scan.BasePeakMz.ToString("G17", CultureInfo.InvariantCulture));
             writer.WriteAttributeString("basePeakIntensity", scan.BasePeakIntensity.ToString());
             writer.WriteAttributeString("totIonCurrent", scan.TotalIonCurrent.ToString());
-            writer.WriteAttributeString("compensationVoltage", scan.FaimsCV.ToString());
 
             //tSIM/MSX methods could be MS1s with "SPS" ions so no ms order consideration here
             if (scan.MsOrder > 1)
@@ -134,18 +135,16 @@ namespace Monocle.File {
             writer.WriteStartElement("parentFile");
             writer.WriteAttributeString("fileName", header.FileName);
             writer.WriteAttributeString("fileType", "RAWData");
+            writer.WriteAttributeString("fileSha1", CalculateFileHash(header.FilePath));
             writer.WriteEndElement(); // parentFile
             
-            writer.WriteStartElement("msInstrument");
-            writer.WriteStartElement("msManufacturer");
-            writer.WriteAttributeString("category", "msManufacturer");
-            writer.WriteAttributeString("value", header.InstrumentManufacturer);
-            writer.WriteEndElement(); // msManufacturer
-            writer.WriteStartElement("msModel");
-            writer.WriteAttributeString("category", "msModel");
-            writer.WriteAttributeString("value", header.InstrumentModel);
-            writer.WriteEndElement(); // msModel
-            writer.WriteEndElement(); // msInstrument
+            writer.WriteStartElement("dataProcessing");
+            writer.WriteStartElement("software");
+            writer.WriteAttributeString("type", "conversion");
+            writer.WriteAttributeString("name", "Monocle");
+            writer.WriteAttributeString("version", "1");
+            writer.WriteEndElement(); // software
+            writer.WriteEndElement(); // dataProcessing
         }
 
         /// <summary>
@@ -232,5 +231,28 @@ namespace Monocle.File {
             return "unknown";
         }
 
+        /// <summary>
+        /// Calculates the SHA1 hash of a file and returns the string.
+        /// </summary>
+        /// <param name="file">The full path to the file</param>
+        /// <returns>the result hash</returns>
+        private string CalculateFileHash(string file) {
+            using (FileStream fs = new FileStream(file, FileMode.Open))
+            {
+                using (BufferedStream bs = new BufferedStream(fs))
+                {
+                    using (SHA1Managed sha1 = new SHA1Managed())
+                    {
+                        byte[] hash = sha1.ComputeHash(bs);
+                        StringBuilder formatted = new StringBuilder(2 * hash.Length);
+                        foreach (byte b in hash)
+                        {
+                            formatted.AppendFormat("{0:X2}", b);
+                        }
+                        return formatted.ToString();
+                    }
+                }
+            }
+        }
     }
 }

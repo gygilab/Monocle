@@ -144,6 +144,7 @@ namespace MonocleUI
                         reader.Open(newFile);
                         ScanFileHeader header = reader.GetHeader();
                         header.FileName = Path.GetFileName(newFile);
+                        header.FilePath = newFile;
 
                         var Scans = new List<Monocle.Data.Scan>();
                         foreach (Scan scan in reader)

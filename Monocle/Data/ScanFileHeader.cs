@@ -26,6 +26,11 @@ namespace Monocle.Data {
         public string FileName = "";
 
         /// <summary>
+        /// Full file path of the source file.
+        /// </summary>
+        public string FilePath = "";
+
+        /// <summary>
         /// Name of the Manufacturer of the instrument.
         /// </summary>
         public string InstrumentManufacturer = "unknown";
