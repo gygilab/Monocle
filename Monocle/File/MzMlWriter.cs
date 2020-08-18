@@ -334,10 +334,11 @@ namespace Monocle.File
             writer.WriteEndElement(); // run
             writer.WriteEndElement(); // mzML
 
-            writer.Flush();
-            long indexOffset = output.BaseStream.Position;
-
             writer.WriteStartElement("indexList");
+
+            writer.Flush();
+            long indexOffset = output.BaseStream.Position - 10; // Length of <indexList
+
             writer.WriteAttributeString("count", "1");
 
             writer.WriteStartElement("index");
