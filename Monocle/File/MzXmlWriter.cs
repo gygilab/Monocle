@@ -237,6 +237,9 @@ namespace Monocle.File {
         /// <param name="file">The full path to the file</param>
         /// <returns>the result hash</returns>
         private string CalculateFileHash(string file) {
+            if (file == "" || !System.IO.File.Exists(file)) {
+                return "";
+            }
             using (FileStream fs = new FileStream(file, FileMode.Open))
             {
                 using (BufferedStream bs = new BufferedStream(fs))

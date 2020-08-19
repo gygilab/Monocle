@@ -24,6 +24,8 @@ namespace Monocle.Tests
             writer.Open("data/mzxml-writer-test.mzxml");
 
             var header = new ScanFileHeader();
+            header.FileName = "mzxml-writer-test.mzxml";
+            header.FilePath = "data/mzxml-writer-test.mzxml";
             writer.WriteHeader(header);
 
             var scans = reader.GetEnumerator();

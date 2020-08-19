@@ -5,11 +5,15 @@ using Monocle.Data;
 namespace Monocle.File {
     class ExtendedMzXmlWriter : MzXmlWriter {
         public override void WriteScan(Scan scan) {
+            writer.WriteStartElement("scan");
+
+            // Get position of scan tag for index.
+            // Flush after writing since the previous tag isnt closed
+            // until the scan tag is written.
             writer.Flush();
-            long pos = output.BaseStream.Position;
+            long pos = output.BaseStream.Position - 5; // pos - length of "<scan"
             scanIndex.Add(scan.ScanNumber, pos);
 
-            writer.WriteStartElement("scan");
             writer.WriteAttributeString("num", scan.ScanNumber.ToString());
             writer.WriteAttributeString("msLevel", scan.MsOrder.ToString());
             writer.WriteAttributeString("scanEvent", scan.ScanEvent.ToString());
