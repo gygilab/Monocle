@@ -53,6 +53,9 @@ namespace MakeMono
         [Option('x', "ConvertOnly", Hidden = true, Required = false, HelpText = "Write output file without modifying precursors.")]
         public bool ConvertOnly { get; set; } = false;
 
+        [Option('r', "RawMonoMz", Hidden = true, Required = false, HelpText = "Read monoisotopic m/z from raw file header. Not recommended for use with Monocle algorithm.")]
+        public bool RawMonoMz { get; set; } = false;
+
         [Option('k', "SkipMono", Hidden = true, Required = false, HelpText = "Avoid monoisotopic peak detection. Data may still be modified.")]
         public bool SkipMono { get; set; } = false;
     }
