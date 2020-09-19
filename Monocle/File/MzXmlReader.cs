@@ -68,7 +68,8 @@ namespace Monocle.File
         /// Open new fileStream to mzXML file.
         /// </summary>
         /// <param name="path"></param>
-        public void Open(string path) {
+        public void Open(string path, ScanReaderOptions options)
+        {
             if (!System.IO.File.Exists(path)) {
                 throw new IOException("File not found: " + path);
             }

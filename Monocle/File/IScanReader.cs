@@ -9,7 +9,7 @@ namespace Monocle.File
         /// Open data file and hold new scan information.
         /// </summary>
         /// <param name="path">Path to the data file.</param>
-        void Open(string path);
+        void Open(string path, ScanReaderOptions options);
 
         /// <summary>
         /// Return some metadata about the file.

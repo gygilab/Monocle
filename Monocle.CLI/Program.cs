@@ -31,6 +31,9 @@ namespace MakeMono
                 UseMostIntense = options.UseMostIntense
             };
 
+            var readerOptions = new ScanReaderOptions();
+            readerOptions.RawMonoMz = options.RawMonoMz;
+
             SetupLogger(options.RunQuiet, options.WriteDebug);
 
             try
@@ -38,7 +41,7 @@ namespace MakeMono
                 log.Info("Starting Processing.");
                 string file = options.InputFilePath;
                 IScanReader reader = ScanReaderFactory.GetReader(file);
-                reader.Open(file);
+                reader.Open(file, readerOptions);
                 var header = reader.GetHeader();
                 header.FileName = Path.GetFileName(file);
                 header.FilePath = file;

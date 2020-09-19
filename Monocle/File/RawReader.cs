@@ -26,12 +26,15 @@ namespace Monocle.File
         /// </summary>
         private Dictionary<int, int> ScanParents = new Dictionary<int, int>();
 
+        private ScanReaderOptions Options;
+
         /// <summary>
         /// Open new Raw file with warning messages.
         /// </summary>
         /// <param name="path"></param>
-        public void Open(string path)
+        public void Open(string path, ScanReaderOptions options)
         {
+            Options = options;
             rawFile = RawFileReaderAdapter.FileFactory(path);
             if (!rawFile.IsOpen)
             {
@@ -169,6 +172,16 @@ namespace Monocle.File
                             break;
                         case "Master Index:":
                             scan.MasterIndex = int.Parse(value);
+                            break;
+                        case "Monoisotopic M/Z:":
+                            if (Options.RawMonoMz && scan.Precursors.Count > 0)
+                            {
+                                double mz = double.Parse(value);
+                                if (mz > 0)
+                                {
+                                    scan.Precursors[0].Mz = mz;
+                                }
+                            }
                             break;
                         case "FAIMS CV:":
                             scan.FaimsCV = (int)double.Parse(value);

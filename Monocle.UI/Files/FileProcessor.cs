@@ -141,7 +141,7 @@ namespace MonocleUI
                         token.ThrowIfCancellationRequested();
 
                         IScanReader reader = ScanReaderFactory.GetReader(newFile);
-                        reader.Open(newFile);
+                        reader.Open(newFile, new ScanReaderOptions());
                         ScanFileHeader header = reader.GetHeader();
                         header.FileName = Path.GetFileName(newFile);
                         header.FilePath = newFile;
