@@ -16,7 +16,7 @@ namespace Monocle.Tests.Tests
         public void Mono1()
         {
             MzXmlReader reader = new MzXmlReader();
-            reader.Open("data/orbixl-mini.mzxml");
+            reader.Open("data/orbixl-mini.mzxml", new ScanReaderOptions());
             var scans = new List<Scan>();
             Scan ms2Scan = new Scan();
             Scan parentScan = new Scan();
@@ -32,7 +32,7 @@ namespace Monocle.Tests.Tests
         public void Mono2()
         {
             MzXmlReader reader = new MzXmlReader();
-            reader.Open("data/orbixl-mini.mzxml");
+            reader.Open("data/orbixl-mini.mzxml", new ScanReaderOptions());
             var scans = new List<Scan>();
             Scan ms2Scan = new Scan();
             Scan parentScan = new Scan();
@@ -48,7 +48,7 @@ namespace Monocle.Tests.Tests
         public void Mono3()
         {
             MzXmlReader reader = new MzXmlReader();
-            reader.Open("data/orbixl-mini.mzxml");
+            reader.Open("data/orbixl-mini.mzxml", new ScanReaderOptions());
             var scans = new List<Scan>();
             Scan ms2Scan = new Scan();
             Scan parentScan = new Scan();
@@ -61,7 +61,7 @@ namespace Monocle.Tests.Tests
         [Fact]
         public void WindowTest() {
             MzXmlReader reader = new MzXmlReader();
-            reader.Open("data/orbixl-mini.mzxml");
+            reader.Open("data/orbixl-mini.mzxml", new ScanReaderOptions());
             var scans = new List<Scan>();
             foreach(Scan scan in reader) {
                 scans.Add(scan);
@@ -77,7 +77,7 @@ namespace Monocle.Tests.Tests
         public void MonoAll()
         {
             MzXmlReader reader = new MzXmlReader();
-            reader.Open("data/orbixl-mini.mzxml");
+            reader.Open("data/orbixl-mini.mzxml", new ScanReaderOptions());
             var scans = new List<Scan>();
             foreach(Scan scan in reader) {
                 scans.Add(scan);

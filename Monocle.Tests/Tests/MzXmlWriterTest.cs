@@ -16,7 +16,7 @@ namespace Monocle.Tests
         [Fact]
         public void testOutput() {
             var reader = new MzXmlReader();
-            reader.Open("data/orbixl-mini.mzxml");
+            reader.Open("data/orbixl-mini.mzxml", new ScanReaderOptions());
 
             string dir = Directory.GetCurrentDirectory();
 
@@ -39,7 +39,7 @@ namespace Monocle.Tests
             writer.Close();
 
             reader = new MzXmlReader();
-            reader.Open("data/mzxml-writer-test.mzxml");
+            reader.Open("data/mzxml-writer-test.mzxml", new ScanReaderOptions());
             
             scans = reader.GetEnumerator();
             scans.MoveNext();

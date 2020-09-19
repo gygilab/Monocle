@@ -12,13 +12,13 @@ namespace Monocle.Tests
         public void TestOpen()
         {
             MzXmlReader reader = new MzXmlReader();
-            reader.Open("data/orbixl-mini.mzxml");
+            reader.Open("data/orbixl-mini.mzxml", new ScanReaderOptions());
         }
 
         [Fact]
         public void TestReadScans() {
             MzXmlReader reader = new MzXmlReader();
-            reader.Open("data/orbixl-mini.mzxml");
+            reader.Open("data/orbixl-mini.mzxml", new ScanReaderOptions());
             var scans = new List<Scan>();
             foreach (Scan scan in reader) {
                 scans.Add(scan);
@@ -34,7 +34,7 @@ namespace Monocle.Tests
         [Fact]
         public void TestReadMs2() {
             MzXmlReader reader = new MzXmlReader();
-            reader.Open("data/orbixl-mini.mzxml");
+            reader.Open("data/orbixl-mini.mzxml", new ScanReaderOptions());
             var scans = new List<Scan>();
             foreach (Scan scan in reader) {
                 scans.Add(scan);
