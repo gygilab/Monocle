@@ -26,6 +26,12 @@ namespace Monocle.File
         /// </summary>
         private Dictionary<int, int> ScanParents = new Dictionary<int, int>();
 
+        /// <summary>
+        /// Boolean to see if we already attempted to read the
+        /// parent scan information from the raw file.
+        /// </summary>
+        private bool ScanParentsLoaded = false;
+
         private ScanReaderOptions Options;
 
         /// <summary>
@@ -328,13 +334,17 @@ namespace Monocle.File
         /// <param name="scan">The scan that needs the assignment of the parent scan number</param>
         private void SetPrecursorScanNumber(Data.Scan scan)
         {
-            if (ScanParents.Count == 0) {
+            if (!ScanParentsLoaded) {
                 // Populate the index - this can be slow.
                 ReadScanParents();
             }
             if (ScanParents.ContainsKey (scan.ScanNumber)) {
                 scan.PrecursorMasterScanNumber = ScanParents[scan.ScanNumber];
             }
+            // At this point there is no parent scan information.
+            // Using the last MS1 doesnt work will for instruments that 
+            // acquire scans in parallel.
+            scan.PrecursorMasterScanNumber = LastMS1;
         }
 
         /// <summary>
@@ -352,6 +362,7 @@ namespace Monocle.File
                     }
                 }
             }
+            ScanParentsLoaded = true;
         }
 
         /// <summary>
