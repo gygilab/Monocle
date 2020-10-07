@@ -35,11 +35,6 @@ namespace Monocle.Data
         public int MasterIndex { get; set; }
 
         /// <summary>
-        /// The current scan description
-        /// </summary>
-        public string ScanDescription { get; set; }
-
-        /// <summary>
         /// Injection time used to acquire the scan ions (milliseconds, max = 5000)
         /// </summary>
         public double IonInjectionTime { get; set; }
