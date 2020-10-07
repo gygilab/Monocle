@@ -60,6 +60,12 @@ namespace Monocle.Data
         public string ScanType { get; set; }
 
         /// <summary>
+        /// Detector or mass analyzer used for the scan.
+        /// e.g. ITMS or FTMS
+        /// </summary>
+        public string DetectorType { get; set; }
+
+        /// <summary>
         /// Scan filter line from RAW file
         /// </summary>
         public string FilterLine { get; set; }
