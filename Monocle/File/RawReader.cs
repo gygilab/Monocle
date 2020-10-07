@@ -115,6 +115,7 @@ namespace Monocle.File
                     MsOrder = (int)scanFilter.MSOrder,
                     Polarity = (scanFilter.Polarity == PolarityType.Positive) ? Data.Polarity.Positive : Data.Polarity.Negative,
                     FilterLine = scanFilter.ToString(),
+                    DetectorType = readDetectorType(scanFilter.MassAnalyzer),
                     RetentionTime = rawFile.RetentionTimeFromScanNumber(iScanNumber)
                 };
 
@@ -430,5 +431,21 @@ namespace Monocle.File
             return precursorIntensity;
         }
 
+        private string readDetectorType(MassAnalyzerType type) {
+            switch(type) {
+                case MassAnalyzerType.MassAnalyzerFTMS:
+                    return "FTMS";
+                case MassAnalyzerType.MassAnalyzerITMS:
+                    return "ITMS";
+                case MassAnalyzerType.MassAnalyzerSQMS:
+                    return "SQMS";
+                case MassAnalyzerType.MassAnalyzerTOFMS:
+                    return "TOFMS";
+                case MassAnalyzerType.MassAnalyzerTQMS:
+                    return "TQMS";
+                default:
+                    return "";
+            }
+        }
     }
 }

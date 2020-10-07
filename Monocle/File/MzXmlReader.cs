@@ -115,6 +115,10 @@ namespace Monocle.File
                             scan = new Scan();
                             while (Reader.MoveToNextAttribute()) {
                                 SetAttribute(scan, Reader.Name, Reader.Value);
+                                if (Reader.Name == "filterLine") {
+                                    // Setting detector after setting filterLine in SetAttribute()
+                                    scan.DetectorType = scan.FilterLine.Substring(0, scan.FilterLine.IndexOf(' ')).ToUpper();
+                                }
                             }
                         }
                         if (Reader.Name == "peaks" && scan != null) {
