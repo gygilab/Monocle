@@ -52,18 +52,18 @@ namespace Monocle.Data
         /// <summary>
         /// String description of scan type
         /// </summary>
-        public string ScanType { get; set; }
+        public string ScanType { get; set; } = "";
 
         /// <summary>
         /// Detector or mass analyzer used for the scan.
         /// e.g. ITMS or FTMS
         /// </summary>
-        public string DetectorType { get; set; }
+        public string DetectorType { get; set; } = "";
 
         /// <summary>
         /// Scan filter line from RAW file
         /// </summary>
-        public string FilterLine { get; set; }
+        public string FilterLine { get; set; } = "";
 
         /// <summary>
         /// "Scan Description" field from the scan header.
@@ -129,7 +129,7 @@ namespace Monocle.Data
         /// <summary>
         /// If a dependent scan, the activation method used to generate the scan fragments
         /// </summary>
-        public string PrecursorActivationMethod { get; set; }
+        public string PrecursorActivationMethod { get; set; } = "";
         
         /// <summary>
         /// The observed centroid peaks in the scan
