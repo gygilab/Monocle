@@ -22,6 +22,8 @@ namespace Monocle.File
                     return new MzXmlWriter();
                 case OutputFileType.exmzxml:
                     return new ExtendedMzXmlWriter();
+                case OutputFileType.mzdb:
+                    return new MzDBWriter();
                 case OutputFileType.mzml:
                     return new MzMlWriter();
                 default:
@@ -47,6 +49,9 @@ namespace Monocle.File
                     // pass thru
                 case OutputFileType.mzxml:
                     ext = "mzXML";
+                    break;
+                case OutputFileType.mzdb:
+                    ext = "mzdb";
                     break;
                 case OutputFileType.mzml:
                     ext = "mzML";

@@ -13,6 +13,7 @@ namespace Monocle
     {
         mzxml,
         exmzxml,
+        mzdb,
         csv,
         mzml
     }

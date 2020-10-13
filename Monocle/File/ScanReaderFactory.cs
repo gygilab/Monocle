@@ -21,6 +21,9 @@ namespace Monocle.File
             {
                 return new RawReader();
             }
+            else if (extension == ".mzdb") {
+                return new MzDBReader();
+            }
             throw new ArgumentException("Unrecognized file extension: " + extension);
         }
     }
