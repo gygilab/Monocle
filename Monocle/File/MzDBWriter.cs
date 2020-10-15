@@ -140,6 +140,9 @@ namespace Monocle.File {
             command.Parameters.AddWithValue("$name", "version");
             command.Parameters.AddWithValue("$value", "1");
             command.ExecuteNonQuery();
+            command.Parameters.AddWithValue("$name", "compression");
+            command.Parameters.AddWithValue("$value", "none");
+            command.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -160,7 +163,7 @@ namespace Monocle.File {
             sql = "CREATE UNIQUE INDEX scan_peak_index on scan_peaks (scan)";
             new SQLiteCommand(sql, db).ExecuteNonQuery();
 
-            sql = "CREATE UNIQUE INDEX scan_precursors_index on scan_precursors (scan)";
+            sql = "CREATE INDEX scan_precursors_index on scan_precursors (scan)";
             new SQLiteCommand(sql, db).ExecuteNonQuery();
 
             db.Close();
@@ -215,9 +218,9 @@ namespace Monocle.File {
             peakInsert.Parameters.AddWithValue("$id", ++peakIndex);
             peakInsert.Parameters.AddWithValue("$scan", scan.ScanNumber);
             peakInsert.Parameters.AddWithValue("$peak_count", scan.Centroids.Count);
-            int peakFlags = getPeakFlags(scan);
-            peakInsert.Parameters.AddWithValue("$data_type", peakFlags);
-            peakInsert.Parameters.AddWithValue("$data", CompressData(encodePeaks(scan, peakFlags)));
+            peakInsert.Parameters.AddWithValue("$data_type", getPeakFlags(scan));
+            // skipping compression for now.
+            peakInsert.Parameters.AddWithValue("$data", encodePeaks(scan));
             peakInsert.ExecuteNonQuery();
 
             foreach(Precursor precursor in scan.Precursors) {
@@ -252,62 +255,41 @@ namespace Monocle.File {
         /// Encodes the peaks into a byte array according to the input peak flags.
         /// </summary>
         /// <param name="scan">The scan with the peaks to store</param>
-        /// <param name="peakFlags">Flags indicating how to store the data.</param>
         /// <returns>A byte array with the peak data.</returns>
-        private byte[] encodePeaks(Scan scan, int peakFlags) {
+        private byte[] encodePeaks(Scan scan) {
             int peakCount = scan.Centroids.Count;
-            int size = 0;
-            if ((peakFlags & HAS_MZ_FLOAT) != 0) {
-                size += peakCount * 4;
-            }
-            if ((peakFlags & HAS_MZ_DOUBLE) != 0) {
-                size += peakCount * 8;
-            }
-            if ((peakFlags & HAS_INTENSITY) != 0) {
-                size += peakCount * 4;
-            }
-            if ((peakFlags & HAS_BASELINE) != 0) {
-                size += peakCount * 4;
-            }
-            if ((peakFlags & HAS_NOISE) != 0) {
-                size += peakCount * 4;
+            double[] mz = new double[peakCount];
+            float[] all = new float[peakCount * 4];
+            for (int i = 0; i < scan.Centroids.Count; ++i) {
+                Centroid peak = scan.Centroids[i];
+                mz[i] = peak.Mz;
+                all[i] = (float) peak.Mz;
+                all[i + peakCount] = (float) peak.Intensity;
+                all[i + (peakCount * 2)] = (float) peak.Baseline;
+                all[i + (peakCount * 3)] = (float) peak.Noise;
             }
 
-            byte[] output = new byte[size];
-            int index = 0;
-            if ((peakFlags & HAS_MZ_FLOAT) != 0) {
-                foreach(var peak in scan.Centroids) {
-                    BitConverter.GetBytes((float)peak.Mz).CopyTo(output, index);
-                    index += 4;
-                }
+            if (scan.DetectorType == "FTMS") {
+                int mzBytes = peakCount * sizeof(double);
+                int otherBytes = peakCount * 3 * sizeof(float);
+                byte[] output = new byte[mzBytes + otherBytes];
+                Buffer.BlockCopy(mz, 0, output, 0, mzBytes);
+                Buffer.BlockCopy(all, peakCount * sizeof(float), output, mzBytes, otherBytes);
+                return output;
             }
-            if ((peakFlags & HAS_MZ_DOUBLE) != 0) {
-                foreach(var peak in scan.Centroids) {
-                    BitConverter.GetBytes((double)peak.Mz).CopyTo(output, index);
-                    index += 8;
-                }
+            else {
+                int byteCount = peakCount * 2 * sizeof(float);
+                byte[] output = new byte[byteCount];
+                Buffer.BlockCopy(all, 0, output, 0, byteCount);
+                return output;
             }
-            if ((peakFlags & HAS_INTENSITY) != 0) {
-                foreach(var peak in scan.Centroids) {
-                    BitConverter.GetBytes((float)peak.Intensity).CopyTo(output, index);
-                    index += 4;
-                }
-            }
-            if ((peakFlags & HAS_BASELINE) != 0) {
-                foreach(var peak in scan.Centroids) {
-                    BitConverter.GetBytes((float)peak.Baseline).CopyTo(output, index);
-                    index += 4;
-                }
-            }
-            if ((peakFlags & HAS_NOISE) != 0) {
-                foreach(var peak in scan.Centroids) {
-                    BitConverter.GetBytes((float)peak.Noise).CopyTo(output, index);
-                    index += 4;
-                }
-            }
-            return output;
         }
 
+        /// <summary>
+        /// Uses zlib compression to reduce data size.
+        /// </summary>
+        /// <param name="data">input bytes</param>
+        /// <returns>The compresed bytes</returns>
         public static byte[] CompressData(byte[] data)
         {
             using (MemoryStream stream = new MemoryStream())

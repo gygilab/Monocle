@@ -13,10 +13,21 @@ namespace Monocle.File
     {
         private SQLiteConnection db;
 
+        string compression = "";
+
         public void Open(string path, ScanReaderOptions options)
         {
             db = new SQLiteConnection("Data Source=" + path + ";Version=3");
             db.Open();
+
+            var metadata = new SQLiteCommand("SELECT name, value FROM metadata", db);
+            using (var reader = metadata.ExecuteReader())
+            while (reader.Read())
+            {
+                if (((string)reader["name"]) == "compression") {
+                    compression = (string) reader["value"];
+                }
+            }
         }
 
         public ScanFileHeader GetHeader()
@@ -71,7 +82,10 @@ namespace Monocle.File
 
                     int peakFlags = (int) scanReader["data_type"];
                     if (peakFlags > 0) {
-                        byte[] data = DecompressData((byte[]) scanReader["data"]);
+                        byte[] data = (byte[])scanReader["data"];
+                        if (compression == "zlib") {
+                            data = DecompressData(data);
+                        }
                         DecodePeaks(scan, peakFlags, data);
                     }
 
