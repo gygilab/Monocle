@@ -23,6 +23,15 @@ jobs:
     - name: Build
       working-directory: ./Monocle.CLI
       run: dotnet build --configuration Release --no-restore
+    - name: Upload binaries to release
+      uses: gygilab/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: target/release/Monocle
+        asset_name: Monocle
+        tag: ${{ github.ref }}
+        overwrite: true
+        body: "Latest Monocle Release"
     - name: Test
       working-directory: ./Monocle.CLI
       run: dotnet test --no-restore --verbosity normal
