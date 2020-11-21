@@ -29,10 +29,10 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-          tag_name: v0.3
-          release_name: Monocle v0.3
+          tag_name: v0.3.$GITHUB_RUN_ID.$GITHUB_RUN_NUMBER
+          release_name: Monocle v0.3.$GITHUB_RUN_ID.$GITHUB_RUN_NUMBER
           body: ""
-          draft: false
+          draft: true
           prerelease: true
     - name: Zip CLI # This would actually build your project, using zip for an example artifact
       working-directory: ./Monocle.CLI
