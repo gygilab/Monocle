@@ -29,8 +29,8 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: v0.3
+          release_name: Monocle v0.3
           body: ""
           draft: false
           prerelease: true
