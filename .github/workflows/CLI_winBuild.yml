@@ -30,7 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           tag_name: v0.3.${{ github.run_id }}.${{ github.run_number }}
-          release_name: Monocle v0.3.${{ github.run_id }}.${{ github.run_number }}
+          release_name: Monocle Linux CLI v0.3.${{ github.run_id }}.${{ github.run_number }}
           body: ""
           draft: true
           prerelease: true
