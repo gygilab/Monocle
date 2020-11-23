@@ -38,6 +38,7 @@ jobs:
           draft: true
           prerelease: true
     - name: Zip CLI # This would actually build your project, using zip for an example artifact
+      working-directory: ./Monocle.CLI
       run: Compress-Archive -Path ./Monocle.CLI -DestinationPath Monocle.CLI.zip
     - name: Upload Release Asset
       id: upload-release-asset 
