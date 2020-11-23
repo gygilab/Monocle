@@ -39,7 +39,7 @@ jobs:
           prerelease: true
     - name: Compress CLI
       working-directory: ./Monocle.CLI
-      run: tar czvf Monocle.CLI.tar.gz ./Monocle.CLI
+      run: tar czvf ../Monocle.CLI.tar.gz ./Monocle.CLI
     - name: Upload Release Asset
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
