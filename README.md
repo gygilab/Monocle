@@ -15,6 +15,21 @@ For licensing (commercial and non-commercial) of **Monocle (including Monocle, M
 For the purposes of reading RAW data files:
 The **RawFileReader** reading tool. Copyright © 2016 by Thermo Fisher Scientific, Inc. All rights reserved.
 
+### How to use the command-line application
+Download the zip file from the latest release above, extract and navigate
+to it's contents.  Run the Monocle.CLI.exe file with the -f option to specify
+the input file and the -t option to specify the output type. The output file
+will be written in the same directory as the input file.
+
+The following output types are supported:
+ - csv
+ - mzxml
+ - mzml
+
+Example:
+
+    Monocle.CLI.exe -f x00123.raw -t csv
+
 ### How to Build
 Builds for the monocle library and the monocle cli app use the dotnet core command line.
 
@@ -28,14 +43,11 @@ Builds for the monocle library and the monocle cli app use the dotnet core comma
 	# Use -r for the runtime that applies to you
 	dotnet publish -c Release -r win10-x64
 
-### MakeMono Console Information:
-MakeMono, a console application wrapper for Monocle.
-
-Monocle.CLI 1.0.0
-
-Copyright (C) 2019 Monocle.CLI
+### MakeMono Options Information:
 
   -f, --File                Required. Input file for monoisotopic peak correction
+
+  -t, --OutputFileType       Choose to output an mzXML "mzxml", mzML "mzml", or CSV file "csv". default: csv
 
   -n, --NumOfScans          The number of scans to average, default: +/- 6
 
@@ -44,6 +56,8 @@ Copyright (C) 2019 Monocle.CLI
   -z, --Charge range        Set charge range, default: 2:6
 
   -q, --Quiet Run           Do not display file progress in console.
+
+  -x, --ConvertOnly         Convert file formats without running monoisotopic peak detection
 
   --help                    Display this help screen.
 
