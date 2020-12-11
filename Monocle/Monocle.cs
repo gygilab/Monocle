@@ -34,14 +34,15 @@ namespace Monocle
                 Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
                 var nearbyScans = GetNearbyScans(ref scans, precursorScan, Options);
 
-                // For low-res scans, or if ForceCharges is true, generate precursors with
+                // For low-res scans, or if ForceCharges is true, or if there's no charge information
+                // and monoisotopic peak detection is disabled, generate precursors with
                 // a range of charges given by the ChargeRangeUnknown option.
                 bool lowResPrecursor = precursorScan.FilterLine.Contains("ITMS");
-                if (lowResPrecursor || Options.ForceCharges)
+                int range = 1 + Options.ChargeRangeUnknown.High - Options.ChargeRangeUnknown.Low;
+                var precursors = new List<Precursor>(range);
+                foreach (var precursor in scan.Precursors)
                 {
-                    int range = 1 + Options.ChargeRangeUnknown.High - Options.ChargeRangeUnknown.Low;
-                    var precursors = new List<Precursor>(range);
-                    foreach (var precursor in scan.Precursors)
+                    if (lowResPrecursor || Options.ForceCharges || (precursor.Charge == 0 && Options.SkipMono))
                     {
                         for (int z = Options.ChargeRangeUnknown.Low; z <= Options.ChargeRangeUnknown.High; ++z)
                         {
@@ -50,6 +51,8 @@ namespace Monocle
                             precursors.Add(p);
                         }
                     }
+                }
+                if (precursors.Count > 0) {
                     scan.Precursors = precursors;
                 }
 
