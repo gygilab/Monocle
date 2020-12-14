@@ -32,7 +32,6 @@ namespace Monocle
                 }
 
                 Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
-                var nearbyScans = GetNearbyScans(ref scans, precursorScan, Options);
 
                 // For low-res scans, or if ForceCharges is true, or if there's no charge information
                 // and monoisotopic peak detection is disabled, generate precursors with
@@ -58,6 +57,7 @@ namespace Monocle
 
                 if (!Options.SkipMono && !lowResPrecursor)
                 {
+                    var nearbyScans = GetNearbyScans(ref scans, precursorScan, Options);
                     foreach (var precursor in scan.Precursors)
                     {
                         if (!Options.Charge_Detection && precursor.Charge == 0)
@@ -84,6 +84,12 @@ namespace Monocle
             int window = Options.Number_Of_Scans_To_Average;
             var output = new List<Scan>(window * 2);
             int index = precursorScan.ScanNumber - 1;
+            if (index < 0) {
+                return output;
+            }
+            if (index >= scans.Count) {
+                return output;
+            }
             int scanCount = 0;
             if (Options.AveragingVector == AveragingVector.Before || Options.AveragingVector == AveragingVector.Both)
             {
