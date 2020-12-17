@@ -104,6 +104,12 @@ namespace Monocle
         public bool SkipMono { get; set; } = false;
 
         /// <summary>
+        /// Enable to assign the precursor information to MS3 scans from
+        /// the parent MS2.
+        /// </summary>
+        public bool Ms2Ms3Precursor { get; set; } = false;
+
+        /// <summary>
         /// If set to true, Monocle will look through the entire
         /// isolation window and re-assign the precursor m/z to the
         /// peak with the highest intensity before running monoisotopic

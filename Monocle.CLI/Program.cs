@@ -28,7 +28,8 @@ namespace MakeMono
                 SkipMono = options.SkipMono,
                 ChargeRangeUnknown = new ChargeRange(options.ChargeRangeUnknown),
                 ForceCharges = options.ForceCharges,
-                UseMostIntense = options.UseMostIntense
+                UseMostIntense = options.UseMostIntense,
+                Ms2Ms3Precursor = options.Ms2Ms3Precursor
             };
 
             var readerOptions = new ScanReaderOptions();

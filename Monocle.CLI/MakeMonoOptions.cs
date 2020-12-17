@@ -58,5 +58,8 @@ namespace MakeMono
 
         [Option('k', "SkipMono", Hidden = true, Required = false, HelpText = "Avoid monoisotopic peak detection. Data may still be modified.")]
         public bool SkipMono { get; set; } = false;
+
+        [Option("Ms2Ms3Precursor", Hidden = true, Required = false, HelpText = "Assign precursors to the ms3 scan from the parent ms2.")]
+        public bool Ms2Ms3Precursor { get; set; } = false;
     }
 }

@@ -18,6 +18,10 @@ namespace Monocle
         /// <param name="Number_Of_Scans_To_Average"></param>
         public static void Run(ref List<Scan> scans, MonocleOptions Options)
         {
+            if (Options.Ms2Ms3Precursor) {
+                AssignMs3Precursors(scans);
+            }
+            
             foreach (Scan scan in scans)
             {
                 if (scan.MsOrder != Options.MS_Level)
@@ -51,7 +55,8 @@ namespace Monocle
                         }
                     }
                 }
-                if (precursors.Count > 0) {
+                if (precursors.Count > 0)
+                {
                     scan.Precursors = precursors;
                 }
 
@@ -149,6 +154,24 @@ namespace Monocle
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Assign MS^3 precursors from the parent MS2 scan.
+        /// </summary>
+        private static void AssignMs3Precursors(List<Scan> scans)
+        {
+            foreach (Scan scan in scans)
+            {
+                if (scan.MsOrder != 3 || scan.PrecursorMasterScanNumber < 0 || scan.PrecursorMasterScanNumber > scans.Count) {
+                    continue;
+                }
+                Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
+                if (precursorScan.Precursors.Count > 0)
+                {
+                    scan.Precursors = precursorScan.Precursors;
+                }
+            }
         }
 
         /// <summary>
