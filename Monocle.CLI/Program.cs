@@ -51,6 +51,9 @@ namespace MakeMono
                 List<Scan> Scans = new List<Scan>();
                 foreach (Scan scan in reader)
                 {
+                    if (scan.ScanNumber < 1) {
+                        continue;
+                    }
                     Scans.Add(scan);
                 }
 
