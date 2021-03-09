@@ -116,8 +116,11 @@ namespace Monocle.File
                             while (Reader.MoveToNextAttribute()) {
                                 SetAttribute(scan, Reader.Name, Reader.Value);
                                 if (Reader.Name == "filterLine") {
-                                    // Setting detector after setting filterLine in SetAttribute()
-                                    scan.DetectorType = scan.FilterLine.Substring(0, scan.FilterLine.IndexOf(' ')).ToUpper();
+                                    int spacePos = scan.FilterLine.IndexOf(' ');
+                                    if (spacePos > 0) {
+                                        // Setting detector after setting filterLine in SetAttribute()
+                                        scan.DetectorType = scan.FilterLine.Substring(0, spacePos).ToUpper();
+                                    }
                                 }
                             }
                         }
