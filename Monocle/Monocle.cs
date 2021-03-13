@@ -3,8 +3,6 @@ using Monocle.Math;
 using Monocle.Peak;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Monocle
 {
@@ -21,6 +19,8 @@ namespace Monocle
             if (Options.Ms2Ms3Precursor) {
                 AssignMs3Precursors(scans);
             }
+
+            CheckMs2Precursors(scans);
             
             foreach (Scan scan in scans)
             {
@@ -172,6 +172,32 @@ namespace Monocle
                     scan.Precursors = precursorScan.Precursors;
                 }
             }
+        }
+
+        /// <summary>
+        /// Check MS^2 scans to make sue precursor scan numbers are assigned.
+        /// If precursor scan is zero, use the number from the last MS^1 scan.
+        /// </summary>
+        private static void CheckMs2Precursors(List<Scan> scans)
+        {
+            for (int i = 0; i < scans.Count; ++i) {
+                Scan scan = scans[i];
+                if (scan.MsOrder == 2 && scan.PrecursorMasterScanNumber == 0) {
+                    scan.PrecursorMasterScanNumber = FindLastMS1(scans, i);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds the number of the last MS^1 scan
+        /// </summary>
+        private static int FindLastMS1(List<Scan> scans, int startIndex) {
+            for (int j = startIndex; j >= 0; --j) {
+                if (scans[j].MsOrder == 1) {
+                    return scans[j].ScanNumber;
+                }
+            }
+            return 0;
         }
 
         /// <summary>
