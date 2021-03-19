@@ -23,6 +23,9 @@
     <None Update="data\orbixl-mini.mzxml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="data\small.pwiz.1.1.mzML">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
   </ItemGroup>
 
 </Project>
