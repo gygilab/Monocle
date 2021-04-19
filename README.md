@@ -43,22 +43,32 @@ Builds for the monocle library and the monocle cli app use the dotnet core comma
 	# Use -r for the runtime that applies to you
 	dotnet publish -c Release -r win10-x64
 
-### MakeMono Options Information:
+### Monocle.CLI Option Information:
 
-  -f, --File                Required. Input file for monoisotopic peak correction
+  -f, --File                 Required. Input file for monoisotopic peak correction
 
-  -t, --OutputFileType       Choose to output an mzXML "mzxml", mzML "mzml", or CSV file "csv". default: csv
+  -n, --NumOfScans           The number of scans to average, default: +/- 6
 
-  -n, --NumOfScans          The number of scans to average, default: +/- 6
+  -a, --AveragingVector      Choose to average scans "Before" the parent scan, "After" or "Both" (default).
 
-  -c, --Charge detection    Toggle charge detection, default: false|F
+  -c, --ChargeDetection      Toggle charge detection, default: false | F
 
-  -z, --Charge range        Set charge range, default: 2:6
+  -z, --ChargeRange          Range for Charge Detection, if enabled. default: 2:6
 
-  -q, --Quiet Run           Do not display file progress in console.
+  -u, --ChargesForUnknown    For low-res scans, output multiple precursors with these charges. default: 2:3
 
-  -x, --ConvertOnly         Convert file formats without running monoisotopic peak detection
+  -w, --ForceCharges         Output multiple precursors with charges set by -u even if charge is known. default: false
 
-  --help                    Display this help screen.
+  -m, --MsLevel              Select the MS level at which monoisotopic m/z will be adjusted.
 
-  --version                 Display version information.
+  -i, --UseMostIntense       Re-assign precursor m/z to the most intense peak in the isolation window.
+
+  -q, --QuietRun             Do not display file progress in console.
+
+  -t, --OutputFileType       Choose to output an mzXML "mzxml" or CSV file "csv".
+
+  -o, --OutputFilePath       File to write. Include directory, filename, and extension
+
+  --help                     Display this help screen.
+
+  --version                  Display version information.
