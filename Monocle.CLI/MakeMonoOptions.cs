@@ -44,6 +44,9 @@ namespace MakeMono
         [Option('o', "OutputFilePath", Required = false, HelpText = "File to write. Include directory, filename, and extension")]
         public string OutputFilePath { get; set; } = "";
 
+        [Option('p', "AppendTag", Required = false, HelpText = "Append text to output to write out same format as input.")]
+        public string AppendTag { get; set; } = "";
+
         [Option('d', "Debug", Hidden = true, Required = false, HelpText = "Verbose debug output.")]
         public bool WriteDebug { get; set; } = false;
 

@@ -39,7 +39,7 @@ namespace Monocle.File
         /// <param name="filename">the filename to change.</param>
         /// <param name="type">the new file type.</param>
         /// <returns></returns>
-        public static string MakeTargetFileName(string filename, OutputFileType type) {
+        public static string MakeTargetFileName(string filename, OutputFileType type, string appendToFileName = "") {
             string ext = "";
             switch (type) {
                 case OutputFileType.csv:
@@ -59,7 +59,16 @@ namespace Monocle.File
                 default:
                     break;
             }
-            return Path.ChangeExtension(filename, ext);
+
+            //if (ext == type.ToString().ToLower() && appendToFileName == "")
+            //{
+            //    Console.WriteLine("erro");
+            //    appendToFileName = "_monocle";
+            //}
+
+            return Path.Combine(Path.GetDirectoryName(filename),
+                                    Path.GetFileNameWithoutExtension(filename) +
+                                           appendToFileName + "." + ext);
         }
     }
 }

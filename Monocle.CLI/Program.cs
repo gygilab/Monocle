@@ -56,34 +56,45 @@ namespace MakeMono
                     }
                     Scans.Add(scan);
                 }
+                reader.Close();
 
                 if (!monocleOptions.ConvertOnly)
                 {
                     log.Info("Starting monoisotopic assignment.");
                     Monocle.Monocle.Run(ref Scans, monocleOptions);
                 }
-
-                string outputFilePath = options.OutputFilePath.Trim();
-                if(outputFilePath.Length == 0) {
-                    outputFilePath = ScanWriterFactory.MakeTargetFileName(file, monocleOptions.OutputFileType);
+                string outputFilePath;
+                bool sharedExt = Path.GetExtension(file).ToLower().Trim() == "." + monocleOptions.OutputFileType.ToString().ToLower().Trim();
+                if (sharedExt && options.AppendTag == "")
+                {
+                    outputFilePath = ScanWriterFactory.MakeTargetFileName(file, monocleOptions.OutputFileType, "_monocle");
+                    log.Info("Writing output1: " + outputFilePath);
                 }
-                log.Info("Writing output: " + outputFilePath);
+                else
+                {
+                    outputFilePath = ScanWriterFactory.MakeTargetFileName(file, monocleOptions.OutputFileType,options.AppendTag);
+                    log.Info("Writing output2: " + outputFilePath);
+                }
                 IScanWriter writer = ScanWriterFactory.GetWriter(monocleOptions.OutputFileType);
+                
                 writer.Open(outputFilePath);
+                
                 writer.WriteHeader(header);
+
                 foreach (Scan scan in Scans)
                 {
                     writer.WriteScan(scan);
                 }
                 writer.Close();
+
                 log.Info("Done.");
             }
             catch (Exception e)
             {
                 log.Error("An error occurred.");
-                log.Debug(e.GetType().ToString());
-                log.Debug(e.Message);
-                log.Debug(e.ToString());
+                log.Error(e.GetType().ToString());
+                log.Error(e.Message);
+                log.Error(e.ToString());
             }
         }
 

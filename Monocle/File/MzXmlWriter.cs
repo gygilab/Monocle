@@ -44,6 +44,7 @@ namespace Monocle.File {
             settings.NewLineChars = "\n";
 
             output = new StreamWriter(path);
+
             writer = XmlWriter.Create(output, settings);
             writer.WriteStartDocument();
         }

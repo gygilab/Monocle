@@ -60,7 +60,7 @@ namespace Monocle.File {
             writer.WriteAttributeString("precision", "32");
             writer.WriteAttributeString("byteOrder", "network");
             writer.WriteAttributeString("contentType", "m/z-int");
-            writer.WriteAttributeString("compressionType", "none");
+            writer.WriteAttributeString("compressionType", "zlib");
             writer.WriteAttributeString("compressedLen", "0");
             writer.WriteString(EncodePeaks(scan));
             writer.WriteEndElement(); // peaks
