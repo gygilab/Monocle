@@ -63,14 +63,33 @@ namespace Monocle
                 if (!Options.SkipMono && !lowResPrecursor)
                 {
                     var nearbyScans = GetNearbyScans(ref scans, precursorScan, Options);
+                    precursors = new List<Precursor>();
                     foreach (var precursor in scan.Precursors)
                     {
                         if (!Options.Charge_Detection && precursor.Charge == 0)
                         {
+                            // Charge detection will be enabled in the Run method.
                             Console.WriteLine(String.Format("Scan {0} does not have a charge state assigned.  Charge detection enabled.", scan.ScanNumber));
                         }
+
                         Run(nearbyScans, precursorScan, precursor, Options);
+
+                        // If there is still no charge, use charge range.
+                        if (precursor.Charge == 0) {
+                            Console.WriteLine(String.Format("No charge found for scan {0}. Using charge range.", scan.ScanNumber));
+                            for (int z = Options.ChargeRangeUnknown.Low; z <= Options.ChargeRangeUnknown.High; ++z)
+                            {
+                                var p = new Precursor(precursor);
+                                p.Charge = z;
+                                precursors.Add(p);
+                            }
+                        }
+                        else {
+                            precursors.Add(precursor);
+                        }
+
                     }
+                    scan.Precursors = precursors;
                 }
             }
         }
