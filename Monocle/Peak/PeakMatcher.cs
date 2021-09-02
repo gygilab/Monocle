@@ -94,13 +94,8 @@ namespace Monocle.Peak
             int high = peaks.Count - 1;
             int mid = 0;
 
-            while (true)
+            while (low < high)
             {
-                if (low == high)
-                {
-                    return low;
-                }
-
                 mid = (int)((high + low) * 0.5);
 
                 if (peaks[mid].Mz < target)
@@ -112,6 +107,7 @@ namespace Monocle.Peak
                     high = mid;
                 }
             }
+            return low;
         }
 
         private static bool WithinError(double theoretical, double observed, double tolerance, int tolUnits)
