@@ -75,6 +75,13 @@ namespace Monocle.Tests
             Assert.Equal(0, i);
         }
 
+        [Fact]
+        public void EmptyTest() {
+            var scan = new List<Centroid>();
+            int i = PeakMatcher.NearestIndex(scan, 1000.0);
+            Assert.Equal(0, i);
+        }
+
         private List<Centroid> GetTestPeaks() {
             var peaks = new List<Centroid> {
                 new Centroid { Mz = 800.0, Intensity = 200 },
