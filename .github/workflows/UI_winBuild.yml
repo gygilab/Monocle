@@ -23,6 +23,13 @@ jobs:
     - name: Test
       working-directory: ./Monocle.UI
       run: dotnet test --no-restore --verbosity normal
+    - name: Load dependencies through pwsh
+      working-directory: ./Monocle.UI
+      run: |
+        dotnet add package ThermoFisher.CommonCore.Data -s ./ThermoFisher.CommonCore.Data.5.0.0.7.nupkg |
+        dotnet add package ThermoFisher.CommonCore.MassPrecisionEstimator -s ./ThermoFisher.CommonCore.MassPrecisionEstimator.5.0.0.7.nupkg |
+        dotnet add package ThermoFisher.CommonCore.BackgroundSubtraction -s ./ThermoFisher.CommonCore.BackgroundSubtraction.5.0.0.7.nupkg |
+        dotnet add package ThermoFisher.CommonCore.RawFileReader -s ./ThermoFisher.CommonCore.RawFileReader.5.0.0.7.nupkg |
     - name: Build
       working-directory: ./Monocle.UI
       run: dotnet publish -c Release -r win-x64 -o Monocle.UI
