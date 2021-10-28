@@ -25,7 +25,7 @@ jobs:
       run: dotnet test --no-restore --verbosity normal
     - name: Build
       working-directory: ./Monocle.UI
-      run: dotnet publish -c Release -r win-x64 -o Monocle.CLI
+      run: dotnet publish -c Release -r win-x64 -o Monocle.UI
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -37,7 +37,7 @@ jobs:
           body: ""
           draft: true
           prerelease: true
-    - name: Zip CLI # This would actually build your project, using zip for an example artifact
+    - name: Zip UI # This would actually build your project, using zip for an example artifact
       working-directory: ./Monocle.UI
       run: Compress-Archive -Path ./Monocle.UI -DestinationPath ../Monocle.UI.zip
     - name: Upload Release Asset
