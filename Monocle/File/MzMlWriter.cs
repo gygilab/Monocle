@@ -61,6 +61,7 @@ namespace Monocle.File
             { "MS:1000505", "base peak intensity" },
             { "MS:1000131", "number of counts" },
             { "MS:1000285", "total ion current" },
+            { "MS:1001581", "FAIMS compensation voltage" },
             { "MS:1000528", "lowest observed m/z" },
             { "MS:1000527", "highest observed m/z" },
             { "MS:1000795", "no combination" },
@@ -231,6 +232,9 @@ namespace Monocle.File
             WriteCVParam("MS:1000504", scan.BasePeakMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
             WriteCVParam("MS:1000505", scan.BasePeakIntensity.ToString(), "MS:1000131");
             WriteCVParam("MS:1000285", scan.TotalIonCurrent.ToString());
+            if (scan.FaimsCV != 0) {
+                WriteCVParam("MS:1001581", scan.FaimsCV.ToString("F1"));
+            }
             WriteCVParam("MS:1000528", scan.LowestMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
             WriteCVParam("MS:1000527", scan.HighestMz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
 
