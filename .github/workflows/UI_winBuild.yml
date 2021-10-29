@@ -13,20 +13,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.301
-    - name: Install dependencies
-      working-directory: ./Monocle.UI
-      run: |
-        dotnet restore
-    - name: Test
-      working-directory: ./Monocle.UI
-      run: dotnet test --no-restore --verbosity normal
-    - name: Build
-      working-directory: ./Monocle.UI
-      run: dotnet publish -c Release -r win-x64 -o Monocle.UI
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+
+    - name: Restore Packages
+      run: nuget restore MonocleUI.sln
+
+    - name: Build Solution
+      run: msbuild.exe MonocleUI.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile /p:platform="x64"
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
