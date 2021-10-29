@@ -44,7 +44,7 @@ jobs:
 
     - name: Zip UI # This would actually build your project, using zip for an example artifact
       working-directory: ./Monocle.UI
-      run: Compress-Archive -Path ./Monocle.UI -DestinationPath ../Monocle.UI.zip
+      run: Compress-Archive -Path ./bin/x64/Release/ -DestinationPath ../Monocle.UI.zip
 
     - name: Upload Release Asset
       id: upload-release-asset 
