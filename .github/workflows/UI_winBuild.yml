@@ -21,10 +21,10 @@ jobs:
       working-directory: ./Monocle.UI
       run: |
         dotnet restore |
-        dotnet add package ThermoFisher.CommonCore.Data -s ./ThermoFisher.CommonCore.Data.5.0.0.7.nupkg |
-        dotnet add package ThermoFisher.CommonCore.MassPrecisionEstimator -s ./ThermoFisher.CommonCore.MassPrecisionEstimator.5.0.0.7.nupkg |
-        dotnet add package ThermoFisher.CommonCore.BackgroundSubtraction -s ./ThermoFisher.CommonCore.BackgroundSubtraction.5.0.0.7.nupkg |
-        dotnet add package ThermoFisher.CommonCore.RawFileReader -s ./ThermoFisher.CommonCore.RawFileReader.5.0.0.7.nupkg
+        dotnet add package ThermoFisher.CommonCore.Data -s ../packages/Thermo/ThermoRawFileReader_Version_5_0_7/NetStandard20/ThermoFisher.CommonCore.Data.5.0.0.7.nupkg |
+        dotnet add package ThermoFisher.CommonCore.MassPrecisionEstimator -s ../packages/Thermo/ThermoRawFileReader_Version_5_0_7/NetStandard20/ThermoFisher.CommonCore.MassPrecisionEstimator.5.0.0.7.nupkg |
+        dotnet add package ThermoFisher.CommonCore.BackgroundSubtraction -s ../packages/Thermo/ThermoRawFileReader_Version_5_0_7/NetStandard20/ThermoFisher.CommonCore.BackgroundSubtraction.5.0.0.7.nupkg |
+        dotnet add package ThermoFisher.CommonCore.RawFileReader -s ../packages/Thermo/ThermoRawFileReader_Version_5_0_7/NetStandard20/ThermoFisher.CommonCore.RawFileReader.5.0.0.7.nupkg
     - name: Test
       working-directory: ./Monocle.UI
       run: dotnet test --no-restore --verbosity normal
