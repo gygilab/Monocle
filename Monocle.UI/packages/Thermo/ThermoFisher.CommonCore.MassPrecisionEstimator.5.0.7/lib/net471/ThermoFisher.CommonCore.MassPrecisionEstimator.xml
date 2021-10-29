@@ -4,10 +4,52 @@
         <name>ThermoFisher.CommonCore.MassPrecisionEstimator</name>
     </assembly>
     <members>
+        <member name="T:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults">
+            <summary>  
+            Class to hold mass precision estimator results for individual mass/intensity points 
+            in a scan. 
+            </summary>
+        </member>
+        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults.Intensity">
+            <summary>
+            Gets or sets the intensity value
+            </summary>
+        </member>
+        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults.Mass">
+            <summary>
+            Gets or sets the mass value
+            </summary>
+        </member>
+        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults.MassAccuracyInMmu">
+            <summary>
+            Gets or sets the mass accuracy in MMU value
+            </summary>
+        </member>
+        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults.MassAccuracyInPpm">
+            <summary>
+            Gets or sets the mass accuracy in PPM value
+            </summary>
+        </member>
+        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults.Resolution">
+            <summary>
+            Gets or sets the resolution value
+            </summary>
+        </member>
         <member name="T:ThermoFisher.CommonCore.MassPrecisionEstimator.IPrecisionEstimate">
             <summary>
             The interface class for the Mass Precision Estimate (MPE) code
             </summary>
+        </member>
+        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.IPrecisionEstimate.Rawfile">
+            <summary> 
+            Sets the RAW file. 
+            </summary>
+        </member>
+        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.IPrecisionEstimate.ScanNumber">
+            <summary> 
+            Sets the scan number. 
+            </summary>
+            <value> The scan number. </value>
         </member>
         <member name="M:ThermoFisher.CommonCore.MassPrecisionEstimator.IPrecisionEstimate.GetIonTime(ThermoFisher.CommonCore.Data.FilterEnums.MassAnalyzerType,ThermoFisher.CommonCore.Data.Business.Scan,System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String})">
             <summary>
@@ -38,20 +80,34 @@
             </summary>
             <returns>The list of EstimatorResults objects</returns>
         </member>
-        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.IPrecisionEstimate.Rawfile">
-            <summary> 
-            Sets the RAW file. 
-            </summary>
-        </member>
-        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.IPrecisionEstimate.ScanNumber">
-            <summary> 
-            Sets the scan number. 
-            </summary>
-            <value> The scan number. </value>
-        </member>
         <member name="T:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate">
             <summary>
             Class to calculate the mass precision estimates (MPE) for a specific scan
+            </summary>
+        </member>
+        <member name="T:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.TrapScanType">
+            <summary>
+            Values that represent the ion trap scan types.
+            </summary>
+        </member>
+        <member name="F:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.TrapScanType.Normal">
+            <summary>
+            The type for a normal scan
+            </summary>
+        </member>
+        <member name="F:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.TrapScanType.Enhanced">
+            <summary>
+            The type for an enhanced scan
+            </summary>
+        </member>
+        <member name="F:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.TrapScanType.Zoom">
+            <summary>
+            The type for a zoom scan
+            </summary>
+        </member>
+        <member name="F:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.TrapScanType.UltraZoom">
+            <summary>
+            The type for an ultra zoom scan
             </summary>
         </member>
         <member name="F:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate._estimatorResults">
@@ -78,6 +134,17 @@
             <summary>
             The scan number.
             </summary>
+        </member>
+        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.Rawfile">
+            <summary>
+            Sets the raw file as an open IRawData objects.
+            </summary>
+        </member>
+        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.ScanNumber">
+            <summary>
+            Sets the scan number of the scan to be analyzed
+            </summary>
+            <value> The scan number. </value>
         </member>
         <member name="M:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.GetIonTrapScanType(System.String)">
             <summary>
@@ -169,73 +236,6 @@
             Gets the scan resolution from the file header 
             </summary>
             <returns>The resolution from the run header.</returns>
-        </member>
-        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.Rawfile">
-            <summary>
-            Sets the raw file as an open IRawData objects.
-            </summary>
-        </member>
-        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.ScanNumber">
-            <summary>
-            Sets the scan number of the scan to be analyzed
-            </summary>
-            <value> The scan number. </value>
-        </member>
-        <member name="T:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.TrapScanType">
-            <summary>
-            Values that represent the ion trap scan types.
-            </summary>
-        </member>
-        <member name="F:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.TrapScanType.Normal">
-            <summary>
-            The type for a normal scan
-            </summary>
-        </member>
-        <member name="F:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.TrapScanType.Enhanced">
-            <summary>
-            The type for an enhanced scan
-            </summary>
-        </member>
-        <member name="F:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.TrapScanType.Zoom">
-            <summary>
-            The type for a zoom scan
-            </summary>
-        </member>
-        <member name="F:ThermoFisher.CommonCore.MassPrecisionEstimator.PrecisionEstimate.TrapScanType.UltraZoom">
-            <summary>
-            The type for an ultra zoom scan
-            </summary>
-        </member>
-        <member name="T:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults">
-            <summary>  
-            Class to hold mass precision estimator results for individual mass/intensity points 
-            in a scan. 
-            </summary>
-        </member>
-        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults.Intensity">
-            <summary>
-            Gets or sets the intensity value
-            </summary>
-        </member>
-        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults.Mass">
-            <summary>
-            Gets or sets the mass value
-            </summary>
-        </member>
-        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults.MassAccuracyInMmu">
-            <summary>
-            Gets or sets the mass accuracy in MMU value
-            </summary>
-        </member>
-        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults.MassAccuracyInPpm">
-            <summary>
-            Gets or sets the mass accuracy in PPM value
-            </summary>
-        </member>
-        <member name="P:ThermoFisher.CommonCore.MassPrecisionEstimator.EstimatorResults.Resolution">
-            <summary>
-            Gets or sets the resolution value
-            </summary>
         </member>
     </members>
 </doc>
