@@ -36,7 +36,7 @@ jobs:
           release_name: Monocle Win CLI v0.3.${{ github.run_id }}.${{ github.run_number }}
           body: ""
           draft: false
-          prerelease: true
+          prerelease: false
     - name: Zip CLI # This would actually build your project, using zip for an example artifact
       working-directory: ./Monocle.CLI
       run: Compress-Archive -Path ./Monocle.CLI -DestinationPath ../Monocle.CLI.zip

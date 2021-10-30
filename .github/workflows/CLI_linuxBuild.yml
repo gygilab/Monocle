@@ -35,7 +35,7 @@ jobs:
           release_name: Monocle Linux CLI v0.3.${{ github.run_id }}.${{ github.run_number }}
           body: ""
           draft: false
-          prerelease: true
+          prerelease: false
       - name: Compress CLI
         working-directory: ./Monocle.CLI
         run: tar czvf ../Monocle.CLI.tar.gz ./Monocle.CLI
