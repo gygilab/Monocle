@@ -36,8 +36,8 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-          tag_name: v0.3.${{ github.run_id }}.${{ github.run_number }}
-          release_name: Monocle Win UI v0.3.${{ github.run_id }}.${{ github.run_number }}
+          tag_name: v0.3.${{ github.run_number }}
+          release_name: Monocle Win UI v0.3.${{ github.run_number }}
           body: ""
           draft: false
           prerelease: false
