@@ -4,11 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Monocle;
 using System.IO;
 using System.Threading;
 
-namespace MonocleUI
+namespace Monocle
 {
     public delegate void FileEventHandler(object sender, FileEventArgs e);
     public class FileEventArgs : EventArgs
@@ -146,7 +145,7 @@ namespace MonocleUI
                         header.FileName = Path.GetFileName(newFile);
                         header.FilePath = newFile;
 
-                        var Scans = new List<Monocle.Data.Scan>();
+                        var Scans = new List<Scan>();
                         foreach (Scan scan in reader)
                         {
                             token.ThrowIfCancellationRequested();
@@ -161,7 +160,7 @@ namespace MonocleUI
                         if (!ConvertOnly)
                         {
                             // Start Run across Scans
-                            Monocle.Monocle.Run(ref Scans, monocleOptions);
+                            Monocle.Run(ref Scans, monocleOptions);
                             CurrentProgress = CalculateProgress(3, filesCompleted, files.FileList.Count);
                             TrackProcess(newFile, CurrentProgress, RunStatus.Processed);
                             token.ThrowIfCancellationRequested();

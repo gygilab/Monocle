@@ -96,10 +96,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Files\FileProcessor.cs" />
-    <Compile Include="Files\Files.cs" />
     <Compile Include="lib\OptionDescriptions.cs" />
-    <Compile Include="lib\runStatus.cs" />
     <Compile Include="MonocleUI.cs">
       <SubType>Form</SubType>
     </Compile>
