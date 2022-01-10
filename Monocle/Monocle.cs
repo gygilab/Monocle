@@ -194,7 +194,7 @@ namespace Monocle
         }
 
         /// <summary>
-        /// Check MS^2 scans to make sue precursor scan numbers are assigned.
+        /// Check MS^2 scans to make sure precursor scan numbers are assigned.
         /// If precursor scan is zero, use the number from the last MS^1 scan.
         /// </summary>
         private static void CheckMs2Precursors(List<Scan> scans)
@@ -228,6 +228,14 @@ namespace Monocle
         public static void Run(List<Scan> Ms1ScansCentroids, Scan ParentScan, Precursor precursor, MonocleOptions Options)
         {
             double precursorMz = precursor.IsolationMz;
+            if (Options.RawMonoMz && precursor.Mz > 1)
+            {
+                precursorMz = precursor.Mz;
+            }
+            if (precursorMz < 1)
+            {
+                precursorMz = precursor.OriginalMz;
+            }
             if (precursorMz < 1)
             {
                 precursorMz = precursor.Mz;

@@ -119,25 +119,27 @@ namespace Monocle.File
                     RetentionTime = rawFile.RetentionTimeFromScanNumber(iScanNumber)
                 };
 
+                // Precursor info can come from multiple places in the raw file.
+                // Mono m/z will be resolved in the SetPrecursors method.
+                var reactionPrecursor = new Data.Precursor();
+                var spsMasses = new List<Data.Precursor>();
+                double monoMz = 0;
+                int charge = 0;
+
                 if(scan.MsOrder > 1)
                 {
                     // Get the current scan's activation method while ignoring upstream activation
                     scan.PrecursorActivationMethod = ConvertActivationType(scanFilter.GetActivation(scan.MsOrder - 2));
-
-                    // handle dependent scans and not SPS (processed below)
-                    scan.Precursors.Clear();
-                    for (int i = 0; i < scanEvent.MassCount; ++i){
-                        var reaction = scanEvent.GetReaction(i);
+                    if (scanEvent.MassCount > 0) {
+                        // Last reaction should be the precursor for the current MS level
+                        var reaction = scanEvent.GetReaction(scanEvent.MassCount - 1);
                         scan.CollisionEnergy = reaction.CollisionEnergy;
-
-                        var precursor = new Data.Precursor
-                        {
+                        reactionPrecursor = new Data.Precursor {
                             IsolationWidth = reaction.IsolationWidth,
                             IsolationMz = reaction.PrecursorMass,
                             Mz = reaction.PrecursorMass,
                             OriginalMz = reaction.PrecursorMass
                         };
-                        scan.Precursors.Add(precursor);
                     }
                 }
 
@@ -168,11 +170,7 @@ namespace Monocle.File
                             scan.ElapsedScanTime = double.Parse(value);
                             break;
                         case "Charge State:":
-                            int charge = int.Parse(value);
-                            foreach (var precursor in scan.Precursors) {
-                                precursor.Charge = charge;
-                                precursor.OriginalCharge = precursor.Charge;
-                            }
+                            charge = int.Parse(value);
                             break;
                         case "Master Scan Number:":
                             scan.PrecursorMasterScanNumber = int.Parse(value);
@@ -181,14 +179,7 @@ namespace Monocle.File
                             scan.MasterIndex = int.Parse(value);
                             break;
                         case "Monoisotopic M/Z:":
-                            if (Options.RawMonoMz && scan.Precursors.Count > 0)
-                            {
-                                double mz = double.Parse(value);
-                                if (mz > 0)
-                                {
-                                    scan.Precursors[0].Mz = mz;
-                                }
-                            }
+                            monoMz = double.Parse(value);
                             break;
                         case "FAIMS CV:":
                             scan.FaimsCV = (int)double.Parse(value);
@@ -197,15 +188,14 @@ namespace Monocle.File
                             scan.FaimsState = (value == "No") ? Data.TriState.Off : Data.TriState.On;
                             break;
                         case "SPS Masses:":
-                            string[] spsIonStringArray = value.TrimEnd(',').Split(',');
-                            if(!string.IsNullOrWhiteSpace(spsIonStringArray[0]) && spsIonStringArray.Length > 0)
+                            string[] spsMassStrings = value.TrimEnd(',').Split(',');
+                            if(!string.IsNullOrWhiteSpace(spsMassStrings[0]) && spsMassStrings.Length > 0)
                             {
-                                scan.Precursors.Clear();
-                                for (int spsIndex = 0; spsIndex < spsIonStringArray.Length; spsIndex++)
+                                for (int spsIndex = 0; spsIndex < spsMassStrings.Length; spsIndex++)
                                 {
-                                    if (double.TryParse(spsIonStringArray[spsIndex], out double spsIon))
+                                    if (double.TryParse(spsMassStrings[spsIndex], out double spsMass))
                                     {
-                                        scan.Precursors.Add(new Data.Precursor(spsIon, 0, 1));
+                                        spsMasses.Add(new Data.Precursor(spsMass, 0, 1));
                                     }
                                 }
                             }
@@ -220,6 +210,8 @@ namespace Monocle.File
 
                 if (scan.MsOrder > 1 && scan.PrecursorMasterScanNumber > rawFile.RunHeader.FirstSpectrum && scan.PrecursorMasterScanNumber < rawFile.RunHeader.LastSpectrum)
                 {
+                    SetPrecursors(scan, reactionPrecursor, spsMasses, monoMz, charge);
+
                     // Fill precursor information
                     var parentScan = ThermoBiz.Scan.FromFile(rawFile, scan.PrecursorMasterScanNumber);
                     if (parentScan != null) {
@@ -346,6 +338,52 @@ namespace Monocle.File
             // Using the last MS1 doesnt work will for instruments that 
             // acquire scans in parallel.
             scan.PrecursorMasterScanNumber = LastMS1;
+        }
+
+        /// <summary>
+        /// Sets output precursor info from the different data sources
+        /// available in the raw file.
+        /// </summary>
+        /// <para>
+        /// Precursor info is saved as follows:
+        /// If the scan header has a field for "Monoisotopic m/z:"
+        /// then it will be used.  The last scan event reaction is the
+        /// precursor for the current ms level. If the scan header
+        /// has "SPS Mass" fields, then those will be added after.
+        /// If the scan header has "Charge:" then the charge will be
+        /// saved for all precursors.
+        /// </para>
+        private void SetPrecursors(Data.Scan scan, Data.Precursor reaction, List<Data.Precursor> spsMasses, double monoMz, int charge) {
+            scan.Precursors.Clear();
+
+            // Use scanEvent reaction
+            double scanMz = 0;
+            double isoWidth = 2;
+            if (monoMz > 1) {
+                reaction.OriginalMz = reaction.Mz;
+                reaction.Mz = monoMz;
+            }
+            if (charge > 0) {
+                reaction.OriginalCharge = reaction.Charge;
+                reaction.Charge = charge;
+            }
+            if (reaction.Mz > 1) {
+                scanMz = reaction.Mz;
+                if (reaction.IsolationWidth > 0.01) {
+                    isoWidth = reaction.IsolationWidth;
+                }
+                scan.Precursors.Add(reaction);
+            }
+
+            // Add in sps ions. if mz already added then skip it.
+            foreach (var precursor in spsMasses) {
+                if (scanMz > 1 && System.Math.Abs(precursor.Mz - scanMz) < isoWidth) {
+                    continue;
+                }
+
+                precursor.Charge = charge;
+                scan.Precursors.Add(precursor);
+            }
         }
 
         /// <summary>

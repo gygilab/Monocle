@@ -29,11 +29,11 @@ namespace MakeMono
                 ChargeRangeUnknown = new ChargeRange(options.ChargeRangeUnknown),
                 ForceCharges = options.ForceCharges,
                 UseMostIntense = options.UseMostIntense,
-                Ms2Ms3Precursor = options.Ms2Ms3Precursor
+                Ms2Ms3Precursor = options.Ms2Ms3Precursor,
+                RawMonoMz = options.RawMonoMz
             };
 
             var readerOptions = new ScanReaderOptions();
-            readerOptions.RawMonoMz = options.RawMonoMz;
 
             SetupLogger(options.RunQuiet, options.WriteDebug);
 

@@ -118,6 +118,12 @@ namespace Monocle
         public bool UseMostIntense { get; set; } = false;
 
         /// <summary>
+        /// If set to true, Monocle will use the input monoisotopic m/z
+        /// as a starting point.  Otherwise, it will start with the isolation m/z
+        /// </summary>
+        public bool RawMonoMz { get; set; } = false;
+
+        /// <summary>
         /// Allow get/set of property based on property name
         /// </summary>
         /// <param name="propertyName"></param>
