@@ -360,7 +360,6 @@ namespace Monocle.File
             double scanMz = 0;
             double isoWidth = 2;
             if (monoMz > 1) {
-                reaction.OriginalMz = reaction.Mz;
                 reaction.Mz = monoMz;
             }
             if (charge > 0) {
