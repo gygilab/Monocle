@@ -208,7 +208,7 @@ namespace Monocle.File
                     SetPrecursorScanNumber(scan);
                 }
 
-                if (scan.MsOrder > 1 && scan.PrecursorMasterScanNumber > rawFile.RunHeader.FirstSpectrum && scan.PrecursorMasterScanNumber < rawFile.RunHeader.LastSpectrum)
+                if (scan.MsOrder > 1 && scan.PrecursorMasterScanNumber >= rawFile.RunHeader.FirstSpectrum && scan.PrecursorMasterScanNumber < rawFile.RunHeader.LastSpectrum)
                 {
                     SetPrecursors(scan, reactionPrecursor, spsMasses, monoMz, charge);
 
