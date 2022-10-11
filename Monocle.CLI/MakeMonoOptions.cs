@@ -47,6 +47,9 @@ namespace MakeMono
         [Option('d', "Debug", Hidden = true, Required = false, HelpText = "Verbose debug output.")]
         public bool WriteDebug { get; set; } = false;
 
+        [Option('e', "HeaderOnly", Hidden = true, Required = false, HelpText = "Output run information as json and exit.")]
+        public bool HeaderOnly { get; set; } = false;
+
         [Option('s', "WriteSps", Hidden = true, Required = false, HelpText = "Write SPS ions as independent precursors.")]
         public bool WriteSps { get; set; } = false;
 

@@ -65,6 +65,7 @@ namespace Monocle.File
             var header = new ScanFileHeader();
             header.StartTime = (float) rawFile.RunHeaderEx.StartTime;
             header.EndTime = (float) rawFile.RunHeaderEx.EndTime;
+            header.AcquisitionDate = rawFile.CreationDate;
             header.ScanCount = rawFile.RunHeaderEx.SpectraCount;
             header.InstrumentModel = rawFile.GetInstrumentData().Model;
             header.InstrumentManufacturer = "ThermoFisher";

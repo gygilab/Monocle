@@ -4,6 +4,7 @@ using Monocle.File;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 
 namespace MakeMono
 {
@@ -39,13 +40,18 @@ namespace MakeMono
 
             try
             {
-                log.Info("Starting Processing.");
                 string file = options.InputFilePath;
                 IScanReader reader = ScanReaderFactory.GetReader(file);
                 reader.Open(file, readerOptions);
                 var header = reader.GetHeader();
                 header.FileName = Path.GetFileName(file);
                 header.FilePath = file;
+
+                if (options.HeaderOnly) {
+                    string jsonString = JsonSerializer.Serialize(header);
+                    Console.WriteLine(jsonString);
+                    return;
+                }
 
                 log.Info("Reading scans: " + file);
                 List<Scan> Scans = new List<Scan>();
