@@ -3,7 +3,7 @@ using Monocle.Data;
 using System;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 
 namespace Monocle.File {
 
@@ -15,15 +15,11 @@ namespace Monocle.File {
         public const int HAS_BASELINE = 8;
         public const int HAS_NOISE = 16;
 
-        private SQLiteConnection db;
-
-        private SQLiteCommand scanInsert;
-
-        private SQLiteCommand precursorInsert;
-
-        private SQLiteCommand peakInsert;
-
-        private SQLiteTransaction loadTransaction;
+        private SqliteConnection db;
+        private SqliteCommand scanInsert;
+        private SqliteCommand precursorInsert;
+        private SqliteCommand peakInsert;
+        private SqliteTransaction loadTransaction;
 
         private int scanIndex = 0;
 
@@ -37,12 +33,11 @@ namespace Monocle.File {
         /// <param name="path">Path to the SQLite db file</param>
         public void Open(string path)
         {
-            SQLiteConnection.CreateFile(path);
-            db = new SQLiteConnection("Data Source=" + path + ";Version=3");
+            db = new SqliteConnection($"Data Source={path}");
             db.Open();
 
             string sql = "CREATE TABLE metadata (name VARCHAR(1024), value TEXT)";
-            new SQLiteCommand(sql, db).ExecuteNonQuery();
+            new SqliteCommand(sql, db).ExecuteNonQuery();
 
             sql = @"CREATE TABLE scans (
                 id INT PRIMARY KEY,
@@ -75,7 +70,7 @@ namespace Monocle.File {
                 elapsed_scan_time DOUBLE,
                 cv DOUBLE
             )";
-            new SQLiteCommand(sql, db).ExecuteNonQuery();
+            new SqliteCommand(sql, db).ExecuteNonQuery();
 
             sql = @"CREATE TABLE scan_peaks (
                 id INT PRIMARY KEY,
@@ -84,7 +79,7 @@ namespace Monocle.File {
                 data_type INT,
                 data BLOB
             )";
-            new SQLiteCommand(sql, db).ExecuteNonQuery();
+            new SqliteCommand(sql, db).ExecuteNonQuery();
 
             sql = @"
             CREATE TABLE scan_precursors (
@@ -99,7 +94,7 @@ namespace Monocle.File {
                 isolation_width DOUBLE,
                 isolation_specificity DOUBLE,
                 precursor_intensity DOUBLE);";
-            new SQLiteCommand(sql, db).ExecuteNonQuery();
+            new SqliteCommand(sql, db).ExecuteNonQuery();
 
             sql = @"INSERT INTO scans (id, scan, last_scan, time, precursor_mh, precursor_mz, charge, 
                 total_intensity, polarity, base_peak_mz, base_peak_intensity, start_mz, end_mz,
@@ -111,11 +106,11 @@ namespace Monocle.File {
                 $start_mz, $end_mz, $low_mz, $high_mz, $parent_scan,
                 $filter_line, $detector_type, $activation_type, $activation_energy, $ms_level, $scan_type,
                 $parent_type, $master_index, $scan_event, $peak_count, $ion_injection_time, $elapsed_scan_time, $cv)";
-            scanInsert = new SQLiteCommand(sql, db);
+            scanInsert = new SqliteCommand(sql, db);
 
             sql = @"INSERT INTO scan_peaks (id, scan, peak_count, data_type, data)
                 VALUES ($id, $scan, $peak_count, $data_type, $data)";
-            peakInsert = new SQLiteCommand(sql, db);
+            peakInsert = new SqliteCommand(sql, db);
 
             sql = @"INSERT INTO scan_precursors
                 (id, scan, precursor_mz, precursor_mh, precursor_charge, original_mz, 
@@ -124,9 +119,13 @@ namespace Monocle.File {
                 ($id, $scan, $precursor_mz, $precursor_mh, $precursor_charge, $original_mz,
                 $original_charge, $isolation_mz, $isolation_width, $isolation_specificity,
                 $precursor_intensity)";
-            precursorInsert = new SQLiteCommand(sql, db);
+            precursorInsert = new SqliteCommand(sql, db);
 
             loadTransaction = db.BeginTransaction();
+
+            scanInsert.Transaction = loadTransaction;
+            peakInsert.Transaction = loadTransaction;
+            precursorInsert.Transaction = loadTransaction;
         }
 
         /// <summary>
@@ -136,10 +135,14 @@ namespace Monocle.File {
         public void WriteHeader(ScanFileHeader header)
         {
             string sql = "INSERT INTO metadata (name, value) VALUES ($name, $value)";
-            var command = new SQLiteCommand(sql, db);
+            var command = new SqliteCommand(sql, db);
+            command.Transaction = loadTransaction;
+            command.Parameters.Clear();
             command.Parameters.AddWithValue("$name", "version");
             command.Parameters.AddWithValue("$value", "1");
             command.ExecuteNonQuery();
+
+            command.Parameters.Clear();
             command.Parameters.AddWithValue("$name", "compression");
             command.Parameters.AddWithValue("$value", "none");
             command.ExecuteNonQuery();
@@ -158,13 +161,13 @@ namespace Monocle.File {
             loadTransaction.Commit();
 
             string sql = "CREATE UNIQUE INDEX scan_index on scans (scan)";
-            new SQLiteCommand(sql, db).ExecuteNonQuery();
+            new SqliteCommand(sql, db).ExecuteNonQuery();
 
             sql = "CREATE UNIQUE INDEX scan_peak_index on scan_peaks (scan)";
-            new SQLiteCommand(sql, db).ExecuteNonQuery();
+            new SqliteCommand(sql, db).ExecuteNonQuery();
 
             sql = "CREATE INDEX scan_precursors_index on scan_precursors (scan)";
-            new SQLiteCommand(sql, db).ExecuteNonQuery();
+            new SqliteCommand(sql, db).ExecuteNonQuery();
 
             db.Close();
         }
@@ -182,6 +185,7 @@ namespace Monocle.File {
                 precursorMz = scan.Precursors[0].Mz;
                 charge = scan.Precursors[0].Charge;
             }
+            scanInsert.Parameters.Clear();
             scanInsert.Parameters.AddWithValue("$id", ++scanIndex);
             scanInsert.Parameters.AddWithValue("$scan", scan.ScanNumber);
             // No support for merged scans yet.
@@ -215,6 +219,7 @@ namespace Monocle.File {
             scanInsert.Parameters.AddWithValue("$cv", scan.FaimsCV);
             scanInsert.ExecuteNonQuery();
 
+            peakInsert.Parameters.Clear();
             peakInsert.Parameters.AddWithValue("$id", ++peakIndex);
             peakInsert.Parameters.AddWithValue("$scan", scan.ScanNumber);
             peakInsert.Parameters.AddWithValue("$peak_count", scan.Centroids.Count);
@@ -224,6 +229,7 @@ namespace Monocle.File {
             peakInsert.ExecuteNonQuery();
 
             foreach(Precursor precursor in scan.Precursors) {
+                precursorInsert.Parameters.Clear();
                 precursorInsert.Parameters.AddWithValue("$id", ++precursorIndex);
                 precursorInsert.Parameters.AddWithValue("$scan", scan.ScanNumber);
                 precursorInsert.Parameters.AddWithValue("$precursor_mz", precursor.Mz);

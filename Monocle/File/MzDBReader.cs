@@ -3,7 +3,7 @@ using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using Monocle.Data;
 using System;
 using System.Collections;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 using System.IO;
 
 
@@ -11,16 +11,16 @@ namespace Monocle.File
 {
     public class MzDBReader : IScanReader
     {
-        private SQLiteConnection db;
+        private SqliteConnection db;
 
         string compression = "";
 
         public void Open(string path, ScanReaderOptions options)
         {
-            db = new SQLiteConnection("Data Source=" + path + ";Version=3");
+            db = new SqliteConnection("Data Source=" + path);
             db.Open();
 
-            var metadata = new SQLiteCommand("SELECT name, value FROM metadata", db);
+            var metadata = new SqliteCommand("SELECT name, value FROM metadata", db);
             using (var reader = metadata.ExecuteReader())
             while (reader.Read())
             {
@@ -46,20 +46,19 @@ namespace Monocle.File
 
         public IEnumerator GetEnumerator()
         {
-            var scanCommand = new SQLiteCommand("SELECT * FROM scans AS s LEFT JOIN scan_peaks as p ON p.scan=s.scan", db);
-            var precursorCommand = new SQLiteCommand("SELECT * FROM scan_precursors WHERE scan=$scan", db);
+            var scanCommand = new SqliteCommand("SELECT * FROM scans AS s LEFT JOIN scan_peaks as p ON p.scan=s.scan", db);
+            var precursorCommand = new SqliteCommand("SELECT * FROM scan_precursors WHERE scan=$scan", db);
 
             using (var scanReader = scanCommand.ExecuteReader())
             {
                 while (scanReader.Read())
                 {
-                    int foo = (int) scanReader["scan"];
                     var scan = new Scan{
-                        ScanNumber = (int) scanReader["scan"],
-                        ScanEvent = (int) scanReader["scan_event"],
-                        MsOrder = (int) scanReader["ms_level"],
-                        PeakCount = (int) scanReader["peak_count"],
-                        MasterIndex = (int) scanReader["master_index"],
+                        ScanNumber = (int)(long) scanReader["scan"],
+                        ScanEvent = (int)(long) scanReader["scan_event"],
+                        MsOrder = (int)(long) scanReader["ms_level"],
+                        PeakCount = (int)(long) scanReader["peak_count"],
+                        MasterIndex = (int)(long) scanReader["master_index"],
                         IonInjectionTime = (double) scanReader["ion_injection_time"],
                         ElapsedScanTime = (double) scanReader["elapsed_scan_time"],
                         Polarity = ReadPolarity((string) scanReader["polarity"]),
@@ -73,14 +72,14 @@ namespace Monocle.File
                         HighestMz = (double) scanReader["high_mz"],
                         BasePeakMz = (double) scanReader["base_peak_mz"],
                         BasePeakIntensity = (double) scanReader["base_peak_intensity"],
-                        FaimsCV = (int) (double) scanReader["cv"],
+                        FaimsCV = (int)(long) (double) scanReader["cv"],
                         TotalIonCurrent = (double) scanReader["total_intensity"],
                         CollisionEnergy = (double) scanReader["activation_energy"],
-                        PrecursorMasterScanNumber = (int) scanReader["parent_scan"],
+                        PrecursorMasterScanNumber = (int)(long) scanReader["parent_scan"],
                         PrecursorActivationMethod = (string) scanReader["activation_type"]
                     };
 
-                    int peakFlags = (int) scanReader["data_type"];
+                    int peakFlags = (int)(long) scanReader["data_type"];
                     if (peakFlags > 0) {
                         byte[] data = (byte[])scanReader["data"];
                         if (compression == "zlib") {
@@ -89,15 +88,16 @@ namespace Monocle.File
                         DecodePeaks(scan, peakFlags, data);
                     }
 
+                    precursorCommand.Parameters.Clear();
                     precursorCommand.Parameters.AddWithValue("$scan", scan.ScanNumber);
                     using (var precursorReader = precursorCommand.ExecuteReader()) {
                         while (precursorReader.Read()) {
                             Precursor precursor = new Precursor() {
                                 Mz = (double) precursorReader["precursor_mz"],
                                 Intensity = (double) precursorReader["precursor_intensity"],
-                                Charge = (int) precursorReader["precursor_charge"],
+                                Charge = (int)(long) precursorReader["precursor_charge"],
                                 OriginalMz = (double) precursorReader["original_mz"],
-                                OriginalCharge = (int) precursorReader["original_charge"],
+                                OriginalCharge = (int)(long) precursorReader["original_charge"],
                                 IsolationMz = (double) precursorReader["isolation_mz"],
                                 IsolationWidth = (double) precursorReader["isolation_width"],
                                 IsolationSpecificity = (double) precursorReader["isolation_specificity"]
