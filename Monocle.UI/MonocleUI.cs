@@ -89,8 +89,9 @@ namespace MonocleUI
         /// <param name="e"></param>
         private void select_output_directory_button_Click(object sender, EventArgs e)
         {
-            if (export_folder_dialog.ShowDialog() == DialogResult.OK)
+            if (export_folder_dialog.ShowDialog() == DialogResult.OK && Directory.Exists(export_folder_dialog.SelectedPath))
             {
+                FileProcessor.monocleOptions.OutputFileDirectory = export_folder_dialog.SelectedPath;
                 export_folder_maskedTB.Text = export_folder_dialog.SelectedPath;
             }
         }
@@ -207,7 +208,8 @@ namespace MonocleUI
             for (int i = 0; i < propertyInfo.Length - 1; i++)
             {
                 if(propertyInfo[i].Name == "WriteSps" || propertyInfo[i].Name == "ConvertOnly" || 
-                    propertyInfo[i].Name == "WriteDebugString" || propertyInfo[i].Name == "OutputFileType")
+                    propertyInfo[i].Name == "WriteDebugString" || propertyInfo[i].Name == "OutputFileType" ||
+                    propertyInfo[i].Name == "OutputFileDirectory")
                 {
                     continue;
                 }

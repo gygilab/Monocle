@@ -23,6 +23,7 @@ namespace MonocleUI.lib
             { "ForceCharges", "Output multiple precursors with charges even if charge is known."},
             { "ConvertOnly", "Write output file without modifying precursors."},
             { "OutputFileType", "Choose to output an mzXML 'mzxml' or CSV file 'csv'."},
+            { "OutputFileDirectory", "Choose the output file directory."},
             { "UseMostIntense", "True - re-assign precursor m/z to peak with the highest intensity before running monoisotopic peak detection."}
         };
     }

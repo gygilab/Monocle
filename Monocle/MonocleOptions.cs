@@ -87,6 +87,11 @@ namespace Monocle
         public OutputFileType OutputFileType { get; set; } = OutputFileType.mzxml;
 
         /// <summary>
+        /// Choose the output file directory.
+        /// </summary>
+        public string OutputFileDirectory { get; set; } = "";
+
+        /// <summary>
         /// Write output file without modifying precursors.
         /// </summary>
         public bool ConvertOnly { get; set; } = false;
