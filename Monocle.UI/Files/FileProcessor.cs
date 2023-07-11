@@ -169,9 +169,13 @@ namespace MonocleUI
 
                         string outputFilePath;
 
-                        if (monocleOptions.OutputFileDirectory != null)
+                        if (
+                            monocleOptions.OutputFileDirectory != null &&
+                            monocleOptions.OutputFileDirectory != "" &&
+                            Directory.Exists(monocleOptions.OutputFileDirectory)
+                            )
                         {
-                            outputFilePath = Path.Combine(Path.GetDirectoryName(newFile), Path.GetFileNameWithoutExtension(newFile) +
+                            outputFilePath = Path.Combine(monocleOptions.OutputFileDirectory, Path.GetFileNameWithoutExtension(newFile) +
                                 "_monocle." +
                                 monocleOptions.OutputFileType.ToString());
                         }
