@@ -167,9 +167,21 @@ namespace MonocleUI
                             token.ThrowIfCancellationRequested();
                         }
 
-                        string outputFilePath = Path.Combine(Path.GetDirectoryName(newFile), Path.GetFileNameWithoutExtension(newFile) +
-                            "_monocle." +
-                            monocleOptions.OutputFileType.ToString());
+                        string outputFilePath;
+
+                        if (monocleOptions.OutputFileDirectory != null)
+                        {
+                            outputFilePath = Path.Combine(Path.GetDirectoryName(newFile), Path.GetFileNameWithoutExtension(newFile) +
+                                "_monocle." +
+                                monocleOptions.OutputFileType.ToString());
+                        }
+                        else
+                        {
+                            outputFilePath = Path.Combine(Path.GetDirectoryName(newFile), Path.GetFileNameWithoutExtension(newFile) +
+                                "_monocle." +
+                                monocleOptions.OutputFileType.ToString());
+                        }
+
                         ScanWriterFactory.MakeTargetFileName(newFile,monocleOptions.OutputFileType);
                         IScanWriter writer = ScanWriterFactory.GetWriter(monocleOptions.OutputFileType);
                         writer.Open(outputFilePath);
