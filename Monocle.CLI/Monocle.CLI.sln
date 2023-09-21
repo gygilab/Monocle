@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.352
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monocle.CLI", "Monocle.CLI.csproj", "{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}"
 EndProject
@@ -15,18 +15,18 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Debug|Any CPU.Build.0 = Debug|x64
-		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Debug|x64.ActiveCfg = Debug|x64
-		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Debug|x64.Build.0 = Debug|x64
+		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Debug|x64.Build.0 = Debug|Any CPU
 		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Release|x64.ActiveCfg = Release|x64
 		{530E6B43-F3B8-48D7-B4F8-36AECF1E77CF}.Release|x64.Build.0 = Release|x64
-		{A6251885-7DC3-4F92-85D6-EA729A06C4DF}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{A6251885-7DC3-4F92-85D6-EA729A06C4DF}.Debug|Any CPU.Build.0 = Debug|x64
-		{A6251885-7DC3-4F92-85D6-EA729A06C4DF}.Debug|x64.ActiveCfg = Debug|x64
-		{A6251885-7DC3-4F92-85D6-EA729A06C4DF}.Debug|x64.Build.0 = Debug|x64
+		{A6251885-7DC3-4F92-85D6-EA729A06C4DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6251885-7DC3-4F92-85D6-EA729A06C4DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6251885-7DC3-4F92-85D6-EA729A06C4DF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6251885-7DC3-4F92-85D6-EA729A06C4DF}.Debug|x64.Build.0 = Debug|Any CPU
 		{A6251885-7DC3-4F92-85D6-EA729A06C4DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6251885-7DC3-4F92-85D6-EA729A06C4DF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6251885-7DC3-4F92-85D6-EA729A06C4DF}.Release|x64.ActiveCfg = Release|x64
