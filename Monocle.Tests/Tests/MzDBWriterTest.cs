@@ -1,7 +1,7 @@
 
 using Monocle.Data;
 using Monocle.File;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 using Xunit;
 
 namespace Monocle.Tests {
@@ -10,6 +10,10 @@ namespace Monocle.Tests {
         private string path = "data/test.mzdb";
 
         public MzDBWriterTest() {
+            if (System.IO.File.Exists(path)) {
+                System.IO.File.Delete(path);
+            }
+            
             var writer = new MzDBWriter();
             writer.Open(path);
             writer.WriteHeader(new ScanFileHeader());
@@ -40,10 +44,10 @@ namespace Monocle.Tests {
 
         [Fact]
         public void testVersion() {
-            var db = new SQLiteConnection("Data Source=" + path);
+            var db = new SqliteConnection("Data Source=" + path);
             db.Open();
             string sql = "Select value from metadata where name='version'";
-            var reader = new SQLiteCommand(sql, db).ExecuteReader();
+            var reader = new SqliteCommand(sql, db).ExecuteReader();
             int valueCount = 0;
             while(reader.Read()) {
                 Assert.Equal("1", reader.GetString(0));
@@ -54,11 +58,11 @@ namespace Monocle.Tests {
 
         [Fact]
         public void testScan() {
-            var db = new SQLiteConnection("Data Source=" + path);
+            var db = new SqliteConnection("Data Source=" + path);
             db.Open();
 
             string sql = "Select scan, filter_line, base_peak_mz, base_peak_intensity FROM scans WHERE scan=1";
-            var reader = new SQLiteCommand(sql, db).ExecuteReader();
+            var reader = new SqliteCommand(sql, db).ExecuteReader();
             int valueCount = 0;
             while(reader.Read()) {
                 Assert.Equal(1, reader.GetInt32(0));
