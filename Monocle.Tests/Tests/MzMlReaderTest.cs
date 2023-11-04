@@ -43,7 +43,7 @@ namespace Monocle.Tests
             var ms2Scan = scans[2];
             
             Assert.Equal(2, ms2Scan.MsOrder);
-            Assert.Equal(1, ms2Scan.Precursors.Count);
+            Assert.Single(ms2Scan.Precursors);
             Assert.Equal(810.7899999, ms2Scan.Precursors[0].Mz, 3);
         }
     }
