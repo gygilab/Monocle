@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-bionic
+FROM mcr.microsoft.com/dotnet/sdk:6.0
 ARG RID=linux-x64
 RUN mkdir -p /build/Monocle && mkdir -p /usr/lib/monocle-ms/ && mkdir -p /usr/bin/
 # Context should be root of repo
