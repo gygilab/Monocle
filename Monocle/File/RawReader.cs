@@ -144,8 +144,8 @@ namespace Monocle.File
                     }
                 }
 
-                ThermoBiz.RunHeader runHeader = rawFile.RunHeader;
-                ThermoBiz.LogEntry trailer = rawFile.GetTrailerExtraInformation(iScanNumber);
+                var runHeader = rawFile.RunHeader;
+                var trailer = rawFile.GetTrailerExtraInformation(iScanNumber);
                 for (int i = 0; i < trailer.Length; i++)
                 {
                     var value = trailer.Values[i];
