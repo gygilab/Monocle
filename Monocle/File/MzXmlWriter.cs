@@ -237,24 +237,20 @@ namespace Monocle.File {
         /// <param name="file">The full path to the file</param>
         /// <returns>the result hash</returns>
         private string CalculateFileHash(string file) {
-            if (file == "" || !System.IO.File.Exists(file)) {
+            if (string.IsNullOrEmpty(file) || !System.IO.File.Exists(file)) {
                 return "";
             }
             using (FileStream fs = new FileStream(file, FileMode.Open))
+            using (BufferedStream bs = new BufferedStream(fs))
+            using (SHA1 sha1 = SHA1.Create())
             {
-                using (BufferedStream bs = new BufferedStream(fs))
+                byte[] hash = sha1.ComputeHash(bs);
+                StringBuilder formatted = new StringBuilder(2 * hash.Length);
+                foreach (byte b in hash)
                 {
-                    using (SHA1Managed sha1 = new SHA1Managed())
-                    {
-                        byte[] hash = sha1.ComputeHash(bs);
-                        StringBuilder formatted = new StringBuilder(2 * hash.Length);
-                        foreach (byte b in hash)
-                        {
-                            formatted.AppendFormat("{0:X2}", b);
-                        }
-                        return formatted.ToString();
-                    }
+                    formatted.AppendFormat("{0:X2}", b);
                 }
+                return formatted.ToString();
             }
         }
     }
