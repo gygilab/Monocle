@@ -28,7 +28,7 @@ sed -i -r "s/monocle-ms \(\S+\) stable/monocle-ms ($VERSION-$BUILD_NUMBER) $DIST
 cp build/deb/Makefile .
 
 cd Monocle.CLI
-dotnet publish -c Release -r linux-x64 -o monocle-ms -p:PublishTrimmed=true
+dotnet publish -c Release -r linux-x64 -o monocle-ms
 cd ../../
 tar czvf monocle-ms_$VERSION.orig.tar.gz monocle-ms
 cd monocle-ms
