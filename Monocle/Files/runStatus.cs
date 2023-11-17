@@ -1,5 +1,5 @@
 ﻿
-namespace MonocleUI
+namespace Monocle
 {
     public enum RunStatus
     {
