@@ -251,7 +251,7 @@ namespace Monocle.File {
         /// <param name="scan">The scan with the peak data.</param>
         /// <returns>An integer with the flags for the type of data stored.</returns>
         private int getPeakFlags(Scan scan) {
-            if (scan.DetectorType == "FTMS") {
+            if (scan.DetectorType == "FTMS" || scan.DetectorType == "ASTMS") {
                 return HAS_MZ_DOUBLE | HAS_INTENSITY | HAS_BASELINE | HAS_NOISE;
             }
             return HAS_MZ_FLOAT | HAS_INTENSITY;
@@ -275,7 +275,7 @@ namespace Monocle.File {
                 all[i + (peakCount * 3)] = (float) peak.Noise;
             }
 
-            if (scan.DetectorType == "FTMS") {
+            if (scan.DetectorType == "FTMS" || scan.DetectorType == "ASTMS") {
                 int mzBytes = peakCount * sizeof(double);
                 int otherBytes = peakCount * 3 * sizeof(float);
                 byte[] output = new byte[mzBytes + otherBytes];
