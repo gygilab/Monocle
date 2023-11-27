@@ -37,6 +37,12 @@ namespace Monocle
 
                 Scan precursorScan = scans[scan.PrecursorMasterScanNumber - 1];
 
+                // Handle back-to-back triggered scans where the parent scan is assigned
+                // to the ms2 but the precursor is in the ms1.
+                if (scan.MsOrder == 2 && precursorScan.MsOrder == scan.MsOrder && precursorScan.PrecursorMasterScanNumber > 0) {
+                    precursorScan = scans[precursorScan.PrecursorMasterScanNumber - 1];
+                }
+
                 // For low-res scans, or if ForceCharges is true, or if there's no charge information
                 // and monoisotopic peak detection is disabled, generate precursors with
                 // a range of charges given by the ChargeRangeUnknown option.
