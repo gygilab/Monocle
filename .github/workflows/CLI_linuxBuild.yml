@@ -13,9 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 3.1.301
+          dotnet-version: '6.0.x'
       - name: Install dependencies
         working-directory: ./Monocle.CLI
         run: dotnet restore
@@ -24,15 +24,15 @@ jobs:
         run: dotnet test --no-restore --verbosity normal
       - name: Build
         working-directory: ./Monocle.CLI
-        run: dotnet publish -c Release -r linux-x64 -o Monocle.CLI -p:PublishTrimmed=true
+        run: dotnet publish -c Release -r linux-x64 --self-contained -o Monocle.CLI -p:PublishTrimmed=true
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v0.3.${{ github.run_number }}
-          release_name: Monocle Linux CLI v0.3.${{ github.run_number }}
+          tag_name: v0.4.${{ github.run_number }}
+          release_name: Monocle Linux CLI v0.4.${{ github.run_number }}
           body: ""
           draft: false
           prerelease: false

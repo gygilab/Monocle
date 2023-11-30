@@ -14,9 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 3.1.301
+        dotnet-version: 6.0.x
     - name: Install dependencies
       working-directory: ./Monocle.CLI
       run: dotnet restore
@@ -32,8 +32,8 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-          tag_name: v0.3.${{ github.run_number }}
-          release_name: Monocle Win CLI v0.3.${{ github.run_number }}
+          tag_name: v0.4.${{ github.run_number }}
+          release_name: Monocle Win CLI v0.4.${{ github.run_number }}
           body: ""
           draft: false
           prerelease: false

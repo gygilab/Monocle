@@ -58,6 +58,8 @@ namespace Monocle.File
             { "MS:1000128", "profile spectrum" },
             { "MS:1000504", "base peak m/z" },
             { "MS:1000040", "m/z" },
+            { "MS:1000041", "charge state" },
+            { "MS:1000042", "peak intensity" },
             { "MS:1000505", "base peak intensity" },
             { "MS:1000131", "number of counts" },
             { "MS:1000285", "total ion current" },
@@ -281,8 +283,8 @@ namespace Monocle.File
                     writer.WriteAttributeString("count", "1");
                     writer.WriteStartElement("selectedIon");
 
-                    WriteCVParam("MS:1000633", precursor.Charge.ToString());
-                    WriteCVParam("MS:1000827", precursor.Mz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
+                    WriteCVParam("MS:1000041", precursor.Charge.ToString());
+                    WriteCVParam("MS:1000744", precursor.Mz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
 
                     writer.WriteEndElement(); // selectedIon
                     writer.WriteEndElement(); // selectedIonList
