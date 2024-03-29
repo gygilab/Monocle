@@ -224,7 +224,12 @@ namespace Monocle.File
 
                 if (thermoScan.HasCentroidStream) {
                     // High res data
-                    CentroidsFromArrays(scan, thermoScan.CentroidScan.Masses, thermoScan.CentroidScan.Intensities, thermoScan.CentroidScan.Baselines, thermoScan.CentroidScan.Noises);
+                    CentroidsFromArrays(scan,
+                        thermoScan.CentroidScan.Masses,
+                        thermoScan.CentroidScan.Intensities,
+                        thermoScan.CentroidScan.Baselines,
+                        thermoScan.CentroidScan.Noises,
+                        thermoScan.CentroidScan.Resolutions);
                 }
                 else {
                     // Low res data
@@ -246,27 +251,38 @@ namespace Monocle.File
         /// <param name="scan"></param>
         /// <param name="mzArray"></param>
         /// <param name="intensityArray"></param>
-        public void CentroidsFromArrays(Data.Scan scan, double[] mzArray, double[] intensityArray, double[] baseline=null, double[] noise=null)
+        public void CentroidsFromArrays(
+            Data.Scan scan,
+            double[] mzs,
+            double[] intensities,
+            double[] baselines=null,
+            double[] noises=null,
+            double[] resolutions=null)
         {
-            if(mzArray.Length != intensityArray.Length)
-            {
-                throw new Exception(" Error: MZ and Intensity Arrays of unequal length.");
+            if (mzs == null || intensities == null) {
+                // Adding this check to handle possible corrupt raw file.
+                Console.WriteLine("Scan number " + scan.ScanNumber + " has no peak data.");
+                return;
             }
-            scan.PeakCount = mzArray.Length;
-            for (int i = 0; i < mzArray.Length; i++)
+            scan.PeakCount = mzs.Length;
+            for (int i = 0; i < mzs.Length; i++)
             {
                 Centroid tempCentroid = new Centroid()
                 {
-                    Mz = mzArray[i],
-                    Intensity = intensityArray[i],
+                    Mz = mzs[i],
+                    Intensity = intensities[i],
                 };
-                if(baseline != null)
+                if(baselines != null)
                 {
-                    tempCentroid.Baseline = baseline[i];
+                    tempCentroid.Baseline = baselines[i];
                 }
-                if(noise != null)
+                if(noises != null)
                 {
-                    tempCentroid.Noise = noise[i];
+                    tempCentroid.Noise = noises[i];
+                }
+                if(resolutions != null)
+                {
+                    tempCentroid.Resolution = (uint) resolutions[i];
                 }
                 scan.Centroids.Add(tempCentroid);
             }
