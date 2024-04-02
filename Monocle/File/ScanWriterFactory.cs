@@ -18,6 +18,8 @@ namespace Monocle.File
             {
                 case OutputFileType.csv:
                     return new CsvWriter();
+                case OutputFileType.csvpeaks:
+                    return new CsvPeaksWriter();
                 case OutputFileType.mzxml:
                     return new MzXmlWriter();
                 case OutputFileType.exmzxml:
@@ -44,6 +46,9 @@ namespace Monocle.File
             switch (type) {
                 case OutputFileType.csv:
                     ext = "csv";
+                    break;
+                case OutputFileType.csvpeaks:
+                    ext = "peaks.csv";
                     break;
                 case OutputFileType.exmzxml:
                     // pass thru

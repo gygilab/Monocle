@@ -15,6 +15,7 @@ namespace Monocle
         exmzxml,
         mzdb,
         csv,
-        mzml
+        mzml,
+        csvpeaks
     }
 }

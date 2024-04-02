@@ -7,13 +7,14 @@ namespace Monocle.Data
     /// </summary>
     public struct Centroid
     {
-        public Centroid(double mz, double intensity, double baseline=0, double noise=0, double purity = 0)
+        public Centroid(double mz, double intensity, double baseline=0, double noise=0, double purity = 0, uint resolution = 0)
         {
             Mz = mz;
             Intensity = intensity;
             Baseline = baseline;
             Noise = noise;
             Purity = purity;
+            Resolution = resolution;
         }
 
         /// <summary>
@@ -40,5 +41,10 @@ namespace Monocle.Data
         /// Purity of the centroid in the scan
         /// </summary>
         public double Purity { get; set; }
+
+        /// <summary>
+        /// Resolution of the Peak
+        /// </summary>
+        public uint Resolution { get; set; }
     }
 }

@@ -14,6 +14,8 @@ namespace Monocle.File {
         public const int HAS_INTENSITY = 4;
         public const int HAS_BASELINE = 8;
         public const int HAS_NOISE = 16;
+        public const int HAS_FLAGS = 32;
+        public const int HAS_RESOLUTION = 64;
 
         private SqliteConnection db;
         private SqliteCommand scanInsert;
@@ -251,10 +253,17 @@ namespace Monocle.File {
         /// <param name="scan">The scan with the peak data.</param>
         /// <returns>An integer with the flags for the type of data stored.</returns>
         private int getPeakFlags(Scan scan) {
+            int output = 0;
             if (scan.DetectorType == "FTMS" || scan.DetectorType == "ASTMS") {
-                return HAS_MZ_DOUBLE | HAS_INTENSITY | HAS_BASELINE | HAS_NOISE;
+                output = HAS_MZ_DOUBLE | HAS_INTENSITY | HAS_BASELINE | HAS_NOISE;
             }
-            return HAS_MZ_FLOAT | HAS_INTENSITY;
+            else {
+                output = HAS_MZ_FLOAT | HAS_INTENSITY;
+            }
+            if (scan.DetectorType == "ASTMS") {
+                output |= HAS_RESOLUTION;
+            }
+            return output;
         }
 
         /// <summary>
@@ -265,7 +274,8 @@ namespace Monocle.File {
         private byte[] encodePeaks(Scan scan) {
             int peakCount = scan.Centroids.Count;
             double[] mz = new double[peakCount];
-            float[] all = new float[peakCount * 4];
+            float[] all = new float[peakCount * 5];
+            uint[] resolution = new uint[peakCount];
             for (int i = 0; i < scan.Centroids.Count; ++i) {
                 Centroid peak = scan.Centroids[i];
                 mz[i] = peak.Mz;
@@ -273,22 +283,34 @@ namespace Monocle.File {
                 all[i + peakCount] = (float) peak.Intensity;
                 all[i + (peakCount * 2)] = (float) peak.Baseline;
                 all[i + (peakCount * 3)] = (float) peak.Noise;
+                resolution[i] = peak.Resolution;
             }
 
-            if (scan.DetectorType == "FTMS" || scan.DetectorType == "ASTMS") {
-                int mzBytes = peakCount * sizeof(double);
-                int otherBytes = peakCount * 3 * sizeof(float);
-                byte[] output = new byte[mzBytes + otherBytes];
-                Buffer.BlockCopy(mz, 0, output, 0, mzBytes);
-                Buffer.BlockCopy(all, peakCount * sizeof(float), output, mzBytes, otherBytes);
-                return output;
+            int mzFloatBytes = peakCount * sizeof(float);
+            int mzDoubleBytes = peakCount * sizeof(double);
+            int intensityBytes = peakCount * sizeof(float);
+            int baselineBytes = peakCount * sizeof(float);
+            int noiseBytes = peakCount * sizeof(float);
+            int resolutionBytes = peakCount * sizeof(uint);
+
+            byte[] output = null;
+            if (scan.DetectorType == "FTMS") {
+                output = new byte[mzDoubleBytes + intensityBytes + baselineBytes + noiseBytes];
+                Buffer.BlockCopy(mz, 0, output, 0, mzDoubleBytes);
+                Buffer.BlockCopy(all, mzFloatBytes, output, mzDoubleBytes, intensityBytes + baselineBytes + noiseBytes);
+            }
+            else if (scan.DetectorType == "ASTMS") {
+                output = new byte[mzDoubleBytes + intensityBytes + baselineBytes + noiseBytes + resolutionBytes];
+                Buffer.BlockCopy(mz, 0, output, 0, mzDoubleBytes);
+                Buffer.BlockCopy(all, mzFloatBytes, output, mzDoubleBytes, intensityBytes + baselineBytes + noiseBytes);
+                Buffer.BlockCopy(resolution, 0, output, mzDoubleBytes + intensityBytes + baselineBytes + noiseBytes, resolutionBytes);
             }
             else {
-                int byteCount = peakCount * 2 * sizeof(float);
-                byte[] output = new byte[byteCount];
-                Buffer.BlockCopy(all, 0, output, 0, byteCount);
-                return output;
+                output = new byte[mzFloatBytes + intensityBytes];
+                Buffer.BlockCopy(all, 0, output, 0, mzFloatBytes + intensityBytes);
             }
+
+            return output;
         }
 
         /// <summary>
