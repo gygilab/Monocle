@@ -144,6 +144,10 @@ namespace Monocle.File
                     }
                 }
 
+                // Ran into an issue with Tune 4.1 SP 1 where scans dont have CV
+                // in the trailer, but it shows up in the filter line.
+                scan.FaimsCV = ReadCVFromFilter(scan.FilterLine);
+
                 var runHeader = rawFile.RunHeader;
                 var trailer = rawFile.GetTrailerExtraInformation(iScanNumber);
                 for (int i = 0; i < trailer.Length; i++)
@@ -183,7 +187,7 @@ namespace Monocle.File
                             monoMz = double.Parse(value);
                             break;
                         case "FAIMS CV:":
-                            scan.FaimsCV = (int)double.Parse(value);
+                            scan.FaimsCV = double.Parse(value);
                             break;
                         case "FAIMS Voltage On:":
                             scan.FaimsState = (value == "No") ? Data.TriState.Off : Data.TriState.On;
@@ -334,6 +338,27 @@ namespace Monocle.File
                 return m.Groups [1].ToString ();
             }
             return "";
+        }
+
+        /// <summary>
+        /// Read the CV value from the filter line.
+        /// 
+        /// The filter line would look like
+        /// ITMS + c NSI cv=-60.00 t d Full ms2 393.8775@cid35.00 [104.0000-1192.0000]
+        /// 
+        /// Parses the cv using case insensitive regex and returns the double value.
+        /// </summary>
+        /// <param name="filterLine">The filter line to read the CV from</param>
+        /// <returns>The CV value</returns>
+        private static double ReadCVFromFilter(string filterLine)
+        {
+            var cvRegex = new Regex(@"cv=([-+]?\d*\.\d+|\d+)", RegexOptions.IgnoreCase);
+            var m = cvRegex.Match(filterLine);
+            if (m.Success)
+            {
+                return double.Parse(m.Groups[1].ToString());
+            }
+            return 0;
         }
 
         /// <summary>
