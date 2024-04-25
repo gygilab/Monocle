@@ -144,7 +144,7 @@ namespace Monocle.File
                     }
                 }
 
-                // Ran into an issue with Tune 4.1 SP 1 where scans dont have CV
+                // Some scans dont have CV
                 // in the trailer, but it shows up in the filter line.
                 scan.FaimsCV = ReadCVFromFilter(scan.FilterLine);
 
