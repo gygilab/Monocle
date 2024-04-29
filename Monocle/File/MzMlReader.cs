@@ -117,7 +117,12 @@ namespace Monocle.File
                     if (Reader.Name == "spectrum")
                     {
                         scan.Centroids.Clear();
-                        for (int i = 0; i < scan.PeakCount; ++i) {
+                        if (binaryData.mzs.Count == 0 || binaryData.intensities.Count == 0) {
+                            Console.WriteLine("Error: Binary data not found for scan " + scan.ScanNumber);
+                            continue;
+                        }
+
+                        for (int i = 0; i < scan.PeakCount && i < binaryData.mzs.Count; ++i) {
                             scan.Centroids.Add(
                                 new Centroid(
                                     binaryData.mzs[i],
@@ -294,48 +299,18 @@ namespace Monocle.File
         }
 
         private List<double> ReadPeaks(string base64Data, int peakCount, bool is64bit) {
-            var output = new List<double>(new double[peakCount]);
+            var output = new List<double>(peakCount);
+            int offsetSize = is64bit ? 8 : 4;
             
             byte[] byteEncoded = Convert.FromBase64String(base64Data);
+            if (byteEncoded.Length != peakCount * offsetSize) {
+                Console.WriteLine("Error: Binary data length does not match peak count.");
+                return output;
+            }
             for(int i = 0; i < peakCount; ++i) {
-                if (is64bit) {
-                    output[i] = BitConverter.ToDouble(byteEncoded, i * 8);
-                }
-                else {
-                    output[i] = BitConverter.ToSingle(byteEncoded, i * 4);
-                }
+                output.Add(BitConverter.ToDouble(byteEncoded, i * offsetSize));
             }
             return output;
-        }
-
-        /// <summary>
-        /// Read mzXML peaks property
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="peakCount"></param>
-        /// <returns></returns>
-        private List<Centroid> ReadPeaks(string str, int peakCount)
-        {
-            List<Centroid> peaks = new List<Centroid>();
-            int size = peakCount * 2;
-            if (String.Compare(str, "AAAAAAAAAAA=") == 0)
-            {
-                return peaks;
-            }
-            byte[] byteEncoded = Convert.FromBase64String(str);
-            Array.Reverse(byteEncoded);
-            float[] values = new float[size];
-            for (int i = 0; i < size; i++)
-            {
-                values[i] = BitConverter.ToSingle(byteEncoded, i * 4);
-            }
-            Array.Reverse(values);
-            for (int i = 0; i < peakCount; ++i)
-            {
-                Centroid tempCent = new Centroid(values[2 * i], values[(2 * i) + 1]);
-                peaks.Add(tempCent);
-            }
-            return peaks;
         }
 
         private void Cleanup()
