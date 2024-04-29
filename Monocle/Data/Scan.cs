@@ -104,7 +104,7 @@ namespace Monocle.Data
         /// <summary>
         /// FAIMS compensation voltage, if used (in volts)
         /// </summary>
-        public int FaimsCV { get; set; }
+        public double FaimsCV { get; set; }
 
         /// <summary>
         /// FAIMS state, it's possible to have a CV of 0 which is the int default.
