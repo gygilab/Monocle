@@ -415,8 +415,7 @@ namespace Monocle.File
             return data;
         }
 
-        private static Regex ScanNumRegex = new Regex(@"(scan|index)=(\d+)");
-
+        private static Regex ScanNumRegex = new Regex(@"(scan|index|merged)=(\d+)");
         /// <summary>
         /// Read the scan number from the id string
         /// in the spectrum element.
@@ -429,20 +428,28 @@ namespace Monocle.File
         /// Example2:
         /// <spectrum index="0" defaultArrayLength="17242" id="index=1">
         /// 
+        /// timsTOF is index based:
+        /// <spectrum index="0"
+        ///     id="merged=0 frame=1 scanStart=1 scanEnd=927"
+        ///     defaultArrayLength="1355">
         /// 
         /// </summary>
         /// <param name="idString"></param>
         /// <returns></returns>
-        private int ScanIDToScanNumber(string idString) {
-
-            int scanId = 0;
-            foreach(Match match in ScanNumRegex.Matches(idString)) {
-                scanId = int.Parse(match.Groups[2].Value);
+        private int ScanIDToScanNumber(string idString)
+        {
+            foreach (Match match in ScanNumRegex.Matches(idString))
+            {
+                if (int.TryParse(match.Groups[2].Value, out int scanId))
+                {
+                    if (idString.Contains("frame")) {
+                        // Convert to 1-based index
+                        scanId += 1;
+                    }
+                    return scanId;
+                }
             }
-            if (scanId == 0) {
-                throw new InvalidDataException("Scan number not found in spectrum tag");
-            }
-            return scanId;
+            throw new InvalidDataException("Scan number not found in spectrum tag");
         }
     }
 
