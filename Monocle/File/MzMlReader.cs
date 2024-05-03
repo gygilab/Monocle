@@ -1,3 +1,4 @@
+using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using Monocle.Data;
 using System;
 using System.Collections;
@@ -267,6 +268,7 @@ namespace Monocle.File
             string data = "";
             bool isMz = true;
             bool is64bit = true;
+            bool compressed = false;
             while(Reader.Read()) {
                 if (Reader.NodeType == XmlNodeType.Element) {
                     if (Reader.Name == "cvParam") {
@@ -276,6 +278,9 @@ namespace Monocle.File
                         }
                         else if (cvParam.Name == "32-bit float") {
                             is64bit = false;
+                        }
+                        else if (cvParam.Name == "zlib compression") {
+                            compressed = true;
                         }
                     }
                     else if(Reader.Name == "binary") {
@@ -289,7 +294,7 @@ namespace Monocle.File
                 }
             }
 
-            var values = ReadPeaks(data, peakCount, is64bit);
+            var values = ReadPeaks(data, peakCount, is64bit, compressed);
             if (isMz) {
                 binaryData.mzs = values;
             }
@@ -298,19 +303,46 @@ namespace Monocle.File
             }
         }
 
-        private List<double> ReadPeaks(string base64Data, int peakCount, bool is64bit) {
+        private List<double> ReadPeaks(string base64Data, int peakCount, bool is64bit, bool compressed) {
             var output = new List<double>(peakCount);
             int offsetSize = is64bit ? 8 : 4;
             
             byte[] byteEncoded = Convert.FromBase64String(base64Data);
+            if (compressed) {
+                byteEncoded = Decompress(byteEncoded, peakCount * offsetSize);
+            }
             if (byteEncoded.Length != peakCount * offsetSize) {
                 Console.WriteLine("Error: Binary data length does not match peak count.");
                 return output;
             }
+            if (is64bit) {
+                for(int i = 0; i < peakCount; ++i) {
+                    output.Add(BitConverter.ToDouble(byteEncoded, i * offsetSize));
+                }
+                return output;
+            }
+
+            // 32-bit float
             for(int i = 0; i < peakCount; ++i) {
-                output.Add(BitConverter.ToDouble(byteEncoded, i * offsetSize));
+                output.Add(BitConverter.ToSingle(byteEncoded, i * offsetSize));
             }
             return output;
+        }
+
+        /// <summary>
+        /// Decompressed the byte array. Only supports zlib compression.
+        /// </summary>
+        /// <param name="data"></param>
+        private byte[] Decompress(byte[] data, int length) {
+            byte[] decompressed = new byte[length];
+            using (var compressedStream = new MemoryStream(data))
+            using (var zipStream = new InflaterInputStream(compressedStream))
+            using (var resultStream = new MemoryStream())
+            {
+                zipStream.CopyTo(resultStream);
+                decompressed = resultStream.ToArray();
+            }
+            return decompressed;
         }
 
         private void Cleanup()
