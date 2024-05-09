@@ -53,36 +53,48 @@ namespace MakeMono
                     return;
                 }
 
-                log.Info("Reading scans: " + file);
-                List<Scan> Scans = new List<Scan>();
-                foreach (Scan scan in reader)
-                {
-                    if (scan.ScanNumber < 1) {
-                        continue;
-                    }
-                    Scans.Add(scan);
-                }
-
-                if (!monocleOptions.ConvertOnly)
-                {
-                    log.Info("Starting monoisotopic assignment.");
-                    Monocle.Monocle.Run(ref Scans, monocleOptions);
-                }
-
                 string outputFilePath = options.OutputFilePath.Trim();
                 if(outputFilePath.Length == 0) {
                     outputFilePath = ScanWriterFactory.MakeTargetFileName(file, monocleOptions.OutputFileType);
                 }
-                log.Info("Writing output: " + outputFilePath);
                 IScanWriter writer = ScanWriterFactory.GetWriter(monocleOptions.OutputFileType);
-                writer.Open(outputFilePath);
-                writer.WriteHeader(header);
-                foreach (Scan scan in Scans)
-                {
-                    writer.WriteScan(scan);
+
+                if (monocleOptions.ConvertOnly) {
+                    log.Info("Writing output: " + outputFilePath);
+                    writer.Open(outputFilePath);
+                    writer.WriteHeader(header);
+                    foreach (Scan scan in reader)
+                    {
+                        writer.WriteScan(scan);
+                    }
+                    writer.Close();
+                    log.Info("Done.");
+                    return;
                 }
-                writer.Close();
-                log.Info("Done.");
+                else {
+                    log.Info("Reading scans: " + file);
+                    List<Scan> Scans = new List<Scan>();
+                    foreach (Scan scan in reader)
+                    {
+                        if (scan.ScanNumber < 1) {
+                            continue;
+                        }
+                        Scans.Add(scan);
+                    }
+
+                    log.Info("Starting monoisotopic assignment.");
+                    Monocle.Monocle.Run(ref Scans, monocleOptions);
+
+                    log.Info("Writing output: " + outputFilePath);
+                    writer.Open(outputFilePath);
+                    writer.WriteHeader(header);
+                    foreach (Scan scan in Scans)
+                    {
+                        writer.WriteScan(scan);
+                    }
+                    writer.Close();
+                    log.Info("Done.");
+                }
             }
             catch (Exception e)
             {

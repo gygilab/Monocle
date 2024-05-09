@@ -1,3 +1,4 @@
+using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using Monocle.Data;
 using System;
 using System.Collections;
@@ -156,7 +157,20 @@ namespace Monocle.File
             {
                 if (Reader.Name == "id")
                 {
-                    scan.ScanNumber = ScanIDToScanNumber(Reader.Value);
+                    // Prefer scan number over index if available.
+                    int scanNumber = ScanIDToScanNumber(Reader.Value);
+                    if (scanNumber > 0)
+                    {
+                        scan.ScanNumber = scanNumber;
+                    }
+                }
+                else if (Reader.Name == "index")
+                {
+                    // Only fall back to index if scan number is not found.
+                    if (scan.ScanNumber == 0)
+                    {
+                        scan.ScanNumber = int.Parse(Reader.Value) + 1;
+                    }
                 }
                 else if (Reader.Name == "defaultArrayLength")
                 {
@@ -267,6 +281,7 @@ namespace Monocle.File
             string data = "";
             bool isMz = true;
             bool is64bit = true;
+            bool compressed = false;
             while(Reader.Read()) {
                 if (Reader.NodeType == XmlNodeType.Element) {
                     if (Reader.Name == "cvParam") {
@@ -276,6 +291,9 @@ namespace Monocle.File
                         }
                         else if (cvParam.Name == "32-bit float") {
                             is64bit = false;
+                        }
+                        else if (cvParam.Name == "zlib compression") {
+                            compressed = true;
                         }
                     }
                     else if(Reader.Name == "binary") {
@@ -289,7 +307,7 @@ namespace Monocle.File
                 }
             }
 
-            var values = ReadPeaks(data, peakCount, is64bit);
+            var values = ReadPeaks(data, peakCount, is64bit, compressed);
             if (isMz) {
                 binaryData.mzs = values;
             }
@@ -298,19 +316,46 @@ namespace Monocle.File
             }
         }
 
-        private List<double> ReadPeaks(string base64Data, int peakCount, bool is64bit) {
+        private List<double> ReadPeaks(string base64Data, int peakCount, bool is64bit, bool compressed) {
             var output = new List<double>(peakCount);
             int offsetSize = is64bit ? 8 : 4;
             
             byte[] byteEncoded = Convert.FromBase64String(base64Data);
+            if (compressed) {
+                byteEncoded = Decompress(byteEncoded, peakCount * offsetSize);
+            }
             if (byteEncoded.Length != peakCount * offsetSize) {
                 Console.WriteLine("Error: Binary data length does not match peak count.");
                 return output;
             }
+            if (is64bit) {
+                for(int i = 0; i < peakCount; ++i) {
+                    output.Add(BitConverter.ToDouble(byteEncoded, i * offsetSize));
+                }
+                return output;
+            }
+
+            // 32-bit float
             for(int i = 0; i < peakCount; ++i) {
-                output.Add(BitConverter.ToDouble(byteEncoded, i * offsetSize));
+                output.Add(BitConverter.ToSingle(byteEncoded, i * offsetSize));
             }
             return output;
+        }
+
+        /// <summary>
+        /// Decompressed the byte array. Only supports zlib compression.
+        /// </summary>
+        /// <param name="data"></param>
+        private byte[] Decompress(byte[] data, int length) {
+            byte[] decompressed = new byte[length];
+            using (var compressedStream = new MemoryStream(data))
+            using (var zipStream = new InflaterInputStream(compressedStream))
+            using (var resultStream = new MemoryStream())
+            {
+                zipStream.CopyTo(resultStream);
+                decompressed = resultStream.ToArray();
+            }
+            return decompressed;
         }
 
         private void Cleanup()
@@ -384,7 +429,6 @@ namespace Monocle.File
         }
 
         private static Regex ScanNumRegex = new Regex(@"(scan|index)=(\d+)");
-
         /// <summary>
         /// Read the scan number from the id string
         /// in the spectrum element.
@@ -397,20 +441,24 @@ namespace Monocle.File
         /// Example2:
         /// <spectrum index="0" defaultArrayLength="17242" id="index=1">
         /// 
+        /// timsTOF is index based:
+        /// <spectrum index="0"
+        ///     id="merged=0 frame=1 scanStart=1 scanEnd=927"
+        ///     defaultArrayLength="1355">
         /// 
         /// </summary>
         /// <param name="idString"></param>
         /// <returns></returns>
-        private int ScanIDToScanNumber(string idString) {
-
-            int scanId = 0;
-            foreach(Match match in ScanNumRegex.Matches(idString)) {
-                scanId = int.Parse(match.Groups[2].Value);
+        private int ScanIDToScanNumber(string idString)
+        {
+            foreach (Match match in ScanNumRegex.Matches(idString))
+            {
+                if (int.TryParse(match.Groups[2].Value, out int scanId))
+                {
+                    return scanId;
+                }
             }
-            if (scanId == 0) {
-                throw new InvalidDataException("Scan number not found in spectrum tag");
-            }
-            return scanId;
+            return 0;
         }
     }
 
