@@ -157,7 +157,20 @@ namespace Monocle.File
             {
                 if (Reader.Name == "id")
                 {
-                    scan.ScanNumber = ScanIDToScanNumber(Reader.Value);
+                    // Prefer scan number over index if available.
+                    int scanNumber = ScanIDToScanNumber(Reader.Value);
+                    if (scanNumber > 0)
+                    {
+                        scan.ScanNumber = scanNumber;
+                    }
+                }
+                else if (Reader.Name == "index")
+                {
+                    // Only fall back to index if scan number is not found.
+                    if (scan.ScanNumber == 0)
+                    {
+                        scan.ScanNumber = int.Parse(Reader.Value) + 1;
+                    }
                 }
                 else if (Reader.Name == "defaultArrayLength")
                 {
@@ -415,7 +428,7 @@ namespace Monocle.File
             return data;
         }
 
-        private static Regex ScanNumRegex = new Regex(@"(scan|index|merged)=(\d+)");
+        private static Regex ScanNumRegex = new Regex(@"(scan|index)=(\d+)");
         /// <summary>
         /// Read the scan number from the id string
         /// in the spectrum element.
@@ -442,14 +455,10 @@ namespace Monocle.File
             {
                 if (int.TryParse(match.Groups[2].Value, out int scanId))
                 {
-                    if (idString.Contains("frame")) {
-                        // Convert to 1-based index
-                        scanId += 1;
-                    }
                     return scanId;
                 }
             }
-            throw new InvalidDataException("Scan number not found in spectrum tag");
+            return 0;
         }
     }
 
