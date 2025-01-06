@@ -477,6 +477,11 @@ namespace Monocle.File
                 intensities = segmentedScan.Intensities;
             }
 
+            if (mzs == null || intensities == null) {
+                // Its possible that some scans will have these as null.
+                return 0;
+            }
+
             // Find the nearest peak to the low end.
             int low = 0;
             int mid = 0;
