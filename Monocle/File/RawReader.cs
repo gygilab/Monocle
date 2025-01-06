@@ -478,8 +478,20 @@ namespace Monocle.File
             }
 
             if (mzs == null || intensities == null) {
-                // Its possible that some scans will have these as null.
-                return 0;
+                // Astral scans will have IsCentroidScan = true, but
+                // no centroidStream data. check again using HasCentroidStream.
+                if (scan.HasCentroidStream) {
+                    mzs = scan.CentroidScan.Masses;
+                    intensities = scan.CentroidScan.Intensities;
+                }
+                else {
+                    mzs = scan.SegmentedScan.Positions;
+                    intensities = scan.SegmentedScan.Intensities;
+                }
+
+                if (mzs == null || intensities == null) {
+                    return 0;
+                }
             }
 
             // Find the nearest peak to the low end.
