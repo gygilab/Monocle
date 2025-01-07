@@ -88,7 +88,8 @@ namespace Monocle.File
             { "MS:1000045", "collision energy" },
             { "UO:0000266", "electronvolt" },
             { "MS:1000235", "total ion current chromatogram" },
-            { "MS:1000595", "time array" }
+            { "MS:1000595", "time array" },
+            { "MS:1000927", "ion injection time"}
         };
 
         public void Open(string path) {
@@ -253,6 +254,10 @@ namespace Monocle.File
             WriteCVParam("MS:1000016", scan.RetentionTime.ToString(), "UO:0000031");
             WriteCVParam("MS:1000512", scan.FilterLine);
 
+            if (scan.IonInjectionTime  > 0) {
+                WriteCVParam("MS:1000927", scan.IonInjectionTime.ToString());
+            }
+
             writer.WriteStartElement("scanWindowList");
             writer.WriteAttributeString("count", "1");
 
@@ -285,6 +290,9 @@ namespace Monocle.File
 
                     WriteCVParam("MS:1000041", precursor.Charge.ToString());
                     WriteCVParam("MS:1000744", precursor.Mz.ToString("G17", CultureInfo.InvariantCulture), "MS:1000040");
+                    if (precursor.Intensity > 0) {
+                        WriteCVParam("MS:1000042", precursor.Intensity.ToString(), "MS:1000042");
+                    }
 
                     writer.WriteEndElement(); // selectedIon
                     writer.WriteEndElement(); // selectedIonList

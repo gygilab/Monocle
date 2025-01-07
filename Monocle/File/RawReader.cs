@@ -477,6 +477,23 @@ namespace Monocle.File
                 intensities = segmentedScan.Intensities;
             }
 
+            if (mzs == null || intensities == null) {
+                // Astral scans will have IsCentroidScan = true, but
+                // no centroidStream data. check again using HasCentroidStream.
+                if (scan.HasCentroidStream) {
+                    mzs = scan.CentroidScan.Masses;
+                    intensities = scan.CentroidScan.Intensities;
+                }
+                else {
+                    mzs = scan.SegmentedScan.Positions;
+                    intensities = scan.SegmentedScan.Intensities;
+                }
+
+                if (mzs == null || intensities == null) {
+                    return 0;
+                }
+            }
+
             // Find the nearest peak to the low end.
             int low = 0;
             int mid = 0;
