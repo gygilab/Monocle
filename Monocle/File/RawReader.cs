@@ -170,6 +170,9 @@ namespace Monocle.File
                             break;
                         case "Ion Injection Time (ms):":
                             scan.IonInjectionTime = double.Parse(value);
+                            if (!double.IsFinite(scan.IonInjectionTime)) {
+                                scan.IonInjectionTime = 0;
+                            }
                             break;
                         case "Elapsed Scan Time (sec):":
                             scan.ElapsedScanTime = double.Parse(value);
