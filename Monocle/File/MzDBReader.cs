@@ -151,6 +151,16 @@ namespace Monocle.File
                 }
                 scan.Centroids.Add(centroid);
             }
+
+            if ((flags & MzDBWriter.HAS_BASELINE) != 0) {
+                scan.HasBaseline = true;
+            }
+            if ((flags & MzDBWriter.HAS_NOISE) != 0) {
+                scan.HasNoise = true;
+            }
+            if ((flags & MzDBWriter.HAS_RESOLUTION) != 0) {
+                scan.HasResolution = true;
+            }
         }
 
         private byte[] DecompressData(byte[] data) {

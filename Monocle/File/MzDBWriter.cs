@@ -35,6 +35,11 @@ namespace Monocle.File {
         /// <param name="path">Path to the SQLite db file</param>
         public void Open(string path)
         {
+            // Overwrite existing.
+            if (System.IO.File.Exists(path)) {
+                System.IO.File.Delete(path);
+            }
+
             db = new SqliteConnection($"Data Source={path}");
             db.Open();
 
@@ -225,9 +230,9 @@ namespace Monocle.File {
             peakInsert.Parameters.AddWithValue("$id", ++peakIndex);
             peakInsert.Parameters.AddWithValue("$scan", scan.ScanNumber);
             peakInsert.Parameters.AddWithValue("$peak_count", scan.Centroids.Count);
-            peakInsert.Parameters.AddWithValue("$data_type", getPeakFlags(scan));
+            peakInsert.Parameters.AddWithValue("$data_type", GetPeakFlags(scan));
             // skipping compression for now.
-            peakInsert.Parameters.AddWithValue("$data", encodePeaks(scan));
+            peakInsert.Parameters.AddWithValue("$data", EncodePeaks(scan));
             peakInsert.ExecuteNonQuery();
 
             foreach(Precursor precursor in scan.Precursors) {
@@ -252,15 +257,15 @@ namespace Monocle.File {
         /// </summary>
         /// <param name="scan">The scan with the peak data.</param>
         /// <returns>An integer with the flags for the type of data stored.</returns>
-        private int getPeakFlags(Scan scan) {
+        private int GetPeakFlags(Scan scan) {
             int output = 0;
-            if (scan.DetectorType == "FTMS" || scan.DetectorType == "ASTMS") {
+            if (scan.HasBaseline && scan.HasNoise) {
                 output = HAS_MZ_DOUBLE | HAS_INTENSITY | HAS_BASELINE | HAS_NOISE;
             }
             else {
                 output = HAS_MZ_FLOAT | HAS_INTENSITY;
             }
-            if (scan.DetectorType == "ASTMS") {
+            if (scan.HasResolution) {
                 output |= HAS_RESOLUTION;
             }
             return output;
@@ -271,7 +276,7 @@ namespace Monocle.File {
         /// </summary>
         /// <param name="scan">The scan with the peaks to store</param>
         /// <returns>A byte array with the peak data.</returns>
-        private byte[] encodePeaks(Scan scan) {
+        private byte[] EncodePeaks(Scan scan) {
             int peakCount = scan.Centroids.Count;
             double[] mz = new double[peakCount];
             float[] all = new float[peakCount * 5];
@@ -294,16 +299,16 @@ namespace Monocle.File {
             int resolutionBytes = peakCount * sizeof(uint);
 
             byte[] output = null;
-            if (scan.DetectorType == "FTMS") {
-                output = new byte[mzDoubleBytes + intensityBytes + baselineBytes + noiseBytes];
-                Buffer.BlockCopy(mz, 0, output, 0, mzDoubleBytes);
-                Buffer.BlockCopy(all, mzFloatBytes, output, mzDoubleBytes, intensityBytes + baselineBytes + noiseBytes);
-            }
-            else if (scan.DetectorType == "ASTMS") {
+            if (scan.HasResolution && scan.HasBaseline && scan.HasNoise) {
+                // BlockCopy (Array src, int srcOffset, Array dst, int dstOffset, int count);
                 output = new byte[mzDoubleBytes + intensityBytes + baselineBytes + noiseBytes + resolutionBytes];
                 Buffer.BlockCopy(mz, 0, output, 0, mzDoubleBytes);
                 Buffer.BlockCopy(all, mzFloatBytes, output, mzDoubleBytes, intensityBytes + baselineBytes + noiseBytes);
                 Buffer.BlockCopy(resolution, 0, output, mzDoubleBytes + intensityBytes + baselineBytes + noiseBytes, resolutionBytes);
+            } else if (scan.HasBaseline && scan.HasNoise) {
+                output = new byte[mzDoubleBytes + intensityBytes + baselineBytes + noiseBytes];
+                Buffer.BlockCopy(mz, 0, output, 0, mzDoubleBytes);
+                Buffer.BlockCopy(all, mzFloatBytes, output, mzDoubleBytes, intensityBytes + baselineBytes + noiseBytes);
             }
             else {
                 output = new byte[mzFloatBytes + intensityBytes];
@@ -330,6 +335,5 @@ namespace Monocle.File {
             }
         }
     }
-
 }
 

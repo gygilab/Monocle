@@ -64,5 +64,8 @@ namespace MakeMono
 
         [Option("Ms2Ms3Precursor", Hidden = true, Required = false, HelpText = "Assign precursors to the ms3 scan from the parent ms2.")]
         public bool Ms2Ms3Precursor { get; set; } = false;
+
+        [Option("Resolution", Hidden = true, Required = false, HelpText = "Extract resolution from all scans with resolution information.")]
+        public bool Resolution { get; set; } = false;
     }
 }
