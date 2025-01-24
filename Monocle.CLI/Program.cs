@@ -31,10 +31,12 @@ namespace MakeMono
                 ForceCharges = options.ForceCharges,
                 UseMostIntense = options.UseMostIntense,
                 Ms2Ms3Precursor = options.Ms2Ms3Precursor,
-                RawMonoMz = options.RawMonoMz
+                RawMonoMz = options.RawMonoMz,
+                Resolution = options.Resolution,
             };
 
             var readerOptions = new ScanReaderOptions();
+            readerOptions.Resolution = monocleOptions.Resolution;
 
             SetupLogger(options.RunQuiet, options.WriteDebug);
 

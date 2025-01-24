@@ -130,6 +130,21 @@ namespace Monocle.Data
         /// If a dependent scan, the activation method used to generate the scan fragments
         /// </summary>
         public string PrecursorActivationMethod { get; set; } = "";
+
+        /// <summary>
+        /// Whether the Centroids list has baseline data
+        /// </summary>
+        public bool HasBaseline { get; set; }
+
+        /// <summary>
+        /// Whether the Centroids list has noise data
+        /// </summary>
+        public bool HasNoise { get; set; }
+
+        /// <summary>
+        /// Whether the Centroids list has resolution data
+        /// </summary>
+        public bool HasResolution { get; set; }
         
         /// <summary>
         /// The observed centroid peaks in the scan

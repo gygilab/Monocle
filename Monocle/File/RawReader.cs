@@ -293,6 +293,19 @@ namespace Monocle.File
                 }
                 scan.Centroids.Add(tempCentroid);
             }
+
+            if (baselines != null)
+            {
+                scan.HasBaseline = true;
+            }
+            if (noises != null)
+            {
+                scan.HasNoise = true;
+            }
+            if ((scan.DetectorType == "ASTMS" || Options.Resolution) && resolutions != null)
+            {
+                scan.HasResolution = true;
+            }
         }
 
         /// <summary>

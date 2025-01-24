@@ -129,6 +129,13 @@ namespace Monocle
         public bool RawMonoMz { get; set; } = false;
 
         /// <summary>
+        /// If set to true, Resolution data will be extracted from all scans
+        /// that have resolution data (Orbitrap, Astral).
+        /// Requires mzdb format for output.
+        /// </summary>
+        public bool Resolution { get; set; } = false;
+
+        /// <summary>
         /// Allow get/set of property based on property name
         /// </summary>
         /// <param name="propertyName"></param>
