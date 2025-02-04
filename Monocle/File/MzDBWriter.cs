@@ -43,6 +43,10 @@ namespace Monocle.File {
             db = new SqliteConnection($"Data Source={path}");
             db.Open();
 
+            new SqliteCommand("PRAGMA page_size = 65536", db).ExecuteNonQuery();
+            new SqliteCommand("PRAGMA synchronous = OFF", db).ExecuteNonQuery();
+            new SqliteCommand("PRAGMA journal_mode = MEMORY", db).ExecuteNonQuery();
+
             string sql = "CREATE TABLE metadata (name VARCHAR(1024), value TEXT)";
             new SqliteCommand(sql, db).ExecuteNonQuery();
 
