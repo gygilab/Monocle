@@ -32,7 +32,21 @@ namespace Monocle.File
         /// </summary>
         private bool ScanParentsLoaded = false;
 
+        /// <summary>
+        /// Cache of peak arrays for some scans.
+        /// </summary>
+        private Dictionary<int, RawPeaks> peakCache = new Dictionary<int, RawPeaks>();
+
         private ScanReaderOptions Options;
+
+        /// <summary>
+        /// Caches peak arrays for each scan.
+        /// </summary>
+        private class RawPeaks
+        {
+            public double[] mzs;
+            public double[] intensities;
+        }
 
         /// <summary>
         /// Open new Raw file with warning messages.
@@ -93,7 +107,7 @@ namespace Monocle.File
             int LastScan = rawFile.RunHeaderEx.LastSpectrum;
             for (int iScanNumber = FirstScan; iScanNumber <= LastScan; iScanNumber++)
             {
-                ThermoBiz.Scan thermoScan = ThermoBiz.Scan.FromFile(rawFile, iScanNumber);
+                var scanStatistics = rawFile.GetScanStatsForScanNumber(iScanNumber);
                 IScanFilter scanFilter = rawFile.GetFilterForScanNumber(iScanNumber);
                 IScanEvent scanEvent = rawFile.GetScanEventForScanNumber(iScanNumber);
 
@@ -105,11 +119,11 @@ namespace Monocle.File
                 {
                     ScanNumber = iScanNumber,
                     ScanEvent = (iScanNumber - LastMS1) + 1,
-                    BasePeakIntensity = thermoScan.ScanStatistics.BasePeakIntensity,
-                    BasePeakMz = thermoScan.ScanStatistics.BasePeakMass,
-                    TotalIonCurrent = thermoScan.ScanStatistics.TIC,
-                    LowestMz = thermoScan.ScanStatistics.LowMass,
-                    HighestMz = thermoScan.ScanStatistics.HighMass,
+                    BasePeakIntensity = scanStatistics.BasePeakIntensity,
+                    BasePeakMz = scanStatistics.BasePeakMass,
+                    TotalIonCurrent = scanStatistics.TIC,
+                    LowestMz = scanStatistics.LowMass,
+                    HighestMz = scanStatistics.HighMass,
                     StartMz = scanFilter.GetMassRange(0).Low,
                     EndMz = scanFilter.GetMassRange(0).High,
                     ScanType = ReadScanType(scanFilter.ToString()),
@@ -218,29 +232,25 @@ namespace Monocle.File
 
                 if (scan.MsOrder > 1 && scan.PrecursorMasterScanNumber >= rawFile.RunHeader.FirstSpectrum && scan.PrecursorMasterScanNumber < rawFile.RunHeader.LastSpectrum)
                 {
-                    SetPrecursors(scan, reactionPrecursor, spsMasses, monoMz, charge);
-
-                    // Fill precursor information
-                    var parentScan = ThermoBiz.Scan.FromFile(rawFile, scan.PrecursorMasterScanNumber);
-                    if (parentScan != null) {
-                        foreach(var precursor in scan.Precursors) {
-                            precursor.Intensity = GetMaxIntensity(parentScan, precursor.IsolationMz, precursor.IsolationWidth);
-                        }
-                    }
+                    SetPrecursors(scan, reactionPrecursor, spsMasses, monoMz, charge, scanStatistics);
                 }
 
-                if (thermoScan.HasCentroidStream) {
-                    // High res data
+                var centroidStream = rawFile.GetCentroidStream(iScanNumber, true);
+                if (centroidStream.Masses == null || centroidStream.Masses.Length == 0)
+                {
+                    // The docs suggest to check IsCentroid and look for FT scans.
+                    // But this may not be enough. Try segmented scan if centroidStream is empty.
+                    var segmentedScan = rawFile.GetSegmentedScanFromScanNumber(iScanNumber, null);
+                    CentroidsFromArrays(scan, segmentedScan.Positions, segmentedScan.Intensities);
+                }
+                else
+                {
                     CentroidsFromArrays(scan,
-                        thermoScan.CentroidScan.Masses,
-                        thermoScan.CentroidScan.Intensities,
-                        thermoScan.CentroidScan.Baselines,
-                        thermoScan.CentroidScan.Noises,
-                        thermoScan.CentroidScan.Resolutions);
-                }
-                else {
-                    // Low res data
-                    CentroidsFromArrays(scan, thermoScan.PreferredMasses, thermoScan.PreferredIntensities);
+                        centroidStream.Masses,
+                        centroidStream.Intensities,
+                        centroidStream.Baselines,
+                        centroidStream.Noises,
+                        centroidStream.Resolutions);
                 }
 
                 if (scan.PeakCount > 0) {
@@ -267,7 +277,6 @@ namespace Monocle.File
             double[] resolutions=null)
         {
             if (mzs == null || intensities == null) {
-                // Adding this check to handle possible corrupt raw file.
                 Console.WriteLine("Scan number " + scan.ScanNumber + " has no peak data.");
                 return;
             }
@@ -411,35 +420,73 @@ namespace Monocle.File
         /// If the scan header has "Charge:" then the charge will be
         /// saved for all precursors.
         /// </para>
-        private void SetPrecursors(Data.Scan scan, Data.Precursor reaction, List<Data.Precursor> spsMasses, double monoMz, int charge) {
+        private void SetPrecursors(Data.Scan scan, Data.Precursor reaction, List<Data.Precursor> spsMasses, double monoMz, int charge, ThermoBiz.ScanStatistics scanStatistics)
+        {
             scan.Precursors.Clear();
 
             // Use scanEvent reaction
             double scanMz = 0;
             double isoWidth = 2;
-            if (monoMz > 1) {
+            if (monoMz > 1)
+            {
                 reaction.Mz = monoMz;
             }
-            if (charge > 0) {
+            if (charge > 0)
+            {
                 reaction.OriginalCharge = reaction.Charge;
                 reaction.Charge = charge;
             }
-            if (reaction.Mz > 1) {
+            if (reaction.Mz > 1)
+            {
                 scanMz = reaction.Mz;
-                if (reaction.IsolationWidth > 0.01) {
+                if (reaction.IsolationWidth > 0.01)
+                {
                     isoWidth = reaction.IsolationWidth;
                 }
                 scan.Precursors.Add(reaction);
             }
 
             // Add in sps ions. if mz already added then skip it.
-            foreach (var precursor in spsMasses) {
-                if (scanMz > 1 && System.Math.Abs(precursor.Mz - scanMz) < isoWidth) {
+            foreach (var precursor in spsMasses)
+            {
+                if (scanMz > 1 && System.Math.Abs(precursor.Mz - scanMz) < isoWidth)
+                {
                     continue;
                 }
 
                 precursor.Charge = charge;
                 scan.Precursors.Add(precursor);
+            }
+
+            // Get max precursor intensity from parent scan.
+            // We want to cache here so only the parent scans are saved.
+            RawPeaks peaks = null;
+            if (peakCache.ContainsKey(scan.PrecursorMasterScanNumber))
+            {
+                peaks = peakCache[scan.PrecursorMasterScanNumber];
+            }
+            else
+            {
+                peaks = GetPeaks(scan.PrecursorMasterScanNumber);
+                peakCache[scan.PrecursorMasterScanNumber] = peaks;
+            }
+
+            bool hasCentroidStream = scanStatistics.IsCentroidScan && (scanStatistics.SpectrumPacketType == ThermoBiz.SpectrumPacketType.FtCentroid);
+            if (peaks.mzs != null)
+            {
+                foreach (var precursor in scan.Precursors)
+                {
+                    double tolerance = 0.5;
+                    if (precursor.IsolationWidth > 0.01)
+                    {
+                        tolerance = precursor.IsolationWidth / 2;
+                    }
+                    else if (hasCentroidStream)
+                    {
+                        tolerance = 0.05;
+                    }
+                    precursor.Intensity = GetMaxIntensity(peaks, precursor.IsolationMz, tolerance);
+                }
             }
         }
 
@@ -462,53 +509,50 @@ namespace Monocle.File
         }
 
         /// <summary>
-        /// Gets the max intensity found by looking through the peaks in the parent scan.
+        /// Returns m/z and intensity arrays for the given scan number.
+        /// Tries to get the centroid stream first, then falls back to segmented scan.
         /// </summary>
-        /// 
-        /// <returns>The max intensity.</returns>
-        /// <param name="number">the scan number.</param>
-        /// <param name="targetMz">Target mz.</param>
-        private double GetMaxIntensity (ThermoBiz.Scan scan, double targetMz, double isolationWidth)
+        private RawPeaks GetPeaks(int scanNumber)
         {
-            bool hasCentroidStream = scan.ScanStatistics.IsCentroidScan && (scan.ScanStatistics.SpectrumPacketType == ThermoBiz.SpectrumPacketType.FtCentroid);
-            double tolerance = 0.5;
-            if (isolationWidth > 0.01)
-            {   
-                tolerance = isolationWidth / 2;
-            }
-            else if (hasCentroidStream)
-            {   
-                tolerance = 0.05;
-            }
-            double precursorIntensity = 0;
+            var scanStatistics = rawFile.GetScanStatsForScanNumber(scanNumber);
+            
             double[] mzs = null;
             double[] intensities = null;
-            if (hasCentroidStream) {
-                var centroidStream = scan.CentroidScan;
+
+            var centroidStream = rawFile.GetCentroidStream(scanNumber, true);
+            if (centroidStream.Masses != null && centroidStream.Masses.Length > 0)
+            {
                 mzs = centroidStream.Masses;
                 intensities = centroidStream.Intensities;
-            } else {
-                var segmentedScan = scan.SegmentedScan;
+            }
+            else
+            {
+                var segmentedScan = rawFile.GetSegmentedScanFromScanNumber(scanNumber, null);
                 mzs = segmentedScan.Positions;
                 intensities = segmentedScan.Intensities;
             }
 
-            if (mzs == null || intensities == null) {
-                // Astral scans will have IsCentroidScan = true, but
-                // no centroidStream data. check again using HasCentroidStream.
-                if (scan.HasCentroidStream) {
-                    mzs = scan.CentroidScan.Masses;
-                    intensities = scan.CentroidScan.Intensities;
-                }
-                else {
-                    mzs = scan.SegmentedScan.Positions;
-                    intensities = scan.SegmentedScan.Intensities;
-                }
+            return new RawPeaks()
+            {
+                mzs = mzs,
+                intensities = intensities
+            };
+        }
 
-                if (mzs == null || intensities == null) {
-                    return 0;
-                }
-            }
+        /// <summary>
+        /// Gets the max intensity found by looking through the peaks in the parent scan.
+        /// </summary>
+        /// 
+        /// <returns>The max intensity.</returns>
+        /// <param name="number">The scan number</param>
+        /// <param name="targetMz">Target m/z</param>
+        /// <param name="tolerance">Peak match tolerance.</param>
+        private double GetMaxIntensity(RawPeaks peaks, double targetMz, double tolerance)
+        {
+            double[] mzs = peaks.mzs;
+            double[] intensities = peaks.intensities;
+
+            double precursorIntensity = 0;
 
             // Find the nearest peak to the low end.
             int low = 0;
