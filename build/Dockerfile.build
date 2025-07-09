@@ -4,7 +4,7 @@ RUN mkdir -p /build/Monocle && mkdir -p /usr/lib/monocle-ms/ && mkdir -p /usr/bi
 # Context should be root of repo
 COPY . /build/Monocle/
 WORKDIR /build/Monocle/
-RUN cd Monocle.CLI && dotnet publish -c Release -r ${RID} -o monocle-ms \
+RUN cd Monocle.CLI && dotnet publish -c Release --self-contained -r ${RID} -o monocle-ms \
   && cp -pR /build/Monocle/Monocle.CLI/monocle-ms/* /usr/lib/monocle-ms/ \
   && cp -p /build/Monocle/build/monocle /usr/bin/monocle
 ENTRYPOINT [ "/usr/bin/monocle" ]
